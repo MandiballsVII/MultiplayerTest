@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LocalMultiplayerScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 32f7c8e82fdb77b44a3802083996c845
+  - enabled: 1
+    path: Assets/Scenes/OnLineMultiplayerScene.unity
+    guid: 5dccf1718f8b8bc4aad358350fed8f5b
   m_configObjects: {}

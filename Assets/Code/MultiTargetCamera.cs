@@ -14,7 +14,7 @@ public class MultiTargetCamera : MonoBehaviour
     [Range(0.01f, 1f)] public float moveSmoothTime = 0.2f;
 
     [Header("Zoom")]
-    public float baseZoom = 8f;        // Tamaño inicial que quieres ver
+    public float baseZoom = 8f;
     public float minZoom = 4f;
     public float maxZoom = 12f;
     [Tooltip("A mayor valor, menos zoom por la misma separación")]
@@ -22,7 +22,7 @@ public class MultiTargetCamera : MonoBehaviour
     public float zoomSpeed = 3f;
 
     [Header("Pixel Settings")]
-    public int pixelsPerUnit = 16; // PPU de tus sprites
+    public int pixelsPerUnit = 16;
 
     [Header("Tether / Elastic")]
     public float tetherDistance = 5f;
@@ -46,7 +46,6 @@ public class MultiTargetCamera : MonoBehaviour
         cam = GetComponent<Camera>();
         if (!cam.orthographic) cam.orthographic = true;
 
-        // Fijar tamaño inicial redondeado a píxeles exactos
         cam.orthographicSize = RoundToPixel(baseZoom);
     }
 
@@ -72,7 +71,6 @@ public class MultiTargetCamera : MonoBehaviour
     {
         Vector3 centerPoint = GetCenterPoint();
 
-        // --- Tether suave ---
         float maxDist = 0f;
         foreach (var t in targets)
         {
@@ -96,7 +94,6 @@ public class MultiTargetCamera : MonoBehaviour
         float targetSize = Mathf.Lerp(minZoom, maxZoom, greatestDistance / zoomLimiter);
         targetSize = Mathf.Clamp(targetSize, minZoom, maxZoom);
 
-        // Redondear a múltiplos de píxel para mantener nitidez
         targetSize = RoundToPixel(targetSize);
 
         float delta = targetSize - cam.orthographicSize;

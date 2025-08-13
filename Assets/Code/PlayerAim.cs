@@ -40,7 +40,7 @@ public class PlayerAim : MonoBehaviour
 
     public void AimPointer(InputAction.CallbackContext ctx)
     {
-        _aimPointer = ctx.ReadValue<Vector2>(); // posición de pantalla (Mouse.position)
+        _aimPointer = ctx.ReadValue<Vector2>(); // (Mouse.position)
     }
 
     public void Fire(InputAction.CallbackContext ctx)
@@ -61,7 +61,7 @@ public class PlayerAim : MonoBehaviour
         float angle;
         Vector3 dir;
 
-        // 1) Prioriza stick si está por encima del deadzone
+        // 1) Priorizes stick if it's over deadzone
         if (_aimStick.sqrMagnitude >= STICK_DEADZONE * STICK_DEADZONE)
         {
             angle = Mathf.Atan2(_aimStick.y, _aimStick.x) * Mathf.Rad2Deg;
@@ -79,7 +79,7 @@ public class PlayerAim : MonoBehaviour
         {
             aimTransform.eulerAngles = new Vector3(0, 0, angle);
 
-            // Flip del sprite del arma
+            // Flip of weapon sprite
             Vector3 aimLocalScale = Vector3.one;
             aimLocalScale.y = (angle > 90 || angle < -90) ? -1f : 1f;
             aimTransform.localScale = aimLocalScale;

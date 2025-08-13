@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
-        // === NUEVO: Mantener dentro de la cámara ===
+        // === Stay into camera space ===
         var camBounds = MultiTargetCamera.Instance.GetCameraBounds();
         Vector3 pos = transform.position;
 
