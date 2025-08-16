@@ -336,7 +336,7 @@ Transform:
   m_GameObject: {fileID: 3852485132690032158}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -383,7 +383,7 @@ SpriteRenderer:
   m_SortingLayerID: 167389457
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c4fa5c7c6bf7aac439edbc52ab46e677, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b06c602b0ddf204e982852ad75bd9a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -503,7 +503,7 @@ Transform:
   m_GameObject: {fileID: 5885685308155626062}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.125, y: -0.098, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -590,12 +590,12 @@ SpriteRenderer:
   m_SortingLayerID: 167389457
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1d81982c68bc2934ba983ddfec5d450d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9d99b1ee4615edf4693f7ccdb21d41b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -825,6 +825,42 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f9b449f0-8845-4a5f-8a3b-39ba08fe6b8c
     m_ActionName: Gameplay/Reload[/Keyboard/r,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a46e260f-77b8-4a19-ba8b-a4235d5c0eda
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow,/XInputControllerWindows/leftStick,/XInputControllerWindows1/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cf70fd13-aa60-4af3-8e4c-13e9dc591f6d
+    m_ActionName: UI/Submit[/Keyboard/space,/Keyboard/enter,/XInputControllerWindows/buttonSouth,/XInputControllerWindows1/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d2d58aa3-3b5c-42f8-a03c-b6c09f4489f9
+    m_ActionName: UI/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonWest,/XInputControllerWindows1/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0d783e41-15c7-451c-b152-477e3cf30bbc
+    m_ActionName: UI/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b0743383-b2cf-4a9b-aac1-8891f50264fe
+    m_ActionName: UI/Click[/Mouse/leftButton,/XInputControllerWindows/rightTrigger,/XInputControllerWindows1/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bafe1d8c-414a-4cd0-9985-da958bd0615c
+    m_ActionName: UI/Join[/Keyboard/enter,/XInputControllerWindows/start,/XInputControllerWindows1/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f35b5644-899e-4563-9a38-137f58404a6a
+    m_ActionName: PlayerSelection/Submit[/Keyboard/enter,/XInputControllerWindows/buttonSouth,/XInputControllerWindows1/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d32a1576-a173-4f18-84c6-0a763d4b2d3f
+    m_ActionName: PlayerSelection/Navigate[/XInputControllerWindows/dpad,/XInputControllerWindows1/dpad,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow,/XInputControllerWindows/leftStick,/XInputControllerWindows1/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b401284d-dde5-45b4-bab5-a1d123df8691
+    m_ActionName: PlayerSelection/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast,/XInputControllerWindows1/buttonEast]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Gameplay
