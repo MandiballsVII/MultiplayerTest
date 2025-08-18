@@ -5,5 +5,6 @@ public class CharacterData : ScriptableObject
 {
     public string characterName;
     public Sprite portrait;
-    public Color uiColor;
+    public GameObject characterPrefab;
+    public Color characterColor = Color.white;
 }

@@ -1,11 +1,13 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectionManager : MonoBehaviour
 {
-    public static CharacterSelectionManager Instance;
+    public static CharacterSelectionManager Instance { get; private set; }
 
     [Header("UI")]
     public Transform UIParent;
@@ -22,14 +24,23 @@ public class CharacterSelectionManager : MonoBehaviour
     [Header("Start Game")]
     public float countdownTime = 3f;
     public string gameSceneName = "NombreDeLaEscenaDelJuego";
+    public TMP_Text countdownText;
 
     private bool gameStarting = false;
     private Coroutine countdownCo;
 
+    private readonly Dictionary<int, PlayerSelection> selectedPlayers = new Dictionary<int, PlayerSelection>();
+
+
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     // ===== API de consulta =====
@@ -56,6 +67,8 @@ public class CharacterSelectionManager : MonoBehaviour
     {
         if (!activeSelectors.Contains(selector))
             activeSelectors.Add(selector);
+        // Si entra un jugador nuevo en el lobby, cancelar la cuenta atrás
+        CancelCountdownIfRunning();
     }
 
     public void UnregisterSelector(CharacterSelector selector)
@@ -64,20 +77,22 @@ public class CharacterSelectionManager : MonoBehaviour
     }
 
     // ===== Bloqueo / Desbloqueo =====
-    public void LockCharacter(CharacterData character, CharacterSelector locker)
+    public void LockCharacter(CharacterData character, CharacterSelector locker, int playerIndex)
     {
-        // Si otro ya lo tenía, no lo sobreescribas
         if (!takenBy.ContainsKey(character))
             takenBy.Add(character, locker);
 
-        // Primero marca su UI como bloqueada (no debe auto-avanzar)
         locker.RefreshLockedUI();
-
-        // Luego avisa al resto
         UpdateAllSelectorsUI(skip: locker);
+
+        // Guardamos la selección del jugador (con su dispositivo)
+        var device = locker.GetComponent<PlayerInput>().devices[0];
+        selectedPlayers[playerIndex] = new PlayerSelection(character, device);
 
         CheckAllPlayersLocked();
     }
+
+
 
     public void UnlockCharacter(CharacterData character, CharacterSelector locker)
     {
@@ -123,10 +138,15 @@ public class CharacterSelectionManager : MonoBehaviour
         float timer = countdownTime;
         while (timer > 0f)
         {
-            Debug.Log($"Comienza en {Mathf.Ceil(timer)}...");
+            if (countdownText != null)
+                countdownText.text = $"Game starts in {Mathf.Ceil(timer)}...";
+
             yield return new WaitForSeconds(1f);
             timer -= 1f;
         }
+
+        if (countdownText != null)
+            countdownText.text = "";
 
         SceneManager.LoadScene(gameSceneName);
     }
@@ -138,7 +158,36 @@ public class CharacterSelectionManager : MonoBehaviour
             StopCoroutine(countdownCo);
             countdownCo = null;
             gameStarting = false;
+
+            if (countdownText != null)
+            {
+                countdownText.text = "Countdown canceled";
+                StartCoroutine(ClearCountdownTextAfterDelay(3f));
+            }
+
             Debug.Log("Cuenta atrás cancelada.");
         }
+    }
+    private IEnumerator ClearCountdownTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (countdownText != null)
+            countdownText.text = "";
+    }
+
+    public Dictionary<int, PlayerSelection> GetSelections()
+    {
+        return selectedPlayers;
+    }
+}
+public class PlayerSelection
+{
+    public CharacterData character;
+    public InputDevice device;
+
+    public PlayerSelection(CharacterData character, InputDevice device)
+    {
+        this.character = character;
+        this.device = device;
     }
 }

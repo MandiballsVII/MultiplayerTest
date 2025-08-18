@@ -85,7 +85,8 @@ public class CharacterSelector : MonoBehaviour
 
         // Bloquear este personaje para este jugador (primero me marco locked)
         locked = true;
-        CharacterSelectionManager.Instance.LockCharacter(currentCharacter, this);
+        CharacterSelectionManager.Instance.LockCharacter(currentCharacter, this, playerInput.playerIndex);
+
         RefreshLockedUI();
     }
 

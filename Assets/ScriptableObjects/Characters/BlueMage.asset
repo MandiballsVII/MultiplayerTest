@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Blue Mage
   portrait: {fileID: 21300000, guid: 92addb75c8029a74c8f919959ba9db41, type: 3}
-  uiColor: {r: 0.25485048, g: 0.28956515, b: 0.7830189, a: 0}
+  characterPrefab: {fileID: 7004084598068824524, guid: 5659bcd915300dc409576e837f655321, type: 3}
+  characterColor: {r: 0.10165591, g: 0.085172676, b: 0.6226415, a: 1}
