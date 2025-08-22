@@ -7,4 +7,5 @@ public class CharacterData : ScriptableObject
     public Sprite portrait;
     public GameObject characterPrefab;
     public Color characterColor = Color.white;
+    public SpellSchool school; // Asigna: Red/Blue/Green/Black/White
 }

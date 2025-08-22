@@ -16,3 +16,4 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: a1fd0ab5d8facae4abc0ada59a67bd5c, type: 3}
   characterPrefab: {fileID: 1007875912593411549, guid: 2e783cf50b8a30c478253299c807fe70, type: 3}
   characterColor: {r: 1, g: 1, b: 1, a: 1}
+  school: 4

@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth); // valor absoluto
     }
 
+    public bool HasMana(float amount) => currentMana >= amount;
     public void Heal(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
