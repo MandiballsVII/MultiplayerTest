@@ -14,6 +14,7 @@ public class PlayerAim : MonoBehaviour
 
     public int currentAmmo;
     private bool recharging;
+    private PlayerController playerController;
 
     // Input
     private Vector2 _aimStick;
@@ -24,6 +25,7 @@ public class PlayerAim : MonoBehaviour
     {
         aimTransform = transform.Find("Aim");
         currentAmmo = maxAmmo;
+        playerController = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -103,6 +105,8 @@ public class PlayerAim : MonoBehaviour
         if (bulletPrefab != null && shootPoint != null)
         {
             GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+            playerController.UseMana(1); // Example mana cost
+            playerController.TakeDamage(1); // Example self-damage
             if (bullet.TryGetComponent<Rigidbody2D>(out var rb))
             {
                 rb.AddForce(shootPoint.right * bulletForce, ForceMode2D.Impulse);
