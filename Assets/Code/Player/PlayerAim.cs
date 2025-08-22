@@ -15,6 +15,7 @@ public class PlayerAim : MonoBehaviour
     public int currentAmmo;
     private bool recharging;
     private PlayerController playerController;
+    private PlayerManager playerManager;
 
     // Input
     private Vector2 _aimStick;
@@ -26,6 +27,7 @@ public class PlayerAim : MonoBehaviour
         aimTransform = transform.Find("Aim");
         currentAmmo = maxAmmo;
         playerController = GetComponent<PlayerController>();
+        playerManager = GetComponent<PlayerManager>();
     }
 
     void Update()
@@ -92,6 +94,7 @@ public class PlayerAim : MonoBehaviour
     void HandleShooting()
     {
         if (recharging) return;
+        else if(playerManager.IsDashing) return;
 
         if (currentAmmo <= 0)
         {
