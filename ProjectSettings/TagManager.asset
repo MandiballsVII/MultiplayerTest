@@ -14,7 +14,7 @@ TagManager:
   - UI
   - Player
   - Object
-  - 
+  - Walls
   - 
   - 
   - 
@@ -42,8 +42,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 2977280675
+    locked: 0
   - name: Object
     uniqueID: 212880467
+    locked: 0
+  - name: Walls
+    uniqueID: 648066803
     locked: 0
   - name: Player
     uniqueID: 167389457

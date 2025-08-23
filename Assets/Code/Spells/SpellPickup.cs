@@ -31,7 +31,7 @@ public class SpellPickup : MonoBehaviour
         // OJO: asegúrate de que el nombre de tu clase es exactamente el mismo que aquí
         // (si tu script se llama PlayerSpellBook con B mayúscula o PlayerSpellbook con b minúscula,
         // usa ese nombre)
-        var book = other.GetComponent<PlayerSpellbook>();
+        var book = other.GetComponent<PlayerSpellBook>();
         if (book == null) return;
 
         book.AddSpellToInventory(data);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
   m_Name: MagicMissile_Red
   m_EditorClassIdentifier: 
-  id: 002
+  id: 001
   displayName: MagicMissile_Red
   icon: {fileID: 328725868, guid: ee257f2eef4a9784f8921833acde7d20, type: 3}
   school: 0

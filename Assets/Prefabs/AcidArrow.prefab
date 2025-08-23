@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3059831833575544433}
   - component: {fileID: 3023329873398616747}
   - component: {fileID: 6196858665982461503}
-  m_Layer: 6
-  m_Name: Bullet
+  m_Layer: 0
+  m_Name: AcidArrow
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,10 +74,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 167389457
-  m_SortingLayer: 4
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 1228137666, guid: 8ff1f2b11a9a8ed45ba3ecdb15622d9e, type: 3}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -532410719, guid: cc3896bd5a105734ea7ed3ec26d2b385, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -171,7 +171,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622451925767254046}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 940cef9fce9dda541b4678f2e12db040, type: 2}
   m_CullingMode: 0

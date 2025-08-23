@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerSpellbook : MonoBehaviour
+public class PlayerSpellBook : MonoBehaviour
 {
     [Header("Slots")]
     public SpellData[] slots = new SpellData[4];   // Asigna en runtime/pickup
@@ -40,17 +40,28 @@ public class PlayerSpellbook : MonoBehaviour
     public void AddSpellToInventory(SpellData data)
     {
         if (!inventory.Contains(data)) inventory.Add(data);
-        // De momento: auto-asigna al primer slot libre
-        for (int i = 0; i < slots.Length; i++)
+
+        int slotIndex = GetSlotIndexForType(data.type);
+        if (slotIndex < 0 || slotIndex >= slots.Length)
         {
-            if (slots[i] == null)
-            {
-                slots[i] = data;
-                Debug.Log($"[{name}] Asignado {data.displayName} al slot {i + 1}");
-                return;
-            }
+            Debug.LogWarning($"[{name}] No hay slot para el tipo {data.type}");
+            return;
         }
-        // Si no hay hueco, podrías reemplazar el 1, o abrir UI de asignación
+
+        slots[slotIndex] = data;
+        Debug.Log($"[{name}] Asignado {data.displayName} al slot {slotIndex + 1}");
+    }
+
+    private int GetSlotIndexForType(SpellType type)
+    {
+        return type switch
+        {
+            SpellType.Projectile => 0,
+            SpellType.Area => 1,
+            SpellType.Self => 2,
+            SpellType.Summon => 3,
+            _ => -1
+        };
     }
 
     private void TryCast(int slotIndex)

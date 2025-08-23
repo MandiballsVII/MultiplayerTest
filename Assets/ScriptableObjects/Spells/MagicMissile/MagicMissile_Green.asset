@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
-  m_Name: MagicMissile_Black
+  m_Name: MagicMissile_Green
   m_EditorClassIdentifier: 
-  id: 001
-  displayName: MagicMissile_Black
-  icon: {fileID: 1228137666, guid: 8ff1f2b11a9a8ed45ba3ecdb15622d9e, type: 3}
-  school: 3
+  id: 003
+  displayName: MagicMissile_Green
+  icon: {fileID: -1659103163, guid: 09393a8d7f235d34db4f9404bd5fbe82, type: 3}
+  school: 2
   type: 0
   manaCost: 1
   cooldown: 1

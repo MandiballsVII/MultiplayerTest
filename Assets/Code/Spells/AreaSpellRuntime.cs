@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class AreaSpellRuntime : MonoBehaviour
 {
-    private PlayerSpellbook owner;
+    private PlayerSpellBook owner;
     private SpellData spell;
 
-    public void Init(PlayerSpellbook owner, SpellData data)
+    public void Init(PlayerSpellBook owner, SpellData data)
     {
         this.owner = owner;
         this.spell = data;
