@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,6 +17,10 @@ public class PlayerSpellBook : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerAim playerAim;
     private readonly List<SpellData> inventory = new(); // Para futuro menú de asignación
+
+    private bool isCastingChannel; // indica si hay un hechizo activo canalizado
+    private GameObject activeChannelGO; // referencia al prefab instanciado
+    private SpellData activeChannelSpell; // referencia al hechizo
 
     void Awake()
     {
@@ -66,6 +71,8 @@ public class PlayerSpellBook : MonoBehaviour
 
     private void TryCast(int slotIndex)
     {
+        if (isCastingChannel)
+            return; // No puedes castear otro hechizo mientras canalizas
         var spell = slots[slotIndex];
         if (spell == null) return;
         //print($"[{name}] Intentando lanzar hechizo del slot {slotIndex + 1}");
@@ -123,11 +130,62 @@ public class PlayerSpellBook : MonoBehaviour
     private void CastArea(SpellData spell)
     {
         if (spell.prefab == null) return;
-        var go = Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
-        var aoe = go.GetComponent<AreaSpellRuntime>();
-        if (aoe != null) aoe.Init(this, spell);
-        Destroy(go, spell.duration);
+
+        Vector3 spawnPos;
+        Quaternion rot;
+
+        switch (spell.areaShape)
+        {
+            case AreaShape.Circle:
+                spawnPos = transform.position;
+                rot = Quaternion.identity;
+                break;
+            case AreaShape.Cone:
+                spawnPos = castPoint.position;
+                rot = castPoint.rotation;
+                break;
+            default:
+                spawnPos = castPoint.position;
+                rot = Quaternion.identity;
+                break;
+        }
+
+        var aoeGO = Instantiate(spell.prefab, spawnPos, rot);
+
+        if (spell.areaShape == AreaShape.Cone)
+            aoeGO.transform.SetParent(castPoint);
+
+        var aoeRuntime = aoeGO.GetComponent<AreaSpellRuntime>();
+        if (aoeRuntime != null)
+            aoeRuntime.Init(this, spell);
+
+        if (spell.isChanneled)
+        {
+            isCastingChannel = true;
+            activeChannelGO = aoeGO;
+            activeChannelSpell = spell;
+
+            // Cuando termine la duración, liberamos
+            StartCoroutine(EndChannelAfterDuration(spell.duration));
+        }
+        else
+        {
+            Destroy(aoeGO, spell.duration);
+        }
     }
+
+    private IEnumerator EndChannelAfterDuration(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        if (activeChannelGO != null)
+            Destroy(activeChannelGO);
+
+        isCastingChannel = false;
+        activeChannelGO = null;
+        activeChannelSpell = null;
+    }
+
 
     private void CastSelf(SpellData spell)
     {

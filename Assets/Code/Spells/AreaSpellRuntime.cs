@@ -5,22 +5,27 @@ public class AreaSpellRuntime : MonoBehaviour
     private PlayerSpellBook owner;
     private SpellData spell;
 
-    public void Init(PlayerSpellBook owner, SpellData data)
+    public void Init(PlayerSpellBook owner, SpellData spell)
     {
         this.owner = owner;
-        this.spell = data;
-
-        // Ajusta el tamaño visual/colisionador al radio
-        var col = GetComponent<CircleCollider2D>();
-        if (col != null) col.radius = spell.areaRadius;
-        transform.localScale = Vector3.one * (spell.areaRadius * 2f);
+        this.spell = spell;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.TryGetComponent<IDamageable>(out var dmg))
+        if (other.CompareTag("Enemy"))
         {
-            //dmg.TakeDamage(spell.power);
+            print("Area spell hit an enemy!");
+            // Aquí aplicas daño periódico
+            //var enemy = other.GetComponent<EnemyHealth>();
+            //if (enemy != null)
+            //{
+            //    enemy.TakeDamage(spell.power * Time.deltaTime); // daño por segundo
+            //}
+        }
+        else
+        {
+            print("Area spell hit something else or nothing at all!");
         }
     }
 }

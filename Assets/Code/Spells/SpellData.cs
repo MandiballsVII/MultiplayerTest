@@ -20,4 +20,13 @@ public class SpellData : ScriptableObject
     public float areaRadius = 2.5f;     // para Area
     public float duration = 3f;         // p.ej. AoE vivo / buff duración
     public float power = 20f;           // daño/curación genérica según tipo
+
+    [Header("Área")]
+    public AreaShape areaShape;
+    public float coneAngle = 45f; // solo para conos
+
+    [Header("Canalización")]
+    [Tooltip("true para conos, rayos o cualquier hechizo de duración prolongada")]
+    public bool isChanneled; // true para conos, rayos, etc.
+
 }

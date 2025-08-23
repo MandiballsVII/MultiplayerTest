@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
+  m_Name: AcidCone
+  m_EditorClassIdentifier: 
+  id: 006
+  displayName: AcidCone
+  icon: {fileID: 1961419212, guid: 2302c07ac6a7a69498ba349b431fd428, type: 3}
+  school: 2
+  type: 1
+  manaCost: 10
+  cooldown: 3
+  prefab: {fileID: 5476550727666368842, guid: 5fa6fe33ee9f43c4cb362e3cfeb0ee5b, type: 3}
+  projectileSpeed: 12
+  areaRadius: 2.5
+  duration: 3
+  power: 20
+  areaShape: 1
+  coneAngle: 45
+  isChanneled: 1
