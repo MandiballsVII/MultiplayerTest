@@ -14,13 +14,15 @@ public class PlayerSpellbook : MonoBehaviour
 
     private PlayerController controller;
     private PlayerInput playerInput;
+    private PlayerAim playerAim;
     private readonly List<SpellData> inventory = new(); // Para futuro menú de asignación
 
     void Awake()
     {
         controller = GetComponent<PlayerController>();
         playerInput = GetComponent<PlayerInput>();
-        if (castPoint == null) castPoint = transform; // fallback
+        playerAim = GetComponent<PlayerAim>();
+        if (castPoint == null) castPoint = playerAim.shootPoint; // fallback
     }
 
     void Update()
@@ -30,10 +32,10 @@ public class PlayerSpellbook : MonoBehaviour
     }
 
     // === INPUT (vincula en PlayerInput del prefab del jugador) ===
-    public void Ability1(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(0); }
-    public void Ability2(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(1); }
-    public void Ability3(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(2); }
-    public void Ability4(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(3); }
+    public void Projectile(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(0); }
+    public void Area(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(1); }
+    public void Self(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(2); }
+    public void Summon(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(3); }
 
     public void AddSpellToInventory(SpellData data)
     {
@@ -55,6 +57,7 @@ public class PlayerSpellbook : MonoBehaviour
     {
         var spell = slots[slotIndex];
         if (spell == null) return;
+        //print($"[{name}] Intentando lanzar hechizo del slot {slotIndex + 1}");
         if (slotCooldowns[slotIndex] > 0f) return;
 
         if (!controller.HasMana(spell.manaCost)) return;
@@ -63,21 +66,27 @@ public class PlayerSpellbook : MonoBehaviour
         controller.UseMana(spell.manaCost);
 
         // dirección de casteo: usa dónde mira el player (tu PlayerManager rota el sprite)
-        Vector2 dir = transform.right;
+        Vector2 dir = castPoint.right;
 
+        //print($"[{name}] Lanzando {spell.displayName} del slot {slotIndex + 1} hacia {dir}");
         // Ejecutar según tipo
         switch (spell.type)
         {
             case SpellType.Projectile:
+                print("Pew pew!");
+                //playerAim.HandleShooting();
                 CastProjectile(spell, dir);
                 break;
             case SpellType.Area:
+                print("Boom!");
                 CastArea(spell);
                 break;
             case SpellType.Self:
+                print("Ahhh!");
                 CastSelf(spell);
                 break;
             case SpellType.Summon:
+                print("Here, minion!");
                 CastSummon(spell);
                 break;
         }
@@ -89,13 +98,14 @@ public class PlayerSpellbook : MonoBehaviour
     private void CastProjectile(SpellData spell, Vector2 dir)
     {
         if (spell.prefab == null) return;
-        var go = Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
-        if (go.TryGetComponent<Rigidbody2D>(out var rb))
+        var projectile = Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
+        if (projectile.TryGetComponent<Rigidbody2D>(out var rb))
         {
             rb.velocity = dir.normalized * spell.projectileSpeed;
+            //rb.AddForce(shootPoint.right * bulletForce, ForceMode2D.Impulse);
         }
         // Componente opcional de daño en el proyectil (ver más abajo)
-        var hit = go.GetComponent<SpellHit>();
+        var hit = projectile.GetComponent<SpellHit>();
         if (hit != null) hit.Init(this, spell);
     }
 

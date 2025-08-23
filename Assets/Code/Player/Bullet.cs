@@ -7,10 +7,13 @@ public class Bullet : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
 
+    public float lifetime = 3f;
+
     private void Start()
     {
         animator = gameObject.GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        Destroy(gameObject, lifetime);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -30,7 +33,7 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("BasicEnemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             ExploteBullet();
             //AudioManager.instance.PlaySFX("GunShotHit");

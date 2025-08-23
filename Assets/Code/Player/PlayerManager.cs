@@ -82,7 +82,6 @@ public class PlayerManager : MonoBehaviour
 
     public void Dash(InputAction.CallbackContext ctx)
     {
-        print(ctx);
         if (!ctx.performed || !canDash || isDead || moveInput == Vector2.zero) return;
         StartCoroutine(PerformDash());
     }

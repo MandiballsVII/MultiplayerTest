@@ -1030,6 +1030,70 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8b92931b-5e14-474e-bcf5-886a3e2004ef
     m_ActionName: Gameplay/Dash[/Keyboard/shift,/XInputControllerWindows/buttonSouth,/XInputControllerWindows1/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8767550588605358134}
+        m_TargetAssemblyTypeName: PlayerSpellbook, Assembly-CSharp
+        m_MethodName: Projectile
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a9fd248a-79c5-4a91-a569-431c7ed8de05
+    m_ActionName: Gameplay/Projectile[/Mouse/leftButton,/XInputControllerWindows/rightTrigger,/XInputControllerWindows1/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8767550588605358134}
+        m_TargetAssemblyTypeName: PlayerSpellbook, Assembly-CSharp
+        m_MethodName: Area
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a8e1b2f6-4fc9-4943-a3f3-38b5e05dc072
+    m_ActionName: Gameplay/Area[/Mouse/rightButton,/XInputControllerWindows/leftTrigger,/XInputControllerWindows1/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8767550588605358134}
+        m_TargetAssemblyTypeName: PlayerSpellbook, Assembly-CSharp
+        m_MethodName: Self
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8e049ea3-b2ab-451f-a633-a060dd49ff5a
+    m_ActionName: Gameplay/Self[/Mouse/middleButton,/XInputControllerWindows/rightShoulder,/XInputControllerWindows1/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8767550588605358134}
+        m_TargetAssemblyTypeName: PlayerSpellbook, Assembly-CSharp
+        m_MethodName: Summon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0a7da797-3d60-49f0-b0bf-0985230f8318
+    m_ActionName: Gameplay/Summon[/Keyboard/space,/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Gameplay
@@ -1062,3 +1126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb43526d2abbd34f95aac5dd07c1c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  castPoint: {fileID: 0}

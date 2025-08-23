@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerAim : MonoBehaviour
 {
     private Transform aimTransform;
-    [SerializeField] private Transform shootPoint;
+    public Transform shootPoint;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletForce = 20f;
 
@@ -47,11 +47,11 @@ public class PlayerAim : MonoBehaviour
         _aimPointer = ctx.ReadValue<Vector2>(); // (Mouse.position)
     }
 
-    public void Fire(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.performed) return;
-        HandleShooting();
-    }
+    //public void Fire(InputAction.CallbackContext ctx)
+    //{
+    //    if (!ctx.performed) return;
+    //    HandleShooting();
+    //}
 
     public void Reload(InputAction.CallbackContext ctx)
     {
@@ -91,10 +91,10 @@ public class PlayerAim : MonoBehaviour
     }
 
     // === Shooting ===
-    void HandleShooting()
+    public void HandleShooting()
     {
         if (recharging) return;
-        else if(playerManager.IsDashing) return;
+        else if (playerManager.IsDashing) return;
 
         if (currentAmmo <= 0)
         {
@@ -108,8 +108,8 @@ public class PlayerAim : MonoBehaviour
         if (bulletPrefab != null && shootPoint != null)
         {
             GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-            playerController.UseMana(1); // Example mana cost
-            playerController.TakeDamage(1); // Example self-damage
+            //playerController.UseMana(1); // Example mana cost
+            //playerController.TakeDamage(1); // Example self-damage
             if (bullet.TryGetComponent<Rigidbody2D>(out var rb))
             {
                 rb.AddForce(shootPoint.right * bulletForce, ForceMode2D.Impulse);
