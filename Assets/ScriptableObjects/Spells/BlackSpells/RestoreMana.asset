@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 010
   displayName: RestoreMana
-  icon: {fileID: -1473575398, guid: 89e9e0fe7068ede42af76e989e89f6e3, type: 3}
+  icon: {fileID: 21300000, guid: 6bfa94f2f20406d4f92343705ffbbe6e, type: 3}
   school: 3
   type: 2
   manaCost: 0
@@ -36,3 +36,6 @@ MonoBehaviour:
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
   explosionDamage: 0
+  summonPrefab: {fileID: 0}
+  summonCount: 1
+  summonDuration: 10

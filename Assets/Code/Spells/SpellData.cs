@@ -43,5 +43,9 @@ public class SpellData : ScriptableObject
     public float explosionRadius;
     public float explosionDamage;
 
+    [Header("Summon Settings")]
+    public GameObject summonPrefab;
+    public int summonCount = 1; // Por si quieres invocar más de uno
+    public float summonDuration = 10f; // Tiempo que vive el esqueleto
 
 }

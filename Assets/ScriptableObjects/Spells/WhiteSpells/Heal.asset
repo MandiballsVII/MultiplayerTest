@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 009
   displayName: Heal
-  icon: {fileID: 1703720733, guid: 09393a8d7f235d34db4f9404bd5fbe82, type: 3}
+  icon: {fileID: 21300000, guid: 4f76b1a19a6b8a94d841690e60c68f42, type: 3}
   school: 4
   type: 2
   manaCost: 10
@@ -25,6 +25,8 @@ MonoBehaviour:
   duration: 3
   power: 20
   healAmount: 20
+  manaRestoreAmount: 0
+  healthCost: 0
   affectAllPlayers: 1
   auraDuration: 1
   auraPrefab: {fileID: 6762229052723605685, guid: 52e28f65e98620d49a3b2a5981a8b209, type: 3}
@@ -34,3 +36,6 @@ MonoBehaviour:
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
   explosionDamage: 0
+  summonPrefab: {fileID: 0}
+  summonCount: 1
+  summonDuration: 10

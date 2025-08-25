@@ -230,8 +230,18 @@ public class PlayerSpellBook : MonoBehaviour
 
     private void CastSummon(SpellData spell)
     {
-        if (spell.prefab == null) return;
-        Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
+        if (spell == null || spell.summonPrefab == null) return;
+
+        for (int i = 0; i < spell.summonCount; i++)
+        {
+            var summon = Instantiate(
+                spell.summonPrefab,
+                castPoint.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0f),
+                Quaternion.identity
+            );
+
+            Destroy(summon, spell.summonDuration);
+        }
         // Si la invocación necesita saber quién la invocó, pásale referencia
         //var summ = GetComponentInChildren<SummonRuntime>();
         // o un script en el prefab de la invocación que acepte “owner”

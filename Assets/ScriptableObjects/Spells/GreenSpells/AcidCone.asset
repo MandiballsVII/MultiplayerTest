@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 006
   displayName: AcidCone
-  icon: {fileID: 1961419212, guid: 2302c07ac6a7a69498ba349b431fd428, type: 3}
+  icon: {fileID: 21300000, guid: 2a326a15d6eb7ba4c9f724869080f7ce, type: 3}
   school: 2
   type: 1
   manaCost: 10
@@ -24,6 +24,18 @@ MonoBehaviour:
   areaRadius: 2.5
   duration: 3
   power: 20
+  healAmount: 20
+  manaRestoreAmount: 0
+  healthCost: 0
+  affectAllPlayers: 0
+  auraDuration: 1
+  auraPrefab: {fileID: 0}
   areaShape: 1
   coneAngle: 45
   isChanneled: 1
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
+  explosionDamage: 0
+  summonPrefab: {fileID: 0}
+  summonCount: 1
+  summonDuration: 10
