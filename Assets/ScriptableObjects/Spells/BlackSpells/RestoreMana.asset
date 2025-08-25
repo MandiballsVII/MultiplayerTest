@@ -10,20 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
-  m_Name: CircleOfFlames
+  m_Name: RestoreMana
   m_EditorClassIdentifier: 
-  id: 007
-  displayName: CircleOfFlames
-  icon: {fileID: 1664431804, guid: 2302c07ac6a7a69498ba349b431fd428, type: 3}
-  school: 0
-  type: 1
-  manaCost: 10
-  cooldown: 3
-  prefab: {fileID: 596965290358967121, guid: f6fd116d600f0da48834b7b96f6d4099, type: 3}
+  id: 010
+  displayName: RestoreMana
+  icon: {fileID: -1473575398, guid: 89e9e0fe7068ede42af76e989e89f6e3, type: 3}
+  school: 3
+  type: 2
+  manaCost: 0
+  cooldown: 1
+  prefab: {fileID: 0}
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3
   power: 20
+  healAmount: 0
+  manaRestoreAmount: 15
+  healthCost: 15
+  affectAllPlayers: 1
+  auraDuration: 1
+  auraPrefab: {fileID: 8151918111691595867, guid: 6f4936ad235e01d4e9eac0bd6bedd281, type: 3}
   areaShape: 0
   coneAngle: 45
   isChanneled: 0
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
+  explosionDamage: 0

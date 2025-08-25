@@ -117,6 +117,12 @@ public class PlayerSpellBook : MonoBehaviour
     {
         if (spell.prefab == null) return;
         var projectile = Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
+
+        // **IMPORTANTE: inicializar runtime**
+        var projRuntime = projectile.GetComponent<ProjectileRuntime>();
+        if (projRuntime != null)
+            projRuntime.Init(this, spell);
+
         if (projectile.TryGetComponent<Rigidbody2D>(out var rb))
         {
             rb.velocity = dir.normalized * spell.projectileSpeed;
@@ -189,10 +195,38 @@ public class PlayerSpellBook : MonoBehaviour
 
     private void CastSelf(SpellData spell)
     {
-        // ejemplo: curación
-        controller.Heal(spell.power);
-        // shields/buffs -> aquí o con un prefab buffer si prefieres efectos visuales
+        if (spell == null) return;
+
+        // Coste en vida
+        if (spell.healthCost > 0)
+            controller.TakeDamage(spell.healthCost);
+
+        // Determinar objetivos
+        PlayerController[] targets;
+        if (spell.affectAllPlayers)
+            targets = FindObjectsOfType<PlayerController>();
+        else
+            targets = new PlayerController[] { controller };
+
+        foreach (var player in targets)
+        {
+            // Curación
+            if (spell.healAmount > 0)
+                player.Heal(spell.healAmount);
+
+            // Restaurar mana
+            if (spell.manaRestoreAmount > 0)
+                player.RestoreMana(spell.manaRestoreAmount);
+
+            // Aura visual
+            if (spell.auraPrefab != null)
+            {
+                var vfx = Instantiate(spell.auraPrefab, player.transform.position, Quaternion.identity, player.transform);
+                Destroy(vfx, spell.auraDuration > 0 ? spell.auraDuration : 0.5f);
+            }
+        }
     }
+
 
     private void CastSummon(SpellData spell)
     {

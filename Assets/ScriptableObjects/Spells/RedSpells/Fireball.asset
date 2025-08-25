@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
-  m_Name: CircleOfFlames
+  m_Name: Fireball
   m_EditorClassIdentifier: 
-  id: 007
-  displayName: CircleOfFlames
-  icon: {fileID: 1664431804, guid: 2302c07ac6a7a69498ba349b431fd428, type: 3}
+  id: 008
+  displayName: Fireball
+  icon: {fileID: -866124095, guid: e2da14a6a971c574abe9d5bdc2a3f6f6, type: 3}
   school: 0
-  type: 1
-  manaCost: 10
-  cooldown: 3
-  prefab: {fileID: 596965290358967121, guid: f6fd116d600f0da48834b7b96f6d4099, type: 3}
+  type: 0
+  manaCost: 15
+  cooldown: 1
+  prefab: {fileID: 1462063585728789021, guid: c543635515548424b90f112ddc5a80fd, type: 3}
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3
@@ -27,3 +27,6 @@ MonoBehaviour:
   areaShape: 0
   coneAngle: 45
   isChanneled: 0
+  explosionPrefab: {fileID: 9119741086083730073, guid: de7557c8f04c36443bdbf2d8fc710bce, type: 3}
+  explosionRadius: 5
+  explosionDamage: 10

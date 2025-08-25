@@ -21,6 +21,14 @@ public class SpellData : ScriptableObject
     public float duration = 3f;         // p.ej. AoE vivo / buff duración
     public float power = 20f;           // daño/curación genérica según tipo
 
+    [Header("Curación")]
+    public float healAmount = 20f;
+    public float manaRestoreAmount; // cuanto mana devuelve
+    public float healthCost;       // vida que pierde el lanzador
+    public bool affectAllPlayers = false;
+    public float auraDuration = 1f; // duración del aura
+    public GameObject auraPrefab; // el aura verde opcional
+
     [Header("Área")]
     public AreaShape areaShape;
     public float coneAngle = 45f; // solo para conos
@@ -28,5 +36,12 @@ public class SpellData : ScriptableObject
     [Header("Canalización")]
     [Tooltip("true para conos, rayos o cualquier hechizo de duración prolongada")]
     public bool isChanneled; // true para conos, rayos, etc.
+
+    [Header("Explosión")]
+    [Tooltip("Si el proyectil explota al impactar")]
+    public GameObject explosionPrefab; // opcional, para proyectiles que explotan
+    public float explosionRadius;
+    public float explosionDamage;
+
 
 }

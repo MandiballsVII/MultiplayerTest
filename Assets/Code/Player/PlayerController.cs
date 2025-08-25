@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
             OnManaChanged?.Invoke(currentMana);
         }
     }
+    public void RestoreMana(float amount)
+    {
+        currentMana = Mathf.Clamp(currentMana + amount, 0, maxMana);
+        OnManaChanged?.Invoke(currentMana);
+    }
 
     public void UseMana(float amount)
     {
