@@ -7,6 +7,7 @@ public class PlayerHUD : MonoBehaviour
     public Image portraitImage;
     public Slider healthSlider;
     public Slider manaSlider;
+    public PlayerSpellUI spellUI;
 
     public void SetPortrait(Sprite sprite)
     {

@@ -11,6 +11,7 @@ public class HUDManager : MonoBehaviour
     public Transform hudParent;
 
     private Dictionary<PlayerInput, PlayerHUD> playerHUDs = new Dictionary<PlayerInput, PlayerHUD>();
+    private Dictionary<PlayerInput, PlayerSpellUI> playerSpellUIs = new Dictionary<PlayerInput, PlayerSpellUI>();
 
     private void Awake()
     {
@@ -21,10 +22,12 @@ public class HUDManager : MonoBehaviour
     {
         GameObject hudObj = Instantiate(hudPrefab, hudParent);
         PlayerHUD hud = hudObj.GetComponent<PlayerHUD>();
+        PlayerSpellUI spellUI = hudObj.GetComponent<PlayerSpellUI>();
 
         hud.SetPortrait(portrait);
 
         playerHUDs[player] = hud;
+        playerSpellUIs[player] = spellUI;
 
         return hud; // Devolvemos el HUD
     }
@@ -32,5 +35,10 @@ public class HUDManager : MonoBehaviour
     public PlayerHUD GetHUD(PlayerInput player)
     {
         return playerHUDs[player];
+    }
+
+    public PlayerSpellUI GetSpellUI(PlayerInput player)
+    {
+        return playerHUDs[player].spellUI;
     }
 }

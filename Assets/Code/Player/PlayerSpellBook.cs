@@ -22,12 +22,16 @@ public class PlayerSpellBook : MonoBehaviour
     private GameObject activeChannelGO; // referencia al prefab instanciado
     private SpellData activeChannelSpell; // referencia al hechizo
 
+    private PlayerSpellUI spellUI; // Referencia al HUD
+
     void Awake()
     {
         controller = GetComponent<PlayerController>();
         playerInput = GetComponent<PlayerInput>();
         playerAim = GetComponent<PlayerAim>();
         if (castPoint == null) castPoint = playerAim.shootPoint; // fallback
+
+        spellUI = FindObjectOfType<PlayerSpellUI>(); // Busca la UI en escena
     }
 
     void Update()
@@ -42,19 +46,30 @@ public class PlayerSpellBook : MonoBehaviour
     public void Self(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(2); }
     public void Summon(InputAction.CallbackContext ctx) { if (ctx.performed) TryCast(3); }
 
-    public void AddSpellToInventory(SpellData data)
+    public void AddSpellToInventory(SpellData spell)
     {
-        if (!inventory.Contains(data)) inventory.Add(data);
+        if (!inventory.Contains(spell)) inventory.Add(spell);
 
-        int slotIndex = GetSlotIndexForType(data.type);
+        int slotIndex = GetSlotIndexForType(spell.type);
         if (slotIndex < 0 || slotIndex >= slots.Length)
         {
-            Debug.LogWarning($"[{name}] No hay slot para el tipo {data.type}");
+            Debug.LogWarning($"[{name}] No hay slot para el tipo {spell.type}");
             return;
         }
 
-        slots[slotIndex] = data;
-        Debug.Log($"[{name}] Asignado {data.displayName} al slot {slotIndex + 1}");
+        slots[slotIndex] = spell;
+        Debug.Log($"[{name}] Asignado {spell.displayName} al slot {slotIndex + 1}");
+
+        // Actualizar UI
+        var spellUI = HUDManager.Instance.GetSpellUI(controller.PlayerInput);
+        if (spellUI != null)
+        {
+            spellUI.UpdateSpellIcon(spell.type, spell.icon);
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró PlayerSpellUI para este jugador");
+        }
     }
 
     private int GetSlotIndexForType(SpellType type)
