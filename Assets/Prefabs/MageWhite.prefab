@@ -56,6 +56,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 3a716884f364d234eafd226124830615, type: 3}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2b9f263ab7db3f243b6f8bdbd68e0525, type: 3}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8508372035626733680, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_Name
       value: MageWhite

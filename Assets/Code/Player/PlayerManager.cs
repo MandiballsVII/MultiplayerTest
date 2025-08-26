@@ -8,6 +8,10 @@ public class PlayerManager : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private CapsuleCollider2D capsuleCollider;
+    private GameObject playerBody;
+    private GameObject playerHands;
+    private Animator bodyAnimator;
+    private Animator handsAnimator;
 
     private Vector2 moveInput;
     public bool controlsEnabled = true;
@@ -36,18 +40,52 @@ public class PlayerManager : MonoBehaviour
     public Transform bodyTransform; // Nuevo: el sprite del cuerpo
     public Transform aimTransform;  // Nuevo: referencia al Aim (lo setea PlayerAim en Awake)
 
+    public enum PlayerAnimState
+    {
+        Idle,
+        MoveForward,
+        MoveBack,
+        MoveLeft,
+        MoveRight
+    }
+
+    private PlayerAnimState currentState = PlayerAnimState.Idle;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        playerBody = transform.Find("Body").gameObject;
+        playerHands = playerBody.transform.Find("Hands").gameObject;
+        print($"[PlayerManager] Body: {playerBody.name}, Hands: {playerHands.name}");
+        bodyAnimator = playerBody.GetComponent<Animator>();
+        handsAnimator = playerHands.GetComponent<Animator>();
     }
 
     void OnEnable() { MultiTargetCamera.Instance?.Register(transform); }
     void OnDisable() { MultiTargetCamera.Instance?.Unregister(transform); }
 
+    //private void Update()
+    //{
+    //    Vector2 moveDir = moveInput; // Vector2 del Input System (x, y)
+
+    //    float aimAngle = aimTransform.eulerAngles.z * Mathf.Deg2Rad;
+
+    //    // Movimiento en espacio local del aim
+    //    float localX = moveInput.x * Mathf.Cos(-aimAngle) - moveInput.y * Mathf.Sin(-aimAngle);
+    //    float localY = moveInput.x * Mathf.Sin(-aimAngle) + moveInput.y * Mathf.Cos(-aimAngle);
+
+    //    bodyAnimator.SetFloat("MoveX", localX);
+    //    bodyAnimator.SetFloat("MoveY", localY);
+
+    //    // También podrías controlar un "isMoving" para la velocidad de animación
+    //    //bodyAnimator.SetFloat("Speed", moveDir.magnitude);
+    //    print($"[PlayerManager] MoveInput: {moveInput}, Local: ({localX:F2}, {localY:F2})");
+    //}
     void FixedUpdate()
     {
+        Vector2 moveDir = moveInput; // Vector2 del Input System (x, y)
         if (!controlsEnabled || isDead || isDashing)
         {
             if (!isDashing) rb.velocity = Vector2.zero;
@@ -57,7 +95,9 @@ public class PlayerManager : MonoBehaviour
         rb.velocity = moveInput.normalized * movementSpeed;
 
         bool moving = rb.velocity.sqrMagnitude > 0.0001f;
-        animator.SetBool("Moving", moving);
+        //animator.SetBool("Moving", moving);
+        bodyAnimator.SetBool("Moving", moving);
+        handsAnimator.SetBool("Moving", moving);
 
         // Ya NO rotamos el transform según el movimiento
         // Ahora el cuerpo mira donde apuntan las manos (Aim)
@@ -78,7 +118,58 @@ public class PlayerManager : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, camBounds.min.y + halfHeight, camBounds.max.y - halfHeight);
 
         transform.position = pos;
+
+        if (moveDir.sqrMagnitude > 0.01f)
+        {
+            Vector2 aimDir = aimTransform.right;
+            float angle = Vector2.SignedAngle(aimDir, moveDir);
+
+            if (angle > -45f && angle <= 45f)
+                ChangeAnimation(PlayerAnimState.MoveForward);
+            else if (angle > 45f && angle <= 135f)
+                ChangeAnimation(PlayerAnimState.MoveLeft);
+            else if (angle <= -45f && angle > -135f)
+                ChangeAnimation(PlayerAnimState.MoveRight);
+            else
+                ChangeAnimation(PlayerAnimState.MoveBack);
+        }
+        else
+        {
+            ChangeAnimation(PlayerAnimState.Idle);
+        }
     }
+
+    private void ChangeAnimation(PlayerAnimState newState)
+    {
+        if (currentState == newState) return; // Ya estamos en esa animación
+
+        currentState = newState;
+
+        switch (newState)
+        {
+            case PlayerAnimState.Idle:
+                bodyAnimator.Play("BodyIdle");
+                //handsAnimator.Play("Idle");
+                break;
+            case PlayerAnimState.MoveForward:
+                bodyAnimator.Play("BodyMoveForward");
+                //handsAnimator.Play("HandsMoveForward");
+                break;
+            case PlayerAnimState.MoveBack:
+                bodyAnimator.Play("BodyMoveBack");
+                //handsAnimator.Play("HandsMoveBack");
+                break;
+            case PlayerAnimState.MoveLeft:
+                bodyAnimator.Play("BodyMoveLeft");
+                //handsAnimator.Play("HandsMoveLeft");
+                break;
+            case PlayerAnimState.MoveRight:
+                bodyAnimator.Play("BodyMoveRight");
+                //handsAnimator.Play("HandsMoveRight");
+                break;
+        }
+    }
+
 
     // === INPUT (Unity Events) ===
     public void Move(InputAction.CallbackContext ctx)

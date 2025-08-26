@@ -60,6 +60,18 @@ PrefabInstance:
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6592952796173601565, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592952796173601565, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6592952796173601565, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 167389457
+      objectReference: {fileID: 0}
     - target: {fileID: 6699353791244963379, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: controlsEnabled
       value: 1
@@ -71,7 +83,19 @@ PrefabInstance:
     - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 595e1f9a80a1f274cb659d305f9561f6, type: 3}
+      objectReference: {fileID: 21300000, guid: 2b9f263ab7db3f243b6f8bdbd68e0525, type: 3}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.b
+      value: 0.3773585
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3773585
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.r
+      value: 0.3773585
+      objectReference: {fileID: 0}
     - target: {fileID: 8508372035626733680, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_Name
       value: MageBlack

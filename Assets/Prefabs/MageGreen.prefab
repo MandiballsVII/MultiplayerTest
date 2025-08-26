@@ -63,7 +63,19 @@ PrefabInstance:
     - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 9efb700e724d0834b8dc99949a379fa9, type: 3}
+      objectReference: {fileID: 21300000, guid: 2b9f263ab7db3f243b6f8bdbd68e0525, type: 3}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.b
+      value: 0.13061868
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4811321
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734292432900678793, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Color.r
+      value: 0.12936097
+      objectReference: {fileID: 0}
     - target: {fileID: 8508372035626733680, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_Name
       value: MageGreen
