@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 004
   displayName: MagicMissile_Red
-  icon: {fileID: -1398928628, guid: 443d5b615c0dd0f45a0f40778531dbe9, type: 3}
+  icon: {fileID: 21300000, guid: a79ed432312623e43bbddd9258ad3be1, type: 3}
   school: 4
   type: 0
   manaCost: 1
@@ -24,3 +24,18 @@ MonoBehaviour:
   areaRadius: 2.5
   duration: 3
   power: 20
+  healAmount: 20
+  manaRestoreAmount: 0
+  healthCost: 0
+  affectAllPlayers: 0
+  auraDuration: 1
+  auraPrefab: {fileID: 0}
+  areaShape: 0
+  coneAngle: 45
+  isChanneled: 0
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
+  explosionDamage: 0
+  summonPrefab: {fileID: 0}
+  summonCount: 1
+  summonDuration: 10

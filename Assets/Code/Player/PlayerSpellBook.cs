@@ -22,6 +22,8 @@ public class PlayerSpellBook : MonoBehaviour
     private GameObject activeChannelGO; // referencia al prefab instanciado
     private SpellData activeChannelSpell; // referencia al hechizo
 
+    public SpellData defaultProjectileSpell;
+
     private PlayerSpellUI spellUI; // Referencia al HUD
 
     void Awake()
@@ -32,6 +34,18 @@ public class PlayerSpellBook : MonoBehaviour
         if (castPoint == null) castPoint = playerAim.shootPoint; // fallback
 
         spellUI = FindObjectOfType<PlayerSpellUI>(); // Busca la UI en escena
+    }
+
+    void Start()
+    {
+        if (slots[0] == null && defaultProjectileSpell != null)
+            StartCoroutine(AssignDefaultSpellNextFrame());
+    }
+
+    private IEnumerator AssignDefaultSpellNextFrame()
+    {
+        yield return null; // espera 1 frame
+        AddSpellToInventory(defaultProjectileSpell);
     }
 
     void Update()

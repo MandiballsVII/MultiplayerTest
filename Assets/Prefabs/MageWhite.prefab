@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MageWhite
       objectReference: {fileID: 0}
+    - target: {fileID: 8767550588605358134, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: defaultProjectileSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: e00cf7ff0443cd44ab5045b52226e8d7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

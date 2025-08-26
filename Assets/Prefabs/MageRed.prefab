@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.5754717
       objectReference: {fileID: 0}
+    - target: {fileID: 8767550588605358134, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: defaultProjectileSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 05b03e208880df945856edd5adb50857, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
