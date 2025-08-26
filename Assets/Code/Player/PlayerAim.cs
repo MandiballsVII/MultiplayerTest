@@ -22,12 +22,20 @@ public class PlayerAim : MonoBehaviour
     private Vector2 _aimPointer;
     private const float STICK_DEADZONE = 0.15f;
 
+    [SerializeField] private Transform body; // Asigna el objeto Body en el inspector
+
     void Awake()
     {
         aimTransform = transform.Find("Aim");
         currentAmmo = maxAmmo;
         playerController = GetComponent<PlayerController>();
         playerManager = GetComponent<PlayerManager>();
+
+        // Pasamos la referencia al PlayerManager
+        if (playerManager != null)
+        {
+            playerManager.aimTransform = aimTransform;
+        }
     }
 
     void Update()
@@ -65,7 +73,6 @@ public class PlayerAim : MonoBehaviour
         float angle;
         Vector3 dir;
 
-        // 1) Priorizes stick if it's over deadzone
         if (_aimStick.sqrMagnitude >= STICK_DEADZONE * STICK_DEADZONE)
         {
             angle = Mathf.Atan2(_aimStick.y, _aimStick.x) * Mathf.Rad2Deg;
@@ -79,14 +86,22 @@ public class PlayerAim : MonoBehaviour
             angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         }
 
+        // Rotar Aim (manos/arma)
         if (aimTransform != null)
         {
             aimTransform.eulerAngles = new Vector3(0, 0, angle);
 
-            // Flip of weapon sprite
             Vector3 aimLocalScale = Vector3.one;
             aimLocalScale.y = (angle > 90 || angle < -90) ? -1f : 1f;
             aimTransform.localScale = aimLocalScale;
+        }
+
+        // Flipping del cuerpo
+        if (body != null)
+        {
+            Vector3 bodyScale = body.localScale;
+            bodyScale.x = (angle > 90 || angle < -90) ? -1f : 1f;
+            body.localScale = bodyScale;
         }
     }
 

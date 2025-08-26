@@ -17,13 +17,13 @@ public class PlayerManager : MonoBehaviour
     public int healthPoints = 3;
 
     [Header("Dash Settings")]
-    public float dashDistance = 5f;       // Distancia del dash
-    public float dashDuration = 0.2f;     // Tiempo que dura el dash
-    public float dashCooldown = 1f;       // Tiempo entre dashes
+    public float dashDistance = 5f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
     public bool dashInvulnerability = true;
 
     private bool isDashing = false;
-    public bool IsDashing => isDashing; // Propiedad pública de solo lectura
+    public bool IsDashing => isDashing;
     private bool canDash = true;
 
     [HideInInspector] public bool invulnerable;
@@ -31,6 +31,10 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] GameObject deathMenu;
     [SerializeField] private TrailRenderer dashTrail;
+
+    [Header("References")]
+    public Transform bodyTransform; // Nuevo: el sprite del cuerpo
+    public Transform aimTransform;  // Nuevo: referencia al Aim (lo setea PlayerAim en Awake)
 
     void Awake()
     {
@@ -55,10 +59,12 @@ public class PlayerManager : MonoBehaviour
         bool moving = rb.velocity.sqrMagnitude > 0.0001f;
         animator.SetBool("Moving", moving);
 
-        if (moving)
+        // Ya NO rotamos el transform según el movimiento
+        // Ahora el cuerpo mira donde apuntan las manos (Aim)
+        if (aimTransform != null && bodyTransform != null)
         {
-            float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            float aimAngle = aimTransform.eulerAngles.z;
+            bodyTransform.rotation = Quaternion.Euler(0, 0, aimAngle);
         }
 
         // === Stay into camera space ===
@@ -92,7 +98,6 @@ public class PlayerManager : MonoBehaviour
         isDashing = true;
         if (dashInvulnerability) invulnerable = true;
 
-        // Activar trail
         if (dashTrail != null) dashTrail.emitting = true;
 
         Vector2 dashDirection = moveInput.normalized;
@@ -105,7 +110,6 @@ public class PlayerManager : MonoBehaviour
         if (dashInvulnerability) invulnerable = false;
         isDashing = false;
 
-        // Desactivar trail
         if (dashTrail != null) dashTrail.emitting = false;
         dashTrail.Clear();
 
