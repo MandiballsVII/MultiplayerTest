@@ -66,23 +66,6 @@ public class PlayerManager : MonoBehaviour
     void OnEnable() { MultiTargetCamera.Instance?.Register(transform); }
     void OnDisable() { MultiTargetCamera.Instance?.Unregister(transform); }
 
-    //private void Update()
-    //{
-    //    Vector2 moveDir = moveInput; // Vector2 del Input System (x, y)
-
-    //    float aimAngle = aimTransform.eulerAngles.z * Mathf.Deg2Rad;
-
-    //    // Movimiento en espacio local del aim
-    //    float localX = moveInput.x * Mathf.Cos(-aimAngle) - moveInput.y * Mathf.Sin(-aimAngle);
-    //    float localY = moveInput.x * Mathf.Sin(-aimAngle) + moveInput.y * Mathf.Cos(-aimAngle);
-
-    //    bodyAnimator.SetFloat("MoveX", localX);
-    //    bodyAnimator.SetFloat("MoveY", localY);
-
-    //    // También podrías controlar un "isMoving" para la velocidad de animación
-    //    //bodyAnimator.SetFloat("Speed", moveDir.magnitude);
-    //    print($"[PlayerManager] MoveInput: {moveInput}, Local: ({localX:F2}, {localY:F2})");
-    //}
     void FixedUpdate()
     {
         Vector2 moveDir = moveInput; // Vector2 del Input System (x, y)
@@ -95,10 +78,7 @@ public class PlayerManager : MonoBehaviour
         rb.velocity = moveInput.normalized * movementSpeed;
 
         bool moving = rb.velocity.sqrMagnitude > 0.0001f;
-        //animator.SetBool("Moving", moving);
-        bodyAnimator.SetBool("Moving", moving);
-        handsAnimator.SetBool("Moving", moving);
-
+        
         // Ya NO rotamos el transform según el movimiento
         // Ahora el cuerpo mira donde apuntan las manos (Aim)
         if (aimTransform != null && bodyTransform != null)
@@ -149,23 +129,23 @@ public class PlayerManager : MonoBehaviour
         {
             case PlayerAnimState.Idle:
                 bodyAnimator.Play("BodyIdle");
-                //handsAnimator.Play("Idle");
+                handsAnimator.Play("HandsIdle");
                 break;
             case PlayerAnimState.MoveForward:
                 bodyAnimator.Play("BodyMoveForward");
-                //handsAnimator.Play("HandsMoveForward");
+                handsAnimator.Play("HandsMovingForward");
                 break;
             case PlayerAnimState.MoveBack:
                 bodyAnimator.Play("BodyMoveBack");
-                //handsAnimator.Play("HandsMoveBack");
+                handsAnimator.Play("HandsMovingBack");
                 break;
             case PlayerAnimState.MoveLeft:
                 bodyAnimator.Play("BodyMoveLeft");
-                //handsAnimator.Play("HandsMoveLeft");
+                handsAnimator.Play("HandsMovingLeft");
                 break;
             case PlayerAnimState.MoveRight:
                 bodyAnimator.Play("BodyMoveRight");
-                //handsAnimator.Play("HandsMoveRight");
+                handsAnimator.Play("HandsMovingRight");
                 break;
         }
     }
