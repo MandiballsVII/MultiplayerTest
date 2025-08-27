@@ -44,7 +44,7 @@ public class BeholderRay : MonoBehaviour
         }
 
         // destruye si golpea un muro u otra cosa (opcional)
-        if (col.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        if (col.gameObject.layer == LayerMask.NameToLayer("Obstacles"))
         {
             Destroy(gameObject);
         }

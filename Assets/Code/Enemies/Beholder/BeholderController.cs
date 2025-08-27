@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class BeholderController : MonoBehaviour
@@ -9,9 +11,10 @@ public class BeholderController : MonoBehaviour
     public float stoppingTolerance = 0.5f;
     public float moveSpeed = 3f;
     public LayerMask playerLayer;
+    public LayerMask obstacleLayer;
 
-    [SerializeField] private float moveThreshold = 0.01f; // mínimo delta
-    [SerializeField] private float stopDelay = 0.1f;      // segundos que espera antes de poner Idle
+    [SerializeField] private float moveThreshold = 0.01f;
+    [SerializeField] private float stopDelay = 0.1f;
     private float stopTimer = 0f;
 
     [Header("Attack")]
@@ -26,12 +29,21 @@ public class BeholderController : MonoBehaviour
     private float lastShotTime = -999f;
     private Vector2 lastPosition;
 
+    // Pathfinding opcional
+    private List<Vector3> currentPath;
+    private int pathIndex = 0;
+    private Vector3 lastKnownPlayerPos;
+    private bool hasLOS = false; // line of sight
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
-        rb.bodyType = RigidbodyType2D.Kinematic; // mantenemos Kinematic
+        rb.bodyType = RigidbodyType2D.Kinematic;
         anim = GetComponent<Animator>();
+
+        if (firePoint == null)
+            firePoint = transform; // fallback
     }
 
     void Start()
@@ -42,21 +54,117 @@ public class BeholderController : MonoBehaviour
     void Update()
     {
         DetectNearestPlayer();
+        UpdateLineOfSight();
 
-        if (target != null)
+        if (hasLOS && target != null)
+            lastKnownPlayerPos = target.position;
+
+        if (target != null && hasLOS)
             TryShootAtTarget();
     }
 
     void FixedUpdate()
     {
-        // --- Movimiento ---
-        if (target != null)
-        {
-            MoveToOptimalDistance();
-            RotateToFaceTarget();
-        }
+        HandleMovement();
+        HandleRotation();
+        HandleAnimation();
+    }
 
-        // --- Comprobación de movimiento para animación ---
+    void DetectNearestPlayer()
+    {
+        if (playerLayer == 0)
+            playerLayer = LayerMask.GetMask("Player");
+
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
+        if (cols.Length == 0) { target = null; return; }
+
+        float bestDist = float.MaxValue;
+        Transform best = null;
+        foreach (var c in cols)
+        {
+            float d = Vector2.Distance(transform.position, c.transform.position);
+            if (d < bestDist) { bestDist = d; best = c.transform; }
+        }
+        target = best;
+    }
+
+    void UpdateLineOfSight()
+    {
+        if (target == null) { hasLOS = false; return; }
+
+        Vector2 dir = (target.position - transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, detectionRadius, obstacleLayer | playerLayer);
+        hasLOS = hit && hit.collider != null && hit.collider.transform == target;
+    }
+
+    void HandleMovement()
+    {
+        if (target == null && lastKnownPlayerPos == Vector3.zero)
+            return;
+
+        Vector3 destination = (hasLOS && target != null) ? target.position : lastKnownPlayerPos;
+
+        Vector2 toTarget = (Vector2)destination - rb.position;
+        float dist = toTarget.magnitude;
+
+        Vector2 desiredMove = Vector2.zero;
+
+        if (dist > optimalDistance + stoppingTolerance)
+            desiredMove = toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
+        else if (dist < optimalDistance - stoppingTolerance)
+            desiredMove = -toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
+
+        if (desiredMove != Vector2.zero)
+        {
+            // Separar el movimiento en X y Y
+            Vector2 moveX = new Vector2(desiredMove.x, 0f);
+            Vector2 moveY = new Vector2(0f, desiredMove.y);
+
+            // Primero eje X
+            if (moveX != Vector2.zero)
+            {
+                RaycastHit2D hitX = Physics2D.BoxCast(
+                    rb.position,
+                    rb.GetComponent<Collider2D>().bounds.size,
+                    0f,
+                    moveX.normalized,
+                    Mathf.Abs(moveX.x),
+                    obstacleLayer
+                );
+                if (!hitX)
+                    rb.MovePosition(rb.position + moveX);
+            }
+
+            // Luego eje Y
+            if (moveY != Vector2.zero)
+            {
+                RaycastHit2D hitY = Physics2D.BoxCast(
+                    rb.position,
+                    rb.GetComponent<Collider2D>().bounds.size,
+                    0f,
+                    moveY.normalized,
+                    Mathf.Abs(moveY.y),
+                    obstacleLayer
+                );
+                if (!hitY)
+                    rb.MovePosition(rb.position + moveY);
+            }
+        }
+    }
+
+
+    void HandleRotation()
+    {
+        if (target == null && !hasLOS) return;
+
+        Vector2 lookTarget = hasLOS ? (Vector2)target.position : (Vector2)lastKnownPlayerPos;
+        Vector2 toTarget = lookTarget - rb.position;
+        float angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg + 90f;
+        rb.MoveRotation(angle);
+    }
+
+    void HandleAnimation()
+    {
         Vector2 moveDelta = rb.position - lastPosition;
         bool currentlyMoving = moveDelta.sqrMagnitude > moveThreshold;
 
@@ -75,51 +183,9 @@ public class BeholderController : MonoBehaviour
         lastPosition = rb.position;
     }
 
-    void DetectNearestPlayer()
-    {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
-        if (cols.Length == 0) { target = null; return; }
-
-        float bestDist = float.MaxValue;
-        Transform best = null;
-        foreach (var c in cols)
-        {
-            float d = Vector2.Distance(transform.position, c.transform.position);
-            if (d < bestDist) { bestDist = d; best = c.transform; }
-        }
-        target = best;
-    }
-
-    void MoveToOptimalDistance()
-    {
-        if (target == null) return;
-
-        Vector2 toTarget = (Vector2)target.position - rb.position;
-        float dist = toTarget.magnitude;
-        Vector2 move = Vector2.zero;
-
-        if (dist > optimalDistance + stoppingTolerance)
-            move = toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
-        else if (dist < optimalDistance - stoppingTolerance)
-            move = -toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
-
-        if (move != Vector2.zero)
-            rb.MovePosition(rb.position + move);
-    }
-
-    void RotateToFaceTarget()
-    {
-        if (target == null) return;
-
-        Vector2 toTarget = (Vector2)target.position - rb.position;
-        float angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
-        angle += 90f; // el sprite mira hacia abajo
-        rb.MoveRotation(angle);
-    }
-
     void TryShootAtTarget()
     {
-        if (rayPrefab == null || firePoint == null) return;
+        if (rayPrefab == null || firePoint == null || !hasLOS) return;
         if (Time.time < lastShotTime + rayCooldown) return;
 
         lastShotTime = Time.time;

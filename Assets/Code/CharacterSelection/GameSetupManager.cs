@@ -47,6 +47,9 @@ public class GameSetupManager : MonoBehaviour
             // Colocar en el spawn correspondiente
             pi.transform.position = spawnPoints[spawnIndex].position;
 
+            if (PlayerRegistry.Instance != null)
+                PlayerRegistry.Instance.RegisterPlayer(playerObj);
+
             spawnIndex++;
         }
     }

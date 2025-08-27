@@ -19,7 +19,7 @@ public class SpellHit : MonoBehaviour
             // VFX, sonido, etc.
             Destroy(gameObject);
         }
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Obstacles"))
         {
             Destroy(gameObject);
         }

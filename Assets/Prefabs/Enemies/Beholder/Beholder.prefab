@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1238120815683575095}
   - component: {fileID: 2908709910248132014}
   - component: {fileID: 9094758326915798999}
+  - component: {fileID: 6954551297002736540}
   m_Layer: 9
   m_Name: Beholder
   m_TagString: Enemy
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 1478876046, guid: 32e99727202667a4fa77018760aa62a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -130,6 +131,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  moveThreshold: 0.01
+  stopDelay: 0.1
   firePoint: {fileID: 8017433289461637734}
   rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
   rayCooldown: 2
@@ -215,10 +221,40 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  firePoint: {fileID: 0}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  moveThreshold: 0.01
+  stopDelay: 0.1
+  firePoint: {fileID: 8017433289461637734}
   rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
   rayCooldown: 2
   raySpeed: 12
+--- !u!114 &6954551297002736540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123015357571365071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecc8950ec24e5c244b9c6261cd28fba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  firePoint: {fileID: 8017433289461637734}
+  rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
+  obstacleTilemap: {fileID: 0}
+  detectionRadius: 10
+  stoppingDistance: 2
+  moveSpeed: 3
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  rayCooldown: 2
+  raySpeed: 10
+  nodeSize: 1
 --- !u!1 &3345964778419949204
 GameObject:
   m_ObjectHideFlags: 0
