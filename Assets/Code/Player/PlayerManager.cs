@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
     public bool controlsEnabled = true;
 
     [Header("Movement")]
-    public int movementSpeed = 6;
+    public float movementSpeed = 6;
     public int healthPoints = 3;
 
     [Header("Dash Settings")]

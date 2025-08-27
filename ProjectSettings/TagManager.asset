@@ -18,8 +18,8 @@ TagManager:
   - Player
   - Object
   - Walls
-  - 
-  - 
+  - Enemy
+  - Projectiles
   - 
   - 
   - 
@@ -53,6 +53,9 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 648066803
+    locked: 0
+  - name: Enemy
+    uniqueID: 3201853011
     locked: 0
   - name: Player
     uniqueID: 167389457

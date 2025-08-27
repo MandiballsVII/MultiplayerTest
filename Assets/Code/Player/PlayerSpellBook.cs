@@ -26,6 +26,8 @@ public class PlayerSpellBook : MonoBehaviour
 
     private PlayerSpellUI spellUI; // Referencia al HUD
 
+    public bool silenced;
+
     void Awake()
     {
         controller = GetComponent<PlayerController>();
@@ -100,6 +102,7 @@ public class PlayerSpellBook : MonoBehaviour
 
     private void TryCast(int slotIndex)
     {
+        if(silenced) return; // No puedes castear si estás silenciado
         if (isCastingChannel)
             return; // No puedes castear otro hechizo mientras canalizas
         var spell = slots[slotIndex];
