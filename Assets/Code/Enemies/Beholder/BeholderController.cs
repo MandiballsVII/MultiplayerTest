@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
@@ -10,7 +11,7 @@ public class BeholderController : MonoBehaviour
     public float moveSpeed = 3f;
     public LayerMask playerLayer;
 
-    [SerializeField] private float moveThreshold = 0.01f; // mínimo delta
+    [SerializeField] private float moveThreshold = 0.0001f; // mínimo delta
     [SerializeField] private float stopDelay = 0.1f;      // segundos que espera antes de poner Idle
     private float stopTimer = 0f;
 
@@ -19,12 +20,15 @@ public class BeholderController : MonoBehaviour
     public GameObject rayPrefab;
     public float rayCooldown = 2f;
     public float raySpeed = 12f;
+    public float shotDelayBetweenPlayers = 0.3f;
 
     private Animator anim;
     private Rigidbody2D rb;
-    private Transform target;
+
+    private List<Transform> detectedPlayers = new List<Transform>();
+    private Transform closestTarget;
     private float lastShotTime = -999f;
-    private Vector2 lastPosition;
+    CircleCollider2D circleCollider2D;
 
     void Awake()
     {
@@ -32,32 +36,28 @@ public class BeholderController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.bodyType = RigidbodyType2D.Kinematic; // mantenemos Kinematic
         anim = GetComponent<Animator>();
-    }
-
-    void Start()
-    {
-        lastPosition = rb.position;
+        circleCollider2D = GetComponent<CircleCollider2D>();
     }
 
     void Update()
     {
-        DetectNearestPlayer();
+        DetectPlayers();
 
-        if (target != null)
-            TryShootAtTarget();
+        if (detectedPlayers.Count > 0)
+            TryShootAtPlayers();
     }
 
     void FixedUpdate()
     {
         // --- Movimiento ---
-        if (target != null)
+        if (closestTarget != null)
         {
             MoveToOptimalDistance();
             RotateToFaceTarget();
         }
 
         // --- Comprobación de movimiento para animación ---
-        Vector2 moveDelta = rb.position - lastPosition;
+        Vector2 moveDelta = rb.position - (Vector2)rb.position;
         bool currentlyMoving = moveDelta.sqrMagnitude > moveThreshold;
 
         if (currentlyMoving)
@@ -71,30 +71,41 @@ public class BeholderController : MonoBehaviour
             if (stopTimer >= stopDelay)
                 anim.SetBool("IsMoving", false);
         }
-
-        lastPosition = rb.position;
     }
 
-    void DetectNearestPlayer()
+    void DetectPlayers()
     {
+        detectedPlayers.Clear();
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
-        if (cols.Length == 0) { target = null; return; }
+
+        if (cols.Length == 0)
+        {
+            closestTarget = null;
+            return;
+        }
 
         float bestDist = float.MaxValue;
         Transform best = null;
+
         foreach (var c in cols)
         {
+            detectedPlayers.Add(c.transform);
             float d = Vector2.Distance(transform.position, c.transform.position);
-            if (d < bestDist) { bestDist = d; best = c.transform; }
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = c.transform;
+            }
         }
-        target = best;
+
+        closestTarget = best;
     }
 
     void MoveToOptimalDistance()
     {
-        if (target == null) return;
+        if (closestTarget == null) return;
 
-        Vector2 toTarget = (Vector2)target.position - rb.position;
+        Vector2 toTarget = (Vector2)closestTarget.position - rb.position;
         float dist = toTarget.magnitude;
         Vector2 move = Vector2.zero;
 
@@ -107,45 +118,46 @@ public class BeholderController : MonoBehaviour
         {
             // Verificar colisión con paredes
             Vector2 newPos = rb.position + move;
-            RaycastHit2D hit = Physics2D.Raycast(rb.position, move.normalized, move.magnitude + 1f, LayerMask.GetMask("Walls"));
+            RaycastHit2D hit = Physics2D.Raycast(rb.position, move.normalized, move.magnitude + circleCollider2D.radius, LayerMask.GetMask("Walls"));
 
             if (hit.collider == null) // si no hay pared delante, movemos
             {
                 rb.MovePosition(newPos);
             }
-            else
-            {
-                // Bloqueado por pared -> no mover
-                Debug.Log("[Beholder] Movimiento bloqueado por pared: " + hit.collider.name);
-            }
+            
         }
     }
 
 
     void RotateToFaceTarget()
     {
-        if (target == null) return;
+        if (closestTarget == null) return;
 
-        Vector2 toTarget = (Vector2)target.position - rb.position;
+        Vector2 toTarget = (Vector2)closestTarget.position - rb.position;
         float angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
         angle += 90f; // el sprite mira hacia abajo
         rb.MoveRotation(angle);
     }
 
-    void TryShootAtTarget()
+    void TryShootAtPlayers()
     {
         if (rayPrefab == null || firePoint == null) return;
         if (Time.time < lastShotTime + rayCooldown) return;
 
         lastShotTime = Time.time;
 
-        Vector2 dir = ((Vector2)target.position - (Vector2)firePoint.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+        foreach (var player in detectedPlayers)
+        {
+            if (player == null) continue;
 
-        GameObject go = Instantiate(rayPrefab, firePoint.position, rotation);
-        var ray = go.GetComponent<BeholderRay>();
-        if (ray != null) ray.Init(dir, raySpeed);
+            Vector2 dir = ((Vector2)player.position - (Vector2)firePoint.position).normalized;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+            GameObject go = Instantiate(rayPrefab, firePoint.position, rotation);
+            var ray = go.GetComponent<BeholderRay>();
+            if (ray != null) ray.Init(dir, raySpeed);
+        }
     }
 
     void OnDrawGizmosSelected()
