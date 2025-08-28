@@ -21,6 +21,7 @@ public class BeholderController : MonoBehaviour
     public float rayCooldown = 2f;
     public float raySpeed = 12f;
     public float shotDelayBetweenPlayers = 0.3f;
+    LayerMask detectionLayers;
 
     private Animator anim;
     private Rigidbody2D rb;
@@ -37,6 +38,7 @@ public class BeholderController : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic; // mantenemos Kinematic
         anim = GetComponent<Animator>();
         circleCollider2D = GetComponent<CircleCollider2D>();
+        detectionLayers = LayerMask.GetMask("Player", "Summoned");
     }
 
     void Update()
@@ -141,16 +143,17 @@ public class BeholderController : MonoBehaviour
 
     void TryShootAtPlayers()
     {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, detectionLayers);
         if (rayPrefab == null || firePoint == null) return;
         if (Time.time < lastShotTime + rayCooldown) return;
 
         lastShotTime = Time.time;
 
-        foreach (var player in detectedPlayers)
+        foreach (var entity in cols)
         {
-            if (player == null) continue;
+            if (entity == null) continue;
 
-            Vector2 dir = ((Vector2)player.position - (Vector2)firePoint.position).normalized;
+            Vector2 dir = ((Vector2)entity.transform.position - (Vector2)firePoint.position).normalized;
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
