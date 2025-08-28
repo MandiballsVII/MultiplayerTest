@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2552560231780528189}
   - component: {fileID: 1238120815683575095}
   - component: {fileID: 2908709910248132014}
-  - component: {fileID: 9094758326915798999}
   m_Layer: 9
   m_Name: Beholder
   m_TagString: Enemy
@@ -77,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 1478876046, guid: 32e99727202667a4fa77018760aa62a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -130,6 +129,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  moveThreshold: 0.0001
+  stopDelay: 0.1
   firePoint: {fileID: 8017433289461637734}
   rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
   rayCooldown: 2
@@ -142,7 +143,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1123015357571365071}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -195,30 +196,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.1}
   serializedVersion: 2
-  m_Radius: 0.8
---- !u!114 &9094758326915798999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1123015357571365071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d1baf3a4ab1aef41aa1cc93cf822a1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionRadius: 10
-  optimalDistance: 5
-  stoppingTolerance: 0.5
-  moveSpeed: 3
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  firePoint: {fileID: 0}
-  rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
-  rayCooldown: 2
-  raySpeed: 12
+  m_Radius: 1
 --- !u!1 &3345964778419949204
 GameObject:
   m_ObjectHideFlags: 0

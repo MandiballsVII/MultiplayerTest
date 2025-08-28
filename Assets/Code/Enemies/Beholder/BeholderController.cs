@@ -104,8 +104,23 @@ public class BeholderController : MonoBehaviour
             move = -toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
 
         if (move != Vector2.zero)
-            rb.MovePosition(rb.position + move);
+        {
+            // Verificar colisión con paredes
+            Vector2 newPos = rb.position + move;
+            RaycastHit2D hit = Physics2D.Raycast(rb.position, move.normalized, move.magnitude + 1f, LayerMask.GetMask("Walls"));
+
+            if (hit.collider == null) // si no hay pared delante, movemos
+            {
+                rb.MovePosition(newPos);
+            }
+            else
+            {
+                // Bloqueado por pared -> no mover
+                Debug.Log("[Beholder] Movimiento bloqueado por pared: " + hit.collider.name);
+            }
+        }
     }
+
 
     void RotateToFaceTarget()
     {

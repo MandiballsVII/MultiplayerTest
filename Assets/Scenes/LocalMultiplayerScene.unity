@@ -498,7 +498,7 @@ GameObject:
   - component: {fileID: 1027493078}
   - component: {fileID: 1027493077}
   - component: {fileID: 1027493076}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14124,6 +14124,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8521183415286118403, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14954,10 +14958,6 @@ PrefabInstance:
     - target: {fileID: 1123015357571365071, guid: c6b88003b5e994b4db6459d83171c02c, type: 3}
       propertyPath: m_Name
       value: Beholder
-      objectReference: {fileID: 0}
-    - target: {fileID: 2908709910248132014, guid: c6b88003b5e994b4db6459d83171c02c, type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7694122034697379609, guid: c6b88003b5e994b4db6459d83171c02c, type: 3}
       propertyPath: m_LocalPosition.x
