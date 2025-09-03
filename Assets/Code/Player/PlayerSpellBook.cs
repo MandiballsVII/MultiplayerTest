@@ -266,16 +266,27 @@ public class PlayerSpellBook : MonoBehaviour
 
         for (int i = 0; i < spell.summonCount; i++)
         {
-            var summon = Instantiate(
-                spell.summonPrefab,
-                castPoint.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f), 0f),
-                Quaternion.identity
-            );
+            var spawnPos = (castPoint != null ? castPoint.position : transform.position) +
+                           new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
-            Destroy(summon, spell.summonDuration);
+            var summon = Instantiate(spell.summonPrefab, spawnPos, Quaternion.identity);
+
+            // Pasar la referencia del invocador al invocado (SummonedBase)
+            var summoned = summon.GetComponent<SummonedBase>();
+            if (summoned != null)
+            {
+                summoned.Init(this.transform);
+            }
+            else
+            {
+                Debug.LogWarning($"El prefab '{summon.name}' no tiene SummonedBase. No se asignó Owner.");
+            }
+
+            // Destruir tras la duración (si procede)
+            if (spell.summonDuration > 0f)
+                Destroy(summon, spell.summonDuration);
         }
-        // Si la invocación necesita saber quién la invocó, pásale referencia
-        //var summ = GetComponentInChildren<SummonRuntime>();
-        // o un script en el prefab de la invocación que acepte “owner”
     }
+
+
 }

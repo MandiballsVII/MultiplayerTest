@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
-public class BeholderController : MonoBehaviour
+public class BeholderController : EnemyBase, IDamageable
 {
     [Header("Detection / Movement")]
     public float detectionRadius = 10f;
@@ -31,7 +31,7 @@ public class BeholderController : MonoBehaviour
     private float lastShotTime = -999f;
     CircleCollider2D circleCollider2D;
 
-    void Awake()
+    protected override void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
@@ -39,6 +39,7 @@ public class BeholderController : MonoBehaviour
         anim = GetComponent<Animator>();
         circleCollider2D = GetComponent<CircleCollider2D>();
         detectionLayers = LayerMask.GetMask("Player", "Summoned");
+        currentHealth = maxHealth;
     }
 
     void Update()
@@ -170,5 +171,17 @@ public class BeholderController : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, optimalDistance);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+    }
+
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        if(currentHealth > maxHealth)
+            currentHealth = maxHealth;
     }
 }
