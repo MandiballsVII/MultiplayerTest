@@ -249,20 +249,20 @@ public class RandomWalkerGenerator : MonoBehaviour
         newNPC.currentNode = randNode;
     }
 
-/*    private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if (canDrawGizmos)
         {
             Gizmos.color = Color.blue;
-            for(int i =0; i < nodeList.Count; i++)
+            for (int i = 0; i < nodeList.Count; i++)
             {
-                for(int j = 0; j < nodeList[i].connections.Count; j++)
+                for (int j = 0; j < nodeList[i].connections.Count; j++)
                 {
                     Gizmos.DrawLine(nodeList[i].transform.position, nodeList[i].connections[j].transform.position);
                 }
             }
         }
-    }*/
+    }
 }
 
 public class Walker
