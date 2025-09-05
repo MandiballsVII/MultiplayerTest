@@ -26,7 +26,8 @@ public class PlayerAim : MonoBehaviour
 
     void Awake()
     {
-        aimTransform = transform.Find("Aim");
+        aimTransform = transform.Find("Body/Hands");
+        print($"[PlayerAim] Aim Transform: {aimTransform.name}");
         currentAmmo = maxAmmo;
         playerController = GetComponent<PlayerController>();
         playerManager = GetComponent<PlayerManager>();

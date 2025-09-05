@@ -7,7 +7,7 @@ public class NPC_Controller : MonoBehaviour
     public int maxHealth = 100;
     public int curHealth;
     public int panicMultiplier = 1;
-    public NodeManager nodeManager;
+    private NodeManager nodeManager;
 
     public Node currentNode;
     public List<Node> path = new List<Node>();
@@ -28,7 +28,8 @@ public class NPC_Controller : MonoBehaviour
     private void Start()
     {
         curHealth = maxHealth;
-
+        nodeManager = FindObjectOfType<NodeManager>();
+        player = FindObjectOfType<PlayerController>();
         // Buscar nodo más cercano a la posición inicial
         currentNode = nodeManager.GetClosestNode(transform.position);
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -104,39 +105,61 @@ public class NodeManager : MonoBehaviour
     // Nodo más cercano en caso de que no estés justo en una celda
     public Node GetClosestNode(Vector3 world, int maxRadius = 12)
     {
-        var cell = tilemapSuelo.WorldToCell(world);
-        if (nodeDict.TryGetValue(cell, out var exact)) return exact;
+        // Celda base
+        Vector3Int center = tilemapSuelo.WorldToCell(world);
 
-        float bestDist = Mathf.Infinity;
-        Node closest = null;
+        // Chequeo exacto
+        if (nodeDict.TryGetValue(center, out var exact))
+            return exact;
 
-        foreach (var n in nodeList)
+        // Expandir en anillos concéntricos
+        for (int r = 1; r <= maxRadius; r++)
         {
-            float dist = Vector2.SqrMagnitude(world - n.transform.position);
-            if (dist < bestDist)
+            // Perímetro del cuadrado de radio r
+            for (int x = -r; x <= r; x++)
             {
-                bestDist = dist;
-                closest = n;
+                Vector3Int top = center + new Vector3Int(x, r, 0);
+                if (nodeDict.TryGetValue(top, out var n1)) return n1;
+
+                Vector3Int bottom = center + new Vector3Int(x, -r, 0);
+                if (nodeDict.TryGetValue(bottom, out var n2)) return n2;
+            }
+
+            for (int y = -r + 1; y <= r - 1; y++)
+            {
+                Vector3Int right = center + new Vector3Int(r, y, 0);
+                if (nodeDict.TryGetValue(right, out var n3)) return n3;
+
+                Vector3Int left = center + new Vector3Int(-r, y, 0);
+                if (nodeDict.TryGetValue(left, out var n4)) return n4;
             }
         }
-        return closest;
+
+        // Si no encuentra nada en el radio máximo
+        return null;
     }
 
     // Nodo más lejano a una posición
-    public Node GetFurthestNode(Vector3 worldPosition)
+    public Node GetFurthestNode(Vector3 worldPosition, int maxRadius = 50)
     {
-        Node furthest = null;
-        float bestDist = 0f;
+        Vector3Int center = tilemapSuelo.WorldToCell(worldPosition);
 
-        foreach (var node in nodeList)
+        Node furthest = null;
+        float maxDistSqr = 0f;
+
+        // Iteramos sobre todos los nodos del diccionario
+        foreach (var kv in nodeDict)
         {
-            float dist = Vector2.SqrMagnitude(worldPosition - node.transform.position);
-            if (dist > bestDist)
+            Vector3 nodeWorld = tilemapSuelo.GetCellCenterWorld(kv.Key);
+            float distSqr = (nodeWorld - worldPosition).sqrMagnitude;
+
+            if (distSqr > maxDistSqr)
             {
-                bestDist = dist;
-                furthest = node;
+                maxDistSqr = distSqr;
+                furthest = kv.Value;
             }
         }
+
         return furthest;
     }
 
