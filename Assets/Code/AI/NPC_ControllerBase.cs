@@ -39,7 +39,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
         if (path.Count == 0) return;
 
         Node targetNode = path[0];
-        RotateTowards(targetNode.transform.position); // <-- rotación hacia el nodo
+        RotateTowards(targetNode.transform.position); // <-- rotacion hacia el nodo
         transform.position = Vector3.MoveTowards(transform.position, targetNode.transform.position, speed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, targetNode.transform.position) < 0.1f)
@@ -55,11 +55,11 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     protected void RotateTowards(Vector3 targetPosition)
     {
         Vector3 direction = targetPosition - transform.position;
-        if (direction.sqrMagnitude < 0.001f) return; // Evitar errores si está en el mismo punto
+        if (direction.sqrMagnitude < 0.001f) return; // Evitar errores si esta en el mismo punto
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
-        // El -90f depende de cómo esté orientado tu sprite. Ajusta según el "frente" del sprite.
+        // El -90f depende de como este orientado tu sprite. Ajusta segun el "frente" del sprite.
     }
 
 }

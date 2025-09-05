@@ -1,11 +1,5 @@
 using UnityEngine;
 
-public enum Faction
-{
-    Player,
-    Enemy
-}
-
 public class NPC_Melee : NPC_ControllerBase
 {
     [Header("Objetivo")]
@@ -21,7 +15,7 @@ public class NPC_Melee : NPC_ControllerBase
 
         if (newTarget != target)
         {
-            // Si detecta un nuevo objetivo, interrumpimos lo que está haciendo
+            // Si detecta un nuevo objetivo, interrumpimos lo que esta haciendo
             target = newTarget;
             path.Clear(); // <- interrumpe cualquier patrol anterior
         }
@@ -69,7 +63,7 @@ public class NPC_Melee : NPC_ControllerBase
             float dist = Vector2.Distance(transform.position, obj.position);
             if (dist <= detectionRadius && dist < bestDist)
             {
-                // Más adelante aquí se puede agregar raycast para línea de visión
+                // Mas adelante aqui se puede agregar raycast para linea de vision
                 bestDist = dist;
                 closest = obj;
             }
@@ -104,7 +98,7 @@ public class NPC_Melee : NPC_ControllerBase
         // Rotar hacia el objetivo antes de atacar
         RotateTowards(target.position);
 
-        // Lógica de ataque cuerpo a cuerpo
+        // Logica de ataque cuerpo a cuerpo
         Debug.Log($"{name} ataca a {target.name}!");
     }
 
