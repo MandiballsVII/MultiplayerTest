@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5785000311796523841}
   - component: {fileID: 6592952796173601565}
   - component: {fileID: 1774545044039863425}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hands
   m_TagString: PlayerHands
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 5547662752955312891}
   - component: {fileID: 7734292432900678793}
   - component: {fileID: 3007269765577671913}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Body
   m_TagString: PlayerBody
   m_Icon: {fileID: 0}
@@ -368,7 +368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4761223737694663498}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
