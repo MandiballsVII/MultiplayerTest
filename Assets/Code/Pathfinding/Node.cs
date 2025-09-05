@@ -1,29 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public Node cameFrom;
-    public List<Node> connections;
+    [HideInInspector] public Vector3Int cell;       // celda en el grid
+    public List<Node> connections = new List<Node>(); // vecinos
 
-    public float gScore;
-    public float hScore;
+    // A* (se resetea por búsqueda)
+    [HideInInspector] public Node cameFrom;
+    [HideInInspector] public float gScore;
+    [HideInInspector] public float hScore;
+    public float FScore => gScore + hScore;
 
-    public float FScore()
+    private void OnDrawGizmosSelected()
     {
-        return gScore + hScore;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if(connections.Count > 0)
-        {
-            Gizmos.color = Color.blue;
-            for(int i = 0; i < connections.Count; i++)
-            {
-                Gizmos.DrawLine(transform.position, connections[i].transform.position);
-            }
-        }
+        Gizmos.color = Color.blue;
+        foreach (var n in connections)
+            if (n) Gizmos.DrawLine(transform.position, n.transform.position);
     }
 }

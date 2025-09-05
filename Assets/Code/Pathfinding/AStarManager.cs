@@ -1,120 +1,100 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AStarManager : MonoBehaviour
 {
     public static AStarManager instance;
+    public NodeManager nodeManager;
 
-    private void Awake()
+    void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
     }
 
-    public List<Node> GeneratePath(Node start, Node end)
+    // === Costes y heurística ===
+    float StepCost(Node a, Node b)
     {
-        List<Node> openSet = new List<Node>();
+        bool diagonal = (a.cell.x != b.cell.x) && (a.cell.y != b.cell.y);
+        return diagonal ? 1.41421356f : 1f;
+    }
 
-        foreach(Node n in FindObjectsOfType<Node>())
+    float Heuristic(Node a, Node b)
+    {
+        int dx = Mathf.Abs(a.cell.x - b.cell.x);
+        int dy = Mathf.Abs(a.cell.y - b.cell.y);
+        // Distancia octil (perfecta para grid con diagonales)
+        return Mathf.Max(dx, dy) + (1.41421356f - 1f) * Mathf.Min(dx, dy);
+    }
+
+    // === Generar ruta ===
+    public List<Node> GeneratePath(Node start, Node goal)
+    {
+        if (start == null || goal == null)
         {
-            n.gScore = float.MaxValue;
+            Debug.LogWarning("Start o Goal son null, no se puede generar ruta");
+            return null;
         }
+
+        // Reset scores
+        foreach (var n in nodeManager.AllNodes())
+        {
+            n.gScore = float.PositiveInfinity;
+            n.hScore = 0;
+            n.cameFrom = null;
+        }
+
+        var open = new List<Node> { start };
+        var closed = new HashSet<Node>();
 
         start.gScore = 0;
-        start.hScore = Vector2.Distance(start.transform.position, end.transform.position);
-        openSet.Add(start);
+        start.hScore = Heuristic(start, goal);
 
-        while(openSet.Count > 0)
+        while (open.Count > 0)
         {
-            int lowestF = default;
+            // Nodo con menor fScore
+            Node current = open.OrderBy(n => n.FScore).First();
 
-            for(int i = 1; i < openSet.Count; i++)
+            if (current == goal)
+                return ReconstructPath(current);
+
+            open.Remove(current);
+            closed.Add(current);
+
+            foreach (var neighbor in current.connections)
             {
-                if (openSet[i].FScore() < openSet[lowestF].FScore())
-                {
-                    lowestF = i;
-                }
-            }
+                if (closed.Contains(neighbor)) continue;
 
-            Node currentNode = openSet[lowestF];
-            openSet.Remove(currentNode);
+                float tentativeG = current.gScore + StepCost(current, neighbor);
 
-            if(currentNode == end)
-            {
-                List<Node> path = new List<Node>();
+                if (!open.Contains(neighbor))
+                    open.Add(neighbor);
+                else if (tentativeG >= neighbor.gScore)
+                    continue;
 
-                path.Insert(0, end);
-
-                while(currentNode != start)
-                {
-                    currentNode = currentNode.cameFrom;
-                    path.Add(currentNode);
-                }
-
-                path.Reverse();
-                return path;
-            }
-
-            foreach(Node connectedNode in currentNode.connections)
-            {
-                float heldGScore = currentNode.gScore + Vector2.Distance(currentNode.transform.position, connectedNode.transform.position);
-
-                if(heldGScore < connectedNode.gScore)
-                {
-                    connectedNode.cameFrom = currentNode;
-                    connectedNode.gScore = heldGScore;
-                    connectedNode.hScore = Vector2.Distance(connectedNode.transform.position, end.transform.position);
-
-                    if (!openSet.Contains(connectedNode))
-                    {
-                        openSet.Add(connectedNode);
-                    }
-                }
+                neighbor.cameFrom = current;
+                neighbor.gScore = tentativeG;
+                neighbor.hScore = Heuristic(neighbor, goal);
             }
         }
 
+        // No se encontró ruta
         return null;
     }
 
-    public Node FindNearestNode(Vector2 pos)
+    List<Node> ReconstructPath(Node current)
     {
-        Node foundNode = null;
-        float minDistance = float.MaxValue;
-
-        foreach(Node node in FindObjectsOfType<Node>())
+        var totalPath = new List<Node>();
+        while (current != null)
         {
-            float currentDistance = Vector2.Distance(pos, node.transform.position);
-
-            if(currentDistance < minDistance)
-            {
-                minDistance = currentDistance;
-                foundNode = node;
-            }
+            totalPath.Insert(0, current);
+            current = current.cameFrom;
         }
-
-        return foundNode;
-    }
-
-    public Node FindFurthestNode(Vector2 pos)
-    {
-        Node foundNode = null;
-        float maxDistance = default;
-
-        foreach (Node node in FindObjectsOfType<Node>())
-        {
-            float currentDistance = Vector2.Distance(pos, node.transform.position);
-            if(currentDistance > maxDistance)
-            {
-                maxDistance = currentDistance;
-                foundNode = node;
-            }
-        }
-
-        return foundNode;
-    }
-
-    public Node[] AllNodes()
-    {
-        return FindObjectsOfType<Node>();
+        return totalPath;
     }
 }
