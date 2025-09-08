@@ -61,7 +61,8 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     {
         UpdateTargetInfo();
         UpdateState();
-        MoveAlongPath();
+        if(currentState != StateMachine.Idle)
+            MoveAlongPath();
     }
 
     protected abstract void UpdateState();

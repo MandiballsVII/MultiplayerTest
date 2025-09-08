@@ -13,6 +13,18 @@ public class NPC_Melee : NPC_ControllerBase
 
     protected override void UpdateState()
     {
+        if(currentState == StateMachine.Idle)
+        {
+            animator?.SetInteger("State", 2);
+            idleTimer += Time.deltaTime;
+            if(idleTimer >= idleDuration)
+            {
+                currentState = nextStateAfterIdle;
+                animator?.SetInteger("State", 0);
+                idleTimer = 0f;
+            }
+            return; // no hacer nada más mientras está en idle
+        }
         if (target != null)
         {
             // Engaging directamente
@@ -38,17 +50,8 @@ public class NPC_Melee : NPC_ControllerBase
             animator?.SetInteger("State", 0);
             SearchLastKnown();
         }
-        else if(idleTimer < idleDuration && (currentState == StateMachine.Search || currentState == StateMachine.Idle))
-        {
-            print(name + " no encontró al jugador, pausa antes de volver a patrullar");
-            idleTimer += Time.deltaTime;
-            currentState = StateMachine.Idle;
-            animator?.SetInteger("State", 2);
-        }
         else
         {
-            if(idleTimer >= idleDuration)
-                idleTimer = 0f;  // reset idle timer
             // Patrullaje
             currentState = StateMachine.Patrol;
             animator?.SetInteger("State", 0);
@@ -61,19 +64,11 @@ public class NPC_Melee : NPC_ControllerBase
     {
         if (path.Count == 0)
         {
-            //if(idleTimer < idleDuration)
-            //{
-            //    idleTimer += Time.deltaTime;
-            //    currentState = StateMachine.Idle;
-            //    animator?.SetInteger("State", 2);
-            //}
-            //else
-            //{
-                Node randomNode = nodeManager.GetRandomNode();
-                if (randomNode != null)
-                    path = AStarManager.instance.GeneratePath(currentNode, randomNode);
-
-            //}
+            Node randomNode = nodeManager.GetRandomNode();
+            if (randomNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+            currentState = StateMachine.Idle; // pausa antes de patrullar
+            nextStateAfterIdle = StateMachine.Patrol;
         }
     }
 
@@ -122,7 +117,8 @@ public class NPC_Melee : NPC_ControllerBase
             print(name + " no encontró al jugador, vuelve a patrullar");
             lastKnownPosition = null;
             path.Clear();
-
+            currentState = StateMachine.Idle; // pausa antes de patrullar
+            nextStateAfterIdle = StateMachine.Patrol;
         }
     }
 

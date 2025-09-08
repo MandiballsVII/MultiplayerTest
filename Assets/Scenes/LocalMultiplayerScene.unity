@@ -14433,7 +14433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
   speed: 3
-  detectionRadius: 10
+  detectionRadius: 8
   detectionHysteresis: 0.35
   occlusionLossDelay: 0.12
   nodeManager: {fileID: 0}
@@ -14443,6 +14443,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 256
+  idleDuration: 2
 --- !u!58 &1564790628
 CircleCollider2D:
   m_ObjectHideFlags: 0
