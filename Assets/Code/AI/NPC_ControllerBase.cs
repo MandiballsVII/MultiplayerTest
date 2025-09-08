@@ -18,7 +18,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     public NodeManager nodeManager;
     public float attackRange = 1f; // rango de ataque genérico
 
-    public enum StateMachine { Patrol, Engage, Evade, Search }
+    public enum StateMachine { Patrol, Engage, Evade, Search, Idle }
     public StateMachine currentState;
 
     [Header("Facción")]
