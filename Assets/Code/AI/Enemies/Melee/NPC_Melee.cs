@@ -84,17 +84,22 @@ public class NPC_Melee : NPC_ControllerBase
     {
         if (!lastKnownPosition.HasValue) return;
 
+        // Actualizamos currentNode para reflejar la posición actual real
+        currentNode = GetClosestNode(transform.position);
+
         if (path.Count == 0)
         {
             Node goal = GetClosestNode(lastKnownPosition.Value);
             if (goal != null && currentNode != null)
                 path = AStarManager.instance.GeneratePath(currentNode, goal);
         }
-
-        if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.3f)
+        print("Posicion del enemigo: " + transform.position + " -- " + " Punto último conocido: " + lastKnownPosition.Value + " -- " + " Distancia entre los puntos: " + Vector2.Distance(transform.position, lastKnownPosition.Value));
+        if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
         {
+            print(name + " no encontró al jugador, vuelve a patrullar");
             lastKnownPosition = null;
             path.Clear();
+
         }
     }
 
