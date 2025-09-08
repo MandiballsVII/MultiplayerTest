@@ -14292,7 +14292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8508372035626733680, guid: 45999f086c59fa246a6c2c79e9e26e59, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14434,11 +14434,15 @@ MonoBehaviour:
   currentNode: {fileID: 0}
   speed: 3
   detectionRadius: 5
+  detectionHysteresis: 0.35
+  occlusionLossDelay: 0.12
   nodeManager: {fileID: 0}
-  currentState: 0
-  target: {fileID: 0}
   attackRange: 1
+  currentState: 0
   faction: 1
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!58 &1564790628
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -2,74 +2,44 @@ using UnityEngine;
 
 public class NPC_Melee : NPC_ControllerBase
 {
-    [Header("Objetivo")]
-    public Transform target;
-    public float attackRange = 1f;
-
-    [Header("IA")]
-    public Faction faction = Faction.Enemy;
+    // Tiempo entre recalculaciones de path (para no recalcular cada frame)
+    private float pathUpdateCooldown = 0.25f;
+    private float pathUpdateTimer = 0f;
 
     protected override void UpdateState()
     {
-        Transform newTarget = FindClosestTarget();
-
-        if (newTarget != target)
+        if (target != null)
         {
-            // Si detecta un nuevo objetivo, interrumpimos lo que esta haciendo
-            target = newTarget;
-            path.Clear(); // <- interrumpe cualquier patrol anterior
-        }
-
-        if (target == null)
-        {
-            currentState = StateMachine.Patrol;
-            animator.SetInteger("State", 0);
-            Patrol();
-        }
-        else
-        {
+            // Engaging directamente
+            path.Clear();
             float dist = Vector2.Distance(transform.position, target.position);
             if (dist <= attackRange)
             {
                 currentState = StateMachine.Engage;
-                animator.SetInteger("State", 1);
+                animator?.SetInteger("State", 1);
                 Attack();
             }
             else
             {
                 currentState = StateMachine.Engage;
-                animator.SetInteger("State", 0);
-                ChaseTarget();
+                animator?.SetInteger("State", 0);
+                ChaseTarget(target.position); // se mueve directo o por path si hay obstáculos
             }
         }
-    }
-
-
-    Transform FindClosestTarget()
-    {
-        Transform closest = null;
-        float bestDist = Mathf.Infinity;
-
-        int targetLayer = (faction == Faction.Enemy)
-            ? LayerMask.NameToLayer("Player")
-            : LayerMask.NameToLayer("Enemy");
-
-        // Recorremos todos los objetos activos en escena
-        foreach (var obj in GameObject.FindObjectsOfType<Transform>())
+        else if (lastKnownPosition.HasValue)
         {
-            if (obj.gameObject.layer != targetLayer)
-                continue;
-
-            float dist = Vector2.Distance(transform.position, obj.position);
-            if (dist <= detectionRadius && dist < bestDist)
-            {
-                // Mas adelante aqui se puede agregar raycast para linea de vision
-                bestDist = dist;
-                closest = obj;
-            }
+            // Buscar última posición conocida
+            currentState = StateMachine.Search;
+            animator?.SetInteger("State", 0);
+            SearchLastKnown();
         }
-
-        return closest;
+        else
+        {
+            // Patrullaje
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
+        }
     }
 
 
@@ -78,16 +48,53 @@ public class NPC_Melee : NPC_ControllerBase
         if (path.Count == 0)
         {
             Node randomNode = nodeManager.GetRandomNode();
-            path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+            if (randomNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
         }
     }
 
-    void ChaseTarget()
+    void ChaseTarget(Vector3 destination)
     {
-        if (path.Count == 0 && target != null)
+        if (target == null) return;
+
+        // Movimiento directo si hay línea de visión
+        if (HasLineOfSight(target))
         {
-            Node targetNode = GetClosestNode(target.position);
-            path = AStarManager.instance.GeneratePath(currentNode, targetNode);
+            RotateTowards(target.position);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            return; // no usamos pathfinding mientras la visión sea clara
+        }
+
+        // Si no hay LOS, usamos pathfinding
+        pathUpdateTimer -= Time.deltaTime;
+        if (pathUpdateTimer <= 0f)
+        {
+            Node tnode = GetClosestNode(destination);
+            if (tnode != null && currentNode != null)
+            {
+                path = AStarManager.instance.GeneratePath(currentNode, tnode);
+            }
+            pathUpdateTimer = pathUpdateCooldown;
+        }
+    }
+
+
+
+    void SearchLastKnown()
+    {
+        if (!lastKnownPosition.HasValue) return;
+
+        if (path.Count == 0)
+        {
+            Node goal = GetClosestNode(lastKnownPosition.Value);
+            if (goal != null && currentNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, goal);
+        }
+
+        if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.3f)
+        {
+            lastKnownPosition = null;
+            path.Clear();
         }
     }
 
@@ -95,11 +102,7 @@ public class NPC_Melee : NPC_ControllerBase
     {
         if (target == null) return;
 
-        // Rotar hacia el objetivo antes de atacar
         RotateTowards(target.position);
-
-        // Logica de ataque cuerpo a cuerpo
-        Debug.Log($"{name} ataca a {target.name}!");
+        Debug.Log($"{name} ataca a {target.name}");
     }
-
 }
