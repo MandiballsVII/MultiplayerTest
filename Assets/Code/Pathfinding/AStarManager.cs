@@ -33,7 +33,7 @@ public class AStarManager : MonoBehaviour
     }
 
     // === Generar ruta ===
-    public List<Node> GeneratePath(Node start, Node goal)
+    public List<Node> GeneratePath(Node start, Node goal, float agentRadiusInTiles)
     {
         if (start == null || goal == null)
         {
@@ -66,8 +66,11 @@ public class AStarManager : MonoBehaviour
             open.Remove(current);
             closed.Add(current);
 
+            int requiredClearance = Mathf.CeilToInt(agentRadiusInTiles);
+
             foreach (var neighbor in current.connections)
             {
+                if (neighbor.clearance < requiredClearance) continue; // demasiado estrecho, no cabes
                 if (closed.Contains(neighbor)) continue;
 
                 float tentativeG = current.gScore + StepCost(current, neighbor);

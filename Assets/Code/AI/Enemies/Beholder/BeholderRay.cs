@@ -27,6 +27,7 @@ public class BeholderRay : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        print("BeholderRay hit " + col.name);
         // ajusta la comprobación según tu Player script / tags
         if (col.TryGetComponent<PlayerStatus>(out var status))
         {

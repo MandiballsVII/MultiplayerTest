@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cebb64cee7c9f194d87e427a365b2a6d
+guid: 06bf80526cfc607438763b3c97982dae
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 10
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -136,112 +136,112 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_0
+      name: Beholder_attack_NOhitbox_0
       rect:
         serializedVersion: 2
         x: 0
         y: 192
         width: 64
         height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0304c972a24d65b4486be2fc6cedd279
-      internalID: 1478919128
+      spriteID: ff8b3ffe7086cb2498380ad8d2528ea6
+      internalID: -727919836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_1
+      name: Beholder_attack_NOhitbox_1
       rect:
         serializedVersion: 2
         x: 64
         y: 192
         width: 64
         height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a949cebd4238c24091f5b92817af161
-      internalID: 1069150557
+      spriteID: 105168ade6039554e9ac5239a61d1cc3
+      internalID: 1496788015
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_2
+      name: Beholder_attack_NOhitbox_2
       rect:
         serializedVersion: 2
         x: 128
         y: 192
         width: 64
         height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 534ec18711e67ff4f8cb9f1fb08867d5
-      internalID: 1266328040
+      spriteID: 5a5e841925237c14ea353437ca51a323
+      internalID: -1985412663
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_3
+      name: Beholder_attack_NOhitbox_3
       rect:
         serializedVersion: 2
         x: 192
         y: 192
         width: 64
         height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 334e34cb63994f243b29b2473f3f340e
-      internalID: 406451189
+      spriteID: d722e6da2cefb5d4896b5a14fa2d5c39
+      internalID: 764496052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_4
+      name: Beholder_attack_NOhitbox_4
       rect:
         serializedVersion: 2
         x: 256
         y: 192
         width: 64
         height: 64
-      alignment: 9
-      pivot: {x: 0.5, y: 0.4}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4b6ee0e0df0982b479168e7fdbbc7117
-      internalID: -414150569
+      spriteID: a71d90781ac2ed2498956cb037f7d7af
+      internalID: 590865429
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_5
+      name: Beholder_attack_NOhitbox_5
       rect:
         serializedVersion: 2
         x: 0
@@ -249,20 +249,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19144baa43ae72e49acefc6da25edf2c
-      internalID: 458828774
+      spriteID: e6ac6229eb650ce45bfd3b03e88c0487
+      internalID: 53837975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_6
+      name: Beholder_attack_NOhitbox_6
       rect:
         serializedVersion: 2
         x: 64
@@ -270,20 +270,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 24bb5916f0260b94d83de808eb96a471
-      internalID: -131244526
+      spriteID: 6ca01871f9bf1314fb2e29ac11c1af6f
+      internalID: -2043271189
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_7
+      name: Beholder_attack_NOhitbox_7
       rect:
         serializedVersion: 2
         x: 128
@@ -291,20 +291,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bc9addb1370f144e9178ada8f77854b
-      internalID: -263433777
+      spriteID: 492042720855e374b960e4e857f44024
+      internalID: 805087766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_8
+      name: Beholder_attack_NOhitbox_8
       rect:
         serializedVersion: 2
         x: 192
@@ -312,20 +312,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9fed458c3ecd70c40b4eec1a3d50f763
-      internalID: 1881888885
+      spriteID: 6e524926328a17843923448cbe5354c2
+      internalID: -1857469671
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_9
+      name: Beholder_attack_NOhitbox_9
       rect:
         serializedVersion: 2
         x: 256
@@ -333,20 +333,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d50369d044ebc944db8e0c304d4f1bbd
-      internalID: -421025088
+      spriteID: eec1e2efc6e3f8a4e9c74abd15733704
+      internalID: 362042861
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_10
+      name: Beholder_attack_NOhitbox_10
       rect:
         serializedVersion: 2
         x: 0
@@ -354,20 +354,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 206229b673ddbeb43a668b8149d867ec
-      internalID: -1003531530
+      spriteID: 7f208bab3ec90bb40b87229c44136417
+      internalID: 447871836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_11
+      name: Beholder_attack_NOhitbox_11
       rect:
         serializedVersion: 2
         x: 64
@@ -375,20 +375,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dda3f65fd712dd340bc67db2d7871b1d
-      internalID: -1113798391
+      spriteID: 09a0b208ae991b642817b85eb6d8d4d4
+      internalID: 931701851
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_12
+      name: Beholder_attack_NOhitbox_12
       rect:
         serializedVersion: 2
         x: 128
@@ -396,20 +396,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 265048e42833e9c438d16d6edd4af4e0
-      internalID: -904286078
+      spriteID: 5742124cd64f9744394e4c1885b4b179
+      internalID: 1629855787
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_13
+      name: Beholder_attack_NOhitbox_13
       rect:
         serializedVersion: 2
         x: 192
@@ -417,20 +417,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 16aa429bf5569334b97191de3ec25e96
-      internalID: -1869751362
+      spriteID: 91c60a9f41805554ebd8043520129c44
+      internalID: -218510651
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_14
+      name: Beholder_attack_NOhitbox_14
       rect:
         serializedVersion: 2
         x: 256
@@ -438,20 +438,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a7ce585fedab58418a588d5b4c3da99
-      internalID: 669255131
+      spriteID: 0c50f83b7457f98468b200152c7cda90
+      internalID: -1470685573
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_15
+      name: Beholder_attack_NOhitbox_15
       rect:
         serializedVersion: 2
         x: 0
@@ -459,20 +459,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07e87e2d5438bbf489aa764d16670ee2
-      internalID: 977742260
+      spriteID: 0a6a1981c65923c4f8163974fb685a75
+      internalID: -175714552
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_16
+      name: Beholder_attack_NOhitbox_16
       rect:
         serializedVersion: 2
         x: 64
@@ -480,20 +480,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3bf7eee491f129f4f8d9583232a4c777
-      internalID: 1203780294
+      spriteID: d8b552229e4de974596e61ecca5b84b9
+      internalID: -187549187
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_17
+      name: Beholder_attack_NOhitbox_17
       rect:
         serializedVersion: 2
         x: 128
@@ -501,20 +501,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04445bfba907833448d640257720b70f
-      internalID: -1293972759
+      spriteID: 4683a389925df0b4eb7f7176a61e882a
+      internalID: -543466991
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_18
+      name: Beholder_attack_NOhitbox_18
       rect:
         serializedVersion: 2
         x: 192
@@ -522,20 +522,20 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af81fc77a5cc24846986e0278d33dfde
-      internalID: -408924130
+      spriteID: 85e2704679daf01419f8eb506dd78ff8
+      internalID: -1380014500
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_attack_NOhitbox_19
+      name: Beholder_attack_NOhitbox_19
       rect:
         serializedVersion: 2
         x: 256
@@ -543,14 +543,14 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2478f8a4b33900847a9e7c4ad6dbd3ac
-      internalID: 2013885231
+      spriteID: 6c30707a1dae23a4c876d7a8f81f46cd
+      internalID: -242050852
       vertices: []
       indices: 
       edges: []
@@ -566,26 +566,26 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Medusa_attack_NOhitbox_0: 1478919128
-      Medusa_attack_NOhitbox_1: 1069150557
-      Medusa_attack_NOhitbox_10: -1003531530
-      Medusa_attack_NOhitbox_11: -1113798391
-      Medusa_attack_NOhitbox_12: -904286078
-      Medusa_attack_NOhitbox_13: -1869751362
-      Medusa_attack_NOhitbox_14: 669255131
-      Medusa_attack_NOhitbox_15: 977742260
-      Medusa_attack_NOhitbox_16: 1203780294
-      Medusa_attack_NOhitbox_17: -1293972759
-      Medusa_attack_NOhitbox_18: -408924130
-      Medusa_attack_NOhitbox_19: 2013885231
-      Medusa_attack_NOhitbox_2: 1266328040
-      Medusa_attack_NOhitbox_3: 406451189
-      Medusa_attack_NOhitbox_4: -414150569
-      Medusa_attack_NOhitbox_5: 458828774
-      Medusa_attack_NOhitbox_6: -131244526
-      Medusa_attack_NOhitbox_7: -263433777
-      Medusa_attack_NOhitbox_8: 1881888885
-      Medusa_attack_NOhitbox_9: -421025088
+      Beholder_attack_NOhitbox_0: -727919836
+      Beholder_attack_NOhitbox_1: 1496788015
+      Beholder_attack_NOhitbox_10: 447871836
+      Beholder_attack_NOhitbox_11: 931701851
+      Beholder_attack_NOhitbox_12: 1629855787
+      Beholder_attack_NOhitbox_13: -218510651
+      Beholder_attack_NOhitbox_14: -1470685573
+      Beholder_attack_NOhitbox_15: -175714552
+      Beholder_attack_NOhitbox_16: -187549187
+      Beholder_attack_NOhitbox_17: -543466991
+      Beholder_attack_NOhitbox_18: -1380014500
+      Beholder_attack_NOhitbox_19: -242050852
+      Beholder_attack_NOhitbox_2: -1985412663
+      Beholder_attack_NOhitbox_3: 764496052
+      Beholder_attack_NOhitbox_4: 590865429
+      Beholder_attack_NOhitbox_5: 53837975
+      Beholder_attack_NOhitbox_6: -2043271189
+      Beholder_attack_NOhitbox_7: 805087766
+      Beholder_attack_NOhitbox_8: -1857469671
+      Beholder_attack_NOhitbox_9: 362042861
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

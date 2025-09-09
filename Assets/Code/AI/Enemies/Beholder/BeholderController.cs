@@ -1,187 +1,160 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
-public class BeholderController : EnemyBase, IDamageable
+public class NPC_Beholder : NPC_ControllerBase
 {
-    [Header("Detection / Movement")]
-    public float detectionRadius = 10f;
-    public float optimalDistance = 5f;
-    public float stoppingTolerance = 0.5f;
-    public float moveSpeed = 3f;
-    public LayerMask playerLayer;
+    // Tiempo entre recalculaciones de path (para no recalcular cada frame)
+    private float pathUpdateCooldown = 0.25f;
+    private float pathUpdateTimer = 0f;
 
-    [SerializeField] private float moveThreshold = 0.0001f; // mínimo delta
-    [SerializeField] private float stopDelay = 0.1f;      // segundos que espera antes de poner Idle
-    private float stopTimer = 0f;
+    // --- Nuevo: control de pausas entre estados ---
+    private float idleTimer = 0f;
+    public float idleDuration = 2f; // duración del idle en segundos
+    private StateMachine nextStateAfterIdle; // para saber a dónde ir tras la pausa
 
-    [Header("Attack")]
-    public Transform firePoint;
-    public GameObject rayPrefab;
-    public float rayCooldown = 2f;
-    public float raySpeed = 12f;
-    public float shotDelayBetweenPlayers = 0.3f;
-    LayerMask detectionLayers;
+    public GameObject projectilePrefab; // Prefab del proyectil a instanciar
 
-    private Animator anim;
-    private Rigidbody2D rb;
+    public float attackCooldown = 1.5f; // Tiempo entre ataques
+    private float attackTimer = 0f;
+    public Transform firePoint; // Punto desde donde se dispara el proyectil
+    public float projectileSpeed = 15f; // Velocidad del proyectil
 
-    private List<Transform> detectedPlayers = new List<Transform>();
-    private Transform closestTarget;
-    private float lastShotTime = -999f;
-    CircleCollider2D circleCollider2D;
+    public new float radiusInTiles = 2f;
 
-    protected override void Awake()
+    protected override void UpdateState()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0f;
-        rb.bodyType = RigidbodyType2D.Kinematic; // mantenemos Kinematic
-        anim = GetComponent<Animator>();
-        circleCollider2D = GetComponent<CircleCollider2D>();
-        detectionLayers = LayerMask.GetMask("Player", "Summoned");
-        currentHealth = maxHealth;
-    }
-
-    void Update()
-    {
-        DetectPlayers();
-
-        if (detectedPlayers.Count > 0)
-            TryShootAtPlayers();
-    }
-
-    void FixedUpdate()
-    {
-        // --- Movimiento ---
-        if (closestTarget != null)
+        if (currentState == StateMachine.Idle)
         {
-            MoveToOptimalDistance();
-            RotateToFaceTarget();
+            animator?.SetInteger("State", 2);
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleDuration)
+            {
+                currentState = nextStateAfterIdle;
+                animator?.SetInteger("State", 0);
+                idleTimer = 0f;
+            }
+            return; // no hacer nada más mientras está en idle
         }
-
-        // --- Comprobación de movimiento para animación ---
-        Vector2 moveDelta = rb.position - (Vector2)rb.position;
-        bool currentlyMoving = moveDelta.sqrMagnitude > moveThreshold;
-
-        if (currentlyMoving)
+        if (target != null)
         {
-            anim.SetBool("IsMoving", true);
-            stopTimer = 0f;
+            // Engaging directamente
+            path.Clear();
+            float dist = Vector2.Distance(transform.position, target.position);
+            if (dist <= attackRange)
+            {
+                currentState = StateMachine.Engage;
+                animator?.SetInteger("State", 1);
+                Attack();
+            }
+            else
+            {
+                currentState = StateMachine.Engage;
+                animator?.SetInteger("State", 0);
+                ChaseTarget(target.position); // se mueve directo o por path si hay obstáculos
+            }
+        }
+        else if (lastKnownPosition.HasValue)
+        {
+            // Buscar última posición conocida
+            currentState = StateMachine.Search;
+            animator?.SetInteger("State", 0);
+            SearchLastKnown();
         }
         else
         {
-            stopTimer += Time.fixedDeltaTime;
-            if (stopTimer >= stopDelay)
-                anim.SetBool("IsMoving", false);
+            // Patrullaje
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
         }
     }
 
-    void DetectPlayers()
-    {
-        detectedPlayers.Clear();
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, playerLayer);
 
-        if (cols.Length == 0)
+    void Patrol()
+    {
+        if (path.Count == 0)
         {
-            closestTarget = null;
-            return;
+            Node randomNode = nodeManager.GetRandomNode();
+            if (randomNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+            currentState = StateMachine.Idle; // pausa antes de patrullar
+            nextStateAfterIdle = StateMachine.Patrol;
+        }
+    }
+
+    void ChaseTarget(Vector3 destination)
+    {
+        if (target == null) return;
+
+        // Movimiento directo si hay línea de visión
+        if (HasLineOfSight(target))
+        {
+            RotateTowards(target.position);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            return; // no usamos pathfinding mientras la visión sea clara
         }
 
-        float bestDist = float.MaxValue;
-        Transform best = null;
-
-        foreach (var c in cols)
+        // Si no hay LOS, usamos pathfinding
+        pathUpdateTimer -= Time.deltaTime;
+        if (pathUpdateTimer <= 0f)
         {
-            detectedPlayers.Add(c.transform);
-            float d = Vector2.Distance(transform.position, c.transform.position);
-            if (d < bestDist)
+            Node tnode = GetClosestNode(destination);
+            if (tnode != null && currentNode != null)
             {
-                bestDist = d;
-                best = c.transform;
+                path = AStarManager.instance.GeneratePath(currentNode, tnode);
             }
+            pathUpdateTimer = pathUpdateCooldown;
         }
-
-        closestTarget = best;
     }
 
-    void MoveToOptimalDistance()
+
+
+    void SearchLastKnown()
     {
-        if (closestTarget == null) return;
+        if (!lastKnownPosition.HasValue) return;
 
-        Vector2 toTarget = (Vector2)closestTarget.position - rb.position;
-        float dist = toTarget.magnitude;
-        Vector2 move = Vector2.zero;
+        // Actualizamos currentNode para reflejar la posición actual real
+        currentNode = GetClosestNode(transform.position);
 
-        if (dist > optimalDistance + stoppingTolerance)
-            move = toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
-        else if (dist < optimalDistance - stoppingTolerance)
-            move = -toTarget.normalized * moveSpeed * Time.fixedDeltaTime;
-
-        if (move != Vector2.zero)
+        if (path.Count == 0)
         {
-            // Verificar colisión con paredes
-            Vector2 newPos = rb.position + move;
-            RaycastHit2D hit = Physics2D.Raycast(rb.position, move.normalized, move.magnitude + circleCollider2D.radius, LayerMask.GetMask("Walls"));
-
-            if (hit.collider == null) // si no hay pared delante, movemos
-            {
-                rb.MovePosition(newPos);
-            }
-            
+            Node goal = GetClosestNode(lastKnownPosition.Value);
+            if (goal != null && currentNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, goal, radiusInTiles);
         }
-    }
-
-
-    void RotateToFaceTarget()
-    {
-        if (closestTarget == null) return;
-
-        Vector2 toTarget = (Vector2)closestTarget.position - rb.position;
-        float angle = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
-        angle += 90f; // el sprite mira hacia abajo
-        rb.MoveRotation(angle);
-    }
-
-    void TryShootAtPlayers()
-    {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, detectionRadius, detectionLayers);
-        if (rayPrefab == null || firePoint == null) return;
-        if (Time.time < lastShotTime + rayCooldown) return;
-
-        lastShotTime = Time.time;
-
-        foreach (var entity in cols)
+        if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
         {
-            if (entity == null) continue;
-
-            Vector2 dir = ((Vector2)entity.transform.position - (Vector2)firePoint.position).normalized;
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
-
-            GameObject go = Instantiate(rayPrefab, firePoint.position, rotation);
-            var ray = go.GetComponent<BeholderRay>();
-            if (ray != null) ray.Init(dir, raySpeed);
+            print(name + " no encontró al jugador, vuelve a patrullar");
+            lastKnownPosition = null;
+            path.Clear();
+            currentState = StateMachine.Idle; // pausa antes de patrullar
+            nextStateAfterIdle = StateMachine.Patrol;
         }
     }
 
-    void OnDrawGizmosSelected()
+    void Attack()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        if (target == null) return;
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, optimalDistance);
-    }
+        attackTimer += Time.deltaTime;
+        RotateTowards(target.position);
 
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount;
-    }
+        if (attackTimer >= attackCooldown)
+        {
+            // Dirección hacia el objetivo
+            Vector2 direction = (target.position - firePoint.position).normalized;
 
-    public void Heal(int amount)
-    {
-        currentHealth += amount;
-        if(currentHealth > maxHealth)
-            currentHealth = maxHealth;
+            // Calcular ángulo en grados
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Instanciar proyectil con rotación hacia el objetivo
+            var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
+
+            // Darle velocidad
+            projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+
+            Debug.Log($"{name} dispara a {target.name}");
+            attackTimer = 0f;
+        }
     }
 }

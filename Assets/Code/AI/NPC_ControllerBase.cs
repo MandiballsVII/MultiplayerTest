@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class NPC_ControllerBase : MonoBehaviour
+public abstract class NPC_ControllerBase : EnemyBase
 {
     [Header("Movimiento")]
     public Node currentNode;
@@ -28,6 +28,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     public LayerMask obstacleMask; // asignar la capa de 'Walls' en inspector
 
     // Vision/internal state
+    [Header("Pathfinding / Estados")]
     protected Transform target;               // target VISIBLE ahora (null si no está visible)
     protected Transform lastSeenTarget;       // referencia del transform que se vio por última vez
     protected Vector3? lastKnownPosition;     // posición donde se le vio por última vez
@@ -35,6 +36,8 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     bool isLOSLost = false;
 
     protected Animator animator;
+
+    public float radiusInTiles = 1f;
 
     protected virtual void Start()
     {
@@ -210,4 +213,5 @@ public abstract class NPC_ControllerBase : MonoBehaviour
             Gizmos.DrawLine(transform.position, target.position);
         }
     }
+
 }

@@ -23,6 +23,7 @@ public class NodeManager : MonoBehaviour
     static readonly Vector3Int[] ORTHO = { new(1, 0, 0), new(-1, 0, 0), new(0, 1, 0), new(0, -1, 0) };
     static readonly Vector3Int[] DIAG = { new(1, 1, 0), new(-1, 1, 0), new(1, -1, 0), new(-1, -1, 0) };
 
+
     void Awake()
     {
         BuildNodes();
@@ -47,7 +48,40 @@ public class NodeManager : MonoBehaviour
             nodeDict[cell] = n;
             nodeList.Add(n);
         }
+
+        CalculateClearance();
     }
+
+    void CalculateClearance()
+    {
+        foreach (var kv in nodeDict)
+        {
+            var node = kv.Value;
+            int maxRadius = 5; // lo suficiente para tus agentes más grandes
+            int clearance = 0;
+
+            // expandimos en anillos hasta que encontremos pared o nodo inexistente
+            for (int r = 1; r <= maxRadius; r++)
+            {
+                bool blocked = false;
+                for (int dx = -r; dx <= r && !blocked; dx++)
+                {
+                    for (int dy = -r; dy <= r && !blocked; dy++)
+                    {
+                        var pos = node.cell + new Vector3Int(dx, dy, 0);
+                        if (!nodeDict.ContainsKey(pos))
+                        {
+                            blocked = true;
+                        }
+                    }
+                }
+                if (blocked) break;
+                clearance = r;
+            }
+            node.clearance = clearance;
+        }
+    }
+
 
     void BuildConnections()
     {

@@ -16,6 +16,7 @@ public class NPC_Ranged : NPC_ControllerBase
     public float attackCooldown = 1.5f; // Tiempo entre ataques
     private float attackTimer = 0f;
     public Transform firePoint; // Punto desde donde se dispara el proyectil
+    public float projectileSpeed = 15f; // Velocidad del proyectil
 
     protected override void UpdateState()
     {
@@ -147,7 +148,7 @@ public class NPC_Ranged : NPC_ControllerBase
             var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
 
             // Darle velocidad
-            projectile.GetComponent<Rigidbody2D>().velocity = direction * 15f;
+            projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
 
             Debug.Log($"{name} dispara a {target.name}");
             attackTimer = 0f;

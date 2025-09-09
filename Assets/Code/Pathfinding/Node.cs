@@ -12,6 +12,8 @@ public class Node : MonoBehaviour
     [HideInInspector] public float hScore;
     public float FScore => gScore + hScore;
 
+    public int clearance = 1; // número de tiles libres que caben alrededor (min dist a pared en tiles)
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;

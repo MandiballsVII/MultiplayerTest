@@ -23,6 +23,12 @@ public abstract class EnemyBase : MonoBehaviour, IAttackable
         if (currentHealth <= 0f)
             Die();
     }
+    public virtual void Heal(float amount)
+    {
+        currentHealth += amount;
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+    }
 
     protected virtual void Die()
     {

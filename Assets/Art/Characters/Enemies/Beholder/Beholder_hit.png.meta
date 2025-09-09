@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dd7a2b4194112c041a3f8adf427b03d2
+guid: 4a1200fe0c007be4093f8afc8b8997f1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -136,91 +136,49 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Medusa_walk_0
+      name: Beholder_hit_0
       rect:
         serializedVersion: 2
         x: 0
         y: 96
         width: 32
         height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a4658dafe945f1e4cbbf58fbabf3e2ff
-      internalID: 1146536554
+      spriteID: 1962bd376b759054db5ee79e4d376190
+      internalID: -1396723202
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_1
+      name: Beholder_hit_1
       rect:
         serializedVersion: 2
         x: 32
         y: 96
         width: 32
         height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80828ca9cb097064eb4bdfab8a5c105b
-      internalID: 889888922
+      spriteID: 2af4e9c041b0fb9439e5ecd1ead8dfe8
+      internalID: -1408544209
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 96
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fac51b28c5b36fc4d93d2e42ff425661
-      internalID: -696584791
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 96
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: abd1fdf1d4b2c7f44abf2875aa90c95c
-      internalID: 1760623105
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_4
+      name: Beholder_hit_2
       rect:
         serializedVersion: 2
         x: 0
@@ -228,20 +186,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 289bc48f48ec62d469369e1a5a53e40b
-      internalID: 652874869
+      spriteID: 1db01fef248dc0e47a12a6fdb403690c
+      internalID: 1447104815
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_5
+      name: Beholder_hit_3
       rect:
         serializedVersion: 2
         x: 32
@@ -249,62 +207,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d8528d501e272834180c894e29724f9b
-      internalID: 120878087
+      spriteID: 8d5bc65612f70fd44b9e68ca033af7a9
+      internalID: -804187187
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_6
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 25342177e5633ef4682b4810085e28f0
-      internalID: 1846161786
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_7
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c193a20067322b84eb0b0153f467e318
-      internalID: -1948268877
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_8
+      name: Beholder_hit_4
       rect:
         serializedVersion: 2
         x: 0
@@ -312,20 +228,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5858c2a5760c54e4ba1b29275294aa6e
-      internalID: 252759588
+      spriteID: 0a353de9bf22adf4788417a05d31a412
+      internalID: 1981897453
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_9
+      name: Beholder_hit_5
       rect:
         serializedVersion: 2
         x: 32
@@ -333,62 +249,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f046b8d71768d18409fb8dca5d383d33
-      internalID: 2060533383
+      spriteID: 8788498523f9c1945843791c1ce4324b
+      internalID: 356996666
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_10
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 343c38c9d11187e4db70aa8aeecc6e10
-      internalID: -464160595
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_11
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6c8cb6f8618d35144ade867c71965340
-      internalID: -1190397957
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_12
+      name: Beholder_hit_6
       rect:
         serializedVersion: 2
         x: 0
@@ -396,20 +270,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ede019b299085f846820ffc1a6760651
-      internalID: -510899269
+      spriteID: 6adbdace7f39ae648a5831f60bccf283
+      internalID: -1710791111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Medusa_walk_13
+      name: Beholder_hit_7
       rect:
         serializedVersion: 2
         x: 32
@@ -417,56 +291,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e00d123899d14f45a88bfc997571240
-      internalID: 454412454
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_14
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3866b02af439a842b8709b7ed0e681f
-      internalID: 428348364
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Medusa_walk_15
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 15811bb989b0fc24098d5c506e885c7b
-      internalID: -397252997
+      spriteID: f57aeacd500c079459477d2048342dea
+      internalID: 1942961739
       vertices: []
       indices: 
       edges: []
@@ -482,22 +314,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Medusa_walk_0: 1146536554
-      Medusa_walk_1: 889888922
-      Medusa_walk_10: -464160595
-      Medusa_walk_11: -1190397957
-      Medusa_walk_12: -510899269
-      Medusa_walk_13: 454412454
-      Medusa_walk_14: 428348364
-      Medusa_walk_15: -397252997
-      Medusa_walk_2: -696584791
-      Medusa_walk_3: 1760623105
-      Medusa_walk_4: 652874869
-      Medusa_walk_5: 120878087
-      Medusa_walk_6: 1846161786
-      Medusa_walk_7: -1948268877
-      Medusa_walk_8: 252759588
-      Medusa_walk_9: 2060533383
+      Beholder_hit_0: -1396723202
+      Beholder_hit_1: -1408544209
+      Beholder_hit_2: 1447104815
+      Beholder_hit_3: -804187187
+      Beholder_hit_4: 1981897453
+      Beholder_hit_5: 356996666
+      Beholder_hit_6: -1710791111
+      Beholder_hit_7: 1942961739
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
