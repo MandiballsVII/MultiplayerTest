@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class NPC_Ranged : NPC_ControllerBase
 {
-    public GameObject projectilePrefab;
-    public Transform firePoint; // punto desde donde dispara
-    public float fireCooldown = 1.5f;
-    private float fireTimer = 0f;
-
-    public float safeDistance = 2f; // si el player entra dentro, el enemigo retrocede
-
+    // Tiempo entre recalculaciones de path (para no recalcular cada frame)
     private float pathUpdateCooldown = 0.25f;
     private float pathUpdateTimer = 0f;
 
-    // Idle
+    // --- Nuevo: control de pausas entre estados ---
     private float idleTimer = 0f;
-    public float idleDuration = 2f;
-    private StateMachine nextStateAfterIdle;
+    public float idleDuration = 2f; // duración del idle en segundos
+    private StateMachine nextStateAfterIdle; // para saber a dónde ir tras la pausa
+
+    public GameObject projectilePrefab; // Prefab del proyectil a instanciar
+
+    public float attackCooldown = 1.5f; // Tiempo entre ataques
+    private float attackTimer = 0f;
+    public Transform firePoint; // Punto desde donde se dispara el proyectil
 
     protected override void UpdateState()
     {
@@ -29,45 +29,42 @@ public class NPC_Ranged : NPC_ControllerBase
                 animator?.SetInteger("State", 0);
                 idleTimer = 0f;
             }
-            return;
+            return; // no hacer nada más mientras está en idle
         }
-
         if (target != null)
         {
+            // Engaging directamente
+            path.Clear();
             float dist = Vector2.Distance(transform.position, target.position);
-
-            if (dist <= attackRange && dist > safeDistance)
+            if (dist <= attackRange)
             {
                 currentState = StateMachine.Engage;
                 animator?.SetInteger("State", 1);
                 Attack();
             }
-            else if (dist <= safeDistance)
-            {
-                currentState = StateMachine.Evade;
-                animator?.SetInteger("State", 0);
-                RetreatFromTarget(target.position);
-            }
             else
             {
                 currentState = StateMachine.Engage;
                 animator?.SetInteger("State", 0);
-                ChaseTarget(target.position);
+                ChaseTarget(target.position); // se mueve directo o por path si hay obstáculos
             }
         }
         else if (lastKnownPosition.HasValue)
         {
+            // Buscar última posición conocida
             currentState = StateMachine.Search;
             animator?.SetInteger("State", 0);
             SearchLastKnown();
         }
         else
         {
+            // Patrullaje
             currentState = StateMachine.Patrol;
             animator?.SetInteger("State", 0);
             Patrol();
         }
     }
+
 
     void Patrol()
     {
@@ -76,7 +73,7 @@ public class NPC_Ranged : NPC_ControllerBase
             Node randomNode = nodeManager.GetRandomNode();
             if (randomNode != null)
                 path = AStarManager.instance.GeneratePath(currentNode, randomNode);
-            currentState = StateMachine.Idle;
+            currentState = StateMachine.Idle; // pausa antes de patrullar
             nextStateAfterIdle = StateMachine.Patrol;
         }
     }
@@ -85,36 +82,34 @@ public class NPC_Ranged : NPC_ControllerBase
     {
         if (target == null) return;
 
+        // Movimiento directo si hay línea de visión
         if (HasLineOfSight(target))
         {
             RotateTowards(target.position);
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-            return;
+            return; // no usamos pathfinding mientras la visión sea clara
         }
 
+        // Si no hay LOS, usamos pathfinding
         pathUpdateTimer -= Time.deltaTime;
         if (pathUpdateTimer <= 0f)
         {
             Node tnode = GetClosestNode(destination);
             if (tnode != null && currentNode != null)
+            {
                 path = AStarManager.instance.GeneratePath(currentNode, tnode);
-
+            }
             pathUpdateTimer = pathUpdateCooldown;
         }
     }
 
-    void RetreatFromTarget(Vector3 targetPos)
-    {
-        RotateTowards(targetPos);
 
-        Vector3 dirAway = (transform.position - targetPos).normalized;
-        transform.position += dirAway * speed * Time.deltaTime;
-    }
 
     void SearchLastKnown()
     {
         if (!lastKnownPosition.HasValue) return;
 
+        // Actualizamos currentNode para reflejar la posición actual real
         currentNode = GetClosestNode(transform.position);
 
         if (path.Count == 0)
@@ -123,12 +118,12 @@ public class NPC_Ranged : NPC_ControllerBase
             if (goal != null && currentNode != null)
                 path = AStarManager.instance.GeneratePath(currentNode, goal);
         }
-
         if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
         {
+            print(name + " no encontró al jugador, vuelve a patrullar");
             lastKnownPosition = null;
             path.Clear();
-            currentState = StateMachine.Idle;
+            currentState = StateMachine.Idle; // pausa antes de patrullar
             nextStateAfterIdle = StateMachine.Patrol;
         }
     }
@@ -137,15 +132,26 @@ public class NPC_Ranged : NPC_ControllerBase
     {
         if (target == null) return;
 
+        attackTimer += Time.deltaTime;
         RotateTowards(target.position);
 
-        fireTimer -= Time.deltaTime;
-        if (fireTimer <= 0f)
+        if (attackTimer >= attackCooldown)
         {
-            GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-            // aquí puedes añadir lógica al proyectil: velocidad, daño, etc.
-            fireTimer = fireCooldown;
+            // Dirección hacia el objetivo
+            Vector2 direction = (target.position - firePoint.position).normalized;
+
+            // Calcular ángulo en grados
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Instanciar proyectil con rotación hacia el objetivo
+            var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
+
+            // Darle velocidad
+            projectile.GetComponent<Rigidbody2D>().velocity = direction * 15f;
+
             Debug.Log($"{name} dispara a {target.name}");
+            attackTimer = 0f;
         }
     }
+
 }
