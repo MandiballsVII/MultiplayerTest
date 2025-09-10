@@ -66,7 +66,7 @@ public class NPC_Melee : NPC_ControllerBase
         {
             Node randomNode = nodeManager.GetRandomNode();
             if (randomNode != null)
-                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode, radiusInTiles);
             currentState = StateMachine.Idle; // pausa antes de patrullar
             nextStateAfterIdle = StateMachine.Patrol;
         }
@@ -91,7 +91,7 @@ public class NPC_Melee : NPC_ControllerBase
             Node tnode = GetClosestNode(destination);
             if (tnode != null && currentNode != null)
             {
-                path = AStarManager.instance.GeneratePath(currentNode, tnode);
+                path = AStarManager.instance.GeneratePath(currentNode, tnode, radiusInTiles);
             }
             pathUpdateTimer = pathUpdateCooldown;
         }
@@ -110,7 +110,7 @@ public class NPC_Melee : NPC_ControllerBase
         {
             Node goal = GetClosestNode(lastKnownPosition.Value);
             if (goal != null && currentNode != null)
-                path = AStarManager.instance.GeneratePath(currentNode, goal);
+                path = AStarManager.instance.GeneratePath(currentNode, goal, radiusInTiles);
         }
         if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
         {

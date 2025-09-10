@@ -76,7 +76,7 @@ public class NPC_Controller : MonoBehaviour
         if (path.Count == 0)
         {
             Node randomNode = nodeManager.GetRandomNode();
-            path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+            path = AStarManager.instance.GeneratePath(currentNode, randomNode, 1f);
         }
     }
 
@@ -85,7 +85,7 @@ public class NPC_Controller : MonoBehaviour
         if (path.Count == 0)
         {
             Node targetNode = nodeManager.GetClosestNode(player.transform.position);
-            path = AStarManager.instance.GeneratePath(currentNode, targetNode);
+            path = AStarManager.instance.GeneratePath(currentNode, targetNode, 1f);
         }
     }
 
@@ -94,7 +94,7 @@ public class NPC_Controller : MonoBehaviour
         if (path.Count == 0)
         {
             Node targetNode = nodeManager.GetFurthestNode(player.transform.position);
-            path = AStarManager.instance.GeneratePath(currentNode, targetNode);
+            path = AStarManager.instance.GeneratePath(currentNode, targetNode, 1f);
         }
     }
 

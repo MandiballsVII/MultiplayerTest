@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class NPC_Beholder : NPC_ControllerBase
 {
@@ -19,10 +20,9 @@ public class NPC_Beholder : NPC_ControllerBase
     public Transform firePoint; // Punto desde donde se dispara el proyectil
     public float projectileSpeed = 15f; // Velocidad del proyectil
 
-    public new float radiusInTiles = 2f;
-
     protected override void UpdateState()
     {
+        radiusInTiles = 2f; // Beholder es más grande
         if (currentState == StateMachine.Idle)
         {
             animator?.SetInteger("State", 2);
@@ -75,8 +75,8 @@ public class NPC_Beholder : NPC_ControllerBase
         if (path.Count == 0)
         {
             Node randomNode = nodeManager.GetRandomNode();
-            if (randomNode != null)
-                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+            if (randomNode != null && currentNode != null)
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode, radiusInTiles);
             currentState = StateMachine.Idle; // pausa antes de patrullar
             nextStateAfterIdle = StateMachine.Patrol;
         }
@@ -101,7 +101,7 @@ public class NPC_Beholder : NPC_ControllerBase
             Node tnode = GetClosestNode(destination);
             if (tnode != null && currentNode != null)
             {
-                path = AStarManager.instance.GeneratePath(currentNode, tnode);
+                path = AStarManager.instance.GeneratePath(currentNode, tnode, radiusInTiles);
             }
             pathUpdateTimer = pathUpdateCooldown;
         }
@@ -113,48 +113,93 @@ public class NPC_Beholder : NPC_ControllerBase
     {
         if (!lastKnownPosition.HasValue) return;
 
-        // Actualizamos currentNode para reflejar la posición actual real
+        // Actualizamos currentNode
         currentNode = GetClosestNode(transform.position);
 
         if (path.Count == 0)
         {
-            Node goal = GetClosestNode(lastKnownPosition.Value);
+            int requiredClearance = Mathf.Max(0, Mathf.CeilToInt(radiusInTiles) - 1);
+
+            // buscamos un nodo objetivo que cumpla clearance cerca de la última posición
+            Node goal = nodeManager.GetClosestNodeWithClearance(lastKnownPosition.Value, requiredClearance, maxRadius: 8);
+
             if (goal != null && currentNode != null)
+            {
+                Debug.Log($"A* start.cl={currentNode.clearance} goal.cl={goal.clearance} req={requiredClearance}");
+
                 path = AStarManager.instance.GeneratePath(currentNode, goal, radiusInTiles);
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: no se encontró un nodo válido cerca de la última posición conocida (clearance req {requiredClearance}). Cancelo search.");
+                lastKnownPosition = null;
+                path.Clear();
+                currentState = StateMachine.Patrol;
+                return;
+            }
         }
+
         if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
         {
-            print(name + " no encontró al jugador, vuelve a patrullar");
+            Debug.Log($"{name} no encontró al jugador, vuelve a patrullar");
             lastKnownPosition = null;
             path.Clear();
-            currentState = StateMachine.Idle; // pausa antes de patrullar
+            currentState = StateMachine.Idle;
             nextStateAfterIdle = StateMachine.Patrol;
         }
     }
 
+
+
     void Attack()
     {
-        if (target == null) return;
-
         attackTimer += Time.deltaTime;
-        RotateTowards(target.position);
+        if (attackTimer < attackCooldown) return;
 
-        if (attackTimer >= attackCooldown)
+        int mask = LayerMask.GetMask("Player", "Summoned");
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, attackRange, mask);
+
+        if (hits.Length == 0) return;
+
+        List<Transform> visibleTargets = new List<Transform>();
+        foreach (var h in hits)
         {
-            // Dirección hacia el objetivo
-            Vector2 direction = (target.position - firePoint.position).normalized;
+            Vector2 dir = (h.transform.position - firePoint.position).normalized;
+            float dist = Vector2.Distance(firePoint.position, h.transform.position);
 
-            // Calcular ángulo en grados
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            // Raycast para comprobar si hay una pared en medio
+            RaycastHit2D hit = Physics2D.Raycast(firePoint.position, dir, dist, LayerMask.GetMask("Walls"));
 
-            // Instanciar proyectil con rotación hacia el objetivo
-            var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
-
-            // Darle velocidad
-            projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
-
-            Debug.Log($"{name} dispara a {target.name}");
-            attackTimer = 0f;
+            if (hit.collider == null) // no hay muro bloqueando
+            {
+                visibleTargets.Add(h.transform);
+            }
         }
+
+        if (visibleTargets.Count == 0) return;
+
+        // Ordenar por distancia
+        visibleTargets.Sort((a, b) =>
+            Vector2.Distance(transform.position, a.position).CompareTo(Vector2.Distance(transform.position, b.position)));
+
+        // Elegir hasta 4 objetivos
+        int count = Mathf.Min(4, visibleTargets.Count);
+
+        // Rotar hacia el más cercano
+        RotateTowards(visibleTargets[0].position);
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 dir = (visibleTargets[i].position - firePoint.position).normalized;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
+            projectile.GetComponent<BeholderRay>().Init(dir, projectileSpeed);
+        }
+
+        Debug.Log($"{name} dispara a {count} objetivos (con línea de visión)");
+        attackTimer = 0f;
     }
+
+
 }

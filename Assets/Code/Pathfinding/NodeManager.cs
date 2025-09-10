@@ -37,7 +37,6 @@ public class NodeManager : MonoBehaviour
 
         foreach (var cell in tilemapSuelo.cellBounds.allPositionsWithin)
         {
-            // Solo suelo, nunca pared
             if (tilemapSuelo.GetTile(cell) == null) continue;
             if (tilemapParedes && tilemapParedes.GetTile(cell) != null) continue;
 
@@ -49,38 +48,81 @@ public class NodeManager : MonoBehaviour
             nodeList.Add(n);
         }
 
+        // --- calcular clearance después de crear todos los nodos ---
         CalculateClearance();
     }
 
+    // dentro de NodeManager
+
     void CalculateClearance()
     {
+        int maxRadius = 8; // aumenta si esperas enemigos aún más grandes
         foreach (var kv in nodeDict)
         {
             var node = kv.Value;
-            int maxRadius = 5; // lo suficiente para tus agentes más grandes
             int clearance = 0;
 
-            // expandimos en anillos hasta que encontremos pared o nodo inexistente
-            for (int r = 1; r <= maxRadius; r++)
+            // r = 0 -> solo la celda central; r = 1 -> 3x3; r = 2 -> 5x5; ...
+            for (int r = 0; r <= maxRadius; r++)
             {
-                bool blocked = false;
-                for (int dx = -r; dx <= r && !blocked; dx++)
+                bool ok = true;
+                for (int dx = -r; dx <= r && ok; dx++)
                 {
-                    for (int dy = -r; dy <= r && !blocked; dy++)
+                    for (int dy = -r; dy <= r; dy++)
                     {
                         var pos = node.cell + new Vector3Int(dx, dy, 0);
                         if (!nodeDict.ContainsKey(pos))
                         {
-                            blocked = true;
+                            ok = false;
+                            break;
                         }
                     }
                 }
-                if (blocked) break;
-                clearance = r;
+
+                if (ok)
+                    clearance = r;
+                else
+                    break;
             }
+
             node.clearance = clearance;
         }
     }
+
+    // Buscar el nodo más cercano que tenga al menos 'requiredClearance' (busca en anillos)
+    public Node GetClosestNodeWithClearance(Vector3 world, int requiredClearance, int maxRadius = 12)
+    {
+        Vector3Int center = tilemapSuelo.WorldToCell(world);
+
+        // chequeo exacto
+        if (nodeDict.TryGetValue(center, out var exact) && exact.clearance >= requiredClearance)
+            return exact;
+
+        // expandir en anillos sobre la grilla (perímetro)
+        for (int r = 1; r <= maxRadius; r++)
+        {
+            for (int x = -r; x <= r; x++)
+            {
+                Vector3Int p1 = center + new Vector3Int(x, r, 0);
+                if (nodeDict.TryGetValue(p1, out var n1) && n1.clearance >= requiredClearance) return n1;
+
+                Vector3Int p2 = center + new Vector3Int(x, -r, 0);
+                if (nodeDict.TryGetValue(p2, out var n2) && n2.clearance >= requiredClearance) return n2;
+            }
+            for (int y = -r + 1; y <= r - 1; y++)
+            {
+                Vector3Int p3 = center + new Vector3Int(r, y, 0);
+                if (nodeDict.TryGetValue(p3, out var n3) && n3.clearance >= requiredClearance) return n3;
+
+                Vector3Int p4 = center + new Vector3Int(-r, y, 0);
+                if (nodeDict.TryGetValue(p4, out var n4) && n4.clearance >= requiredClearance) return n4;
+            }
+        }
+
+        return null;
+    }
+
+
 
 
     void BuildConnections()

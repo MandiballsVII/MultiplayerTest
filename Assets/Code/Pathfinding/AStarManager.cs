@@ -17,7 +17,6 @@ public class AStarManager : MonoBehaviour
         instance = this;
     }
 
-    // === Costes y heurística ===
     float StepCost(Node a, Node b)
     {
         bool diagonal = (a.cell.x != b.cell.x) && (a.cell.y != b.cell.y);
@@ -28,7 +27,6 @@ public class AStarManager : MonoBehaviour
     {
         int dx = Mathf.Abs(a.cell.x - b.cell.x);
         int dy = Mathf.Abs(a.cell.y - b.cell.y);
-        // Distancia octil (perfecta para grid con diagonales)
         return Mathf.Max(dx, dy) + (1.41421356f - 1f) * Mathf.Min(dx, dy);
     }
 
@@ -37,8 +35,44 @@ public class AStarManager : MonoBehaviour
     {
         if (start == null || goal == null)
         {
-            Debug.LogWarning("Start o Goal son null, no se puede generar ruta");
-            return null;
+            Debug.LogWarning(" Start o Goal son null, devolviendo lista vacía");
+            return new List<Node>();
+        }
+
+        // regla de mapeo: si agentRadiusInTiles == 1 -> required = 0 (solo centro)
+        int requiredClearance = Mathf.Max(0, Mathf.CeilToInt(agentRadiusInTiles) - 1);
+
+        // intentar reemplazar start/goal por nodos cercanos que cumplan clearance si es necesario
+        if (start.clearance < requiredClearance)
+        {
+            var startWorld = nodeManager.tilemapSuelo.GetCellCenterWorld(start.cell);
+            var altStart = nodeManager.GetClosestNodeWithClearance(startWorld, requiredClearance, 8);
+            if (altStart != null)
+            {
+                Debug.Log($"{nameOf(this)}: start no tenía clearance ({start.clearance}) -> usando nodo alternativo con clearance {altStart.clearance}");
+                start = altStart;
+            }
+            else
+            {
+                Debug.LogWarning($"AStar: start no cumple clearance ({start.clearance} < {requiredClearance}) y no hay alternativa. Ruta imposible.");
+                return new List<Node>();
+            }
+        }
+
+        if (goal.clearance < requiredClearance)
+        {
+            var goalWorld = nodeManager.tilemapSuelo.GetCellCenterWorld(goal.cell);
+            var altGoal = nodeManager.GetClosestNodeWithClearance(goalWorld, requiredClearance, 8);
+            if (altGoal != null)
+            {
+                Debug.Log($"{nameOf(this)}: goal no tenía clearance ({goal.clearance}) -> usando nodo alternativo con clearance {altGoal.clearance}");
+                goal = altGoal;
+            }
+            else
+            {
+                Debug.LogWarning($"AStar: goal no cumple clearance ({goal.clearance} < {requiredClearance}) y no hay alternativa. Ruta imposible.");
+                return new List<Node>();
+            }
         }
 
         // Reset scores
@@ -57,7 +91,6 @@ public class AStarManager : MonoBehaviour
 
         while (open.Count > 0)
         {
-            // Nodo con menor fScore
             Node current = open.OrderBy(n => n.FScore).First();
 
             if (current == goal)
@@ -66,11 +99,10 @@ public class AStarManager : MonoBehaviour
             open.Remove(current);
             closed.Add(current);
 
-            int requiredClearance = Mathf.CeilToInt(agentRadiusInTiles);
-
             foreach (var neighbor in current.connections)
             {
-                if (neighbor.clearance < requiredClearance) continue; // demasiado estrecho, no cabes
+                // filtro de clearance
+                if (neighbor.clearance < requiredClearance) continue;
                 if (closed.Contains(neighbor)) continue;
 
                 float tentativeG = current.gScore + StepCost(current, neighbor);
@@ -86,9 +118,13 @@ public class AStarManager : MonoBehaviour
             }
         }
 
-        // No se encontró ruta
-        return null;
+        Debug.LogWarning(" No se encontró ruta. Devolviendo lista vacía.");
+        return new List<Node>();
     }
+
+    // Ayudita para debug (nombre de la instancia)
+    string nameOf(MonoBehaviour m) => m == null ? "AStar" : m.name;
+
 
     List<Node> ReconstructPath(Node current)
     {

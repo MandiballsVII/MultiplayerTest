@@ -122,19 +122,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1baf3a4ab1aef41aa1cc93cf822a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 200
+  currentNode: {fileID: 0}
+  speed: 3
   detectionRadius: 15
-  optimalDistance: 5
-  stoppingTolerance: 0.5
-  moveSpeed: 3
-  playerLayer:
+  detectionHysteresis: 0.35
+  occlusionLossDelay: 0.12
+  nodeManager: {fileID: 0}
+  attackRange: 10
+  currentState: 0
+  faction: 1
+  obstacleMask:
     serializedVersion: 2
-    m_Bits: 64
-  moveThreshold: 0.0001
-  stopDelay: 0.1
+    m_Bits: 256
+  radiusInTiles: 1
+  idleDuration: 2
+  projectilePrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
+  attackCooldown: 1.5
   firePoint: {fileID: 8017433289461637734}
-  rayPrefab: {fileID: 5142924380840073322, guid: 44af18206baadfb42a65baef07c405ce, type: 3}
-  rayCooldown: 2
-  raySpeed: 12
+  projectileSpeed: 10
 --- !u!50 &1238120815683575095
 Rigidbody2D:
   serializedVersion: 4
@@ -161,7 +167,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &2908709910248132014
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -222,7 +228,7 @@ Transform:
   m_GameObject: {fileID: 3345964778419949204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.27, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

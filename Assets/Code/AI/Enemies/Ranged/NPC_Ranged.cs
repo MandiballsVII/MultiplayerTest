@@ -11,6 +11,9 @@ public class NPC_Ranged : NPC_ControllerBase
     public float idleDuration = 2f; // duración del idle en segundos
     private StateMachine nextStateAfterIdle; // para saber a dónde ir tras la pausa
 
+    // --- Para recordar el nodo objetivo en búsqueda ---
+    private Node searchGoalNode = null;
+
     public GameObject projectilePrefab; // Prefab del proyectil a instanciar
 
     public float attackCooldown = 1.5f; // Tiempo entre ataques
@@ -73,7 +76,7 @@ public class NPC_Ranged : NPC_ControllerBase
         {
             Node randomNode = nodeManager.GetRandomNode();
             if (randomNode != null)
-                path = AStarManager.instance.GeneratePath(currentNode, randomNode);
+                path = AStarManager.instance.GeneratePath(currentNode, randomNode, radiusInTiles);
             currentState = StateMachine.Idle; // pausa antes de patrullar
             nextStateAfterIdle = StateMachine.Patrol;
         }
@@ -98,7 +101,7 @@ public class NPC_Ranged : NPC_ControllerBase
             Node tnode = GetClosestNode(destination);
             if (tnode != null && currentNode != null)
             {
-                path = AStarManager.instance.GeneratePath(currentNode, tnode);
+                path = AStarManager.instance.GeneratePath(currentNode, tnode, radiusInTiles);
             }
             pathUpdateTimer = pathUpdateCooldown;
         }
@@ -110,24 +113,45 @@ public class NPC_Ranged : NPC_ControllerBase
     {
         if (!lastKnownPosition.HasValue) return;
 
-        // Actualizamos currentNode para reflejar la posición actual real
+        // Actualizamos el nodo actual
         currentNode = GetClosestNode(transform.position);
 
+        // Si no tenemos path, lo calculamos
         if (path.Count == 0)
         {
-            Node goal = GetClosestNode(lastKnownPosition.Value);
+            int requiredClearance = Mathf.Max(0, Mathf.CeilToInt(radiusInTiles) - 1);
+            Node goal = nodeManager.GetClosestNodeWithClearance(lastKnownPosition.Value, requiredClearance, maxRadius: 8);
+
             if (goal != null && currentNode != null)
-                path = AStarManager.instance.GeneratePath(currentNode, goal);
+            {
+                Debug.Log($"A* start.cl={currentNode.clearance} goal.cl={goal.clearance} req={requiredClearance}");
+                path = AStarManager.instance.GeneratePath(currentNode, goal, radiusInTiles);
+
+                // Guardamos el nodo de destino real para comparar luego
+                searchGoalNode = goal;
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: no se encontró nodo válido cerca de la última posición conocida. Cancelando búsqueda.");
+                lastKnownPosition = null;
+                path.Clear();
+                currentState = StateMachine.Patrol;
+                return;
+            }
         }
-        if (Vector2.Distance(transform.position, lastKnownPosition.Value) < 0.8f)
+
+        // Si hemos llegado suficientemente cerca al nodo de destino
+        if (searchGoalNode != null && Vector2.Distance(transform.position, searchGoalNode.transform.position) < 0.2f)
         {
-            print(name + " no encontró al jugador, vuelve a patrullar");
+            Debug.Log($"{name} terminó búsqueda y no encontró al jugador. Vuelve a patrullar.");
             lastKnownPosition = null;
             path.Clear();
-            currentState = StateMachine.Idle; // pausa antes de patrullar
+            currentState = StateMachine.Idle; // pausa breve antes de retomar patrulla
             nextStateAfterIdle = StateMachine.Patrol;
+            searchGoalNode = null; // limpiamos referencia
         }
     }
+
 
     void Attack()
     {
