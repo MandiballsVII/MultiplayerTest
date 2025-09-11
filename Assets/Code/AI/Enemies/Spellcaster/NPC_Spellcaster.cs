@@ -1,74 +1,41 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class NPC_SpellCaster : NPC_ControllerBase
 {
-    public enum SpellType { Projectile, Area, Self, Summon }
+    [Header("SpellCaster")]
+    public SpellData spell; // Hechizo asignado a este NPC
+    private float spellCooldownTimer = 0f;
 
-    [Header("Spell Config")]
-    public SpellData assignedSpell;
-
-    private float attackTimer = 0f;
-    private float pathUpdateCooldown = 0.25f;
-    private float pathUpdateTimer = 0f;
-
-    [SerializeField] Transform firePoint;
-
-    // Control de idle
-    private float idleTimer = 0f;
-    public float idleDuration = 2f;
-    private StateMachine nextStateAfterIdle;
-
-    // Summoner
-    public float desiredDistanceFromTarget = 6f;
-    private List<GameObject> activeSummons = new List<GameObject>();
-
-    // --- Para recordar el nodo objetivo en búsqueda ---
-    private Node searchGoalNode = null;
-
-    // Healer
-    private IAttackable allyTarget;
+    [Header("Summon settings")]
+    public float summonDistance = 4f; // distancia a mantener del objetivo al invocar
 
     protected override void UpdateState()
     {
-        if (currentState == StateMachine.Idle)
-        {
-            animator?.SetInteger("State", 2);
-            idleTimer += Time.deltaTime;
-            if (idleTimer >= idleDuration)
-            {
-                currentState = nextStateAfterIdle;
-                animator?.SetInteger("State", 0);
-                idleTimer = 0f;
-            }
-            return;
-        }
+        if (spell == null) return;
 
-        if (assignedSpell == null)
-        {
-            Debug.LogWarning($"{name} no tiene SpellData asignado.");
-            return;
-        }
+        // Reducir cooldown del hechizo
+        spellCooldownTimer -= Time.deltaTime;
 
-        switch (assignedSpell.type)
+        switch (spell.type)
         {
             case SpellType.Projectile:
             case SpellType.Area:
-                HandleRangedStyle();
+                HandleRangedBehavior();
                 break;
-
             case SpellType.Summon:
-                HandleSummonerStyle();
+                HandleSummonerBehavior();
                 break;
-
             case SpellType.Self:
-                HandleHealerStyle();
+                HandleSelfSupportBehavior();
                 break;
         }
     }
 
-    // ========== PROJECTILE / AREA ==========
-    private void HandleRangedStyle()
+    // ================= RANGED / PROJECTILE =================
+    void HandleRangedBehavior()
     {
         if (target != null)
         {
@@ -77,7 +44,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
             {
                 currentState = StateMachine.Engage;
                 animator?.SetInteger("State", 1);
-                AttackProjectile();
+                TryCastSpell(target.position);
             }
             else
             {
@@ -94,172 +61,123 @@ public class NPC_SpellCaster : NPC_ControllerBase
         }
         else
         {
-            Patrol();
-        }
-    }
-
-    private void AttackProjectile()
-    {
-        if (target == null) return;
-
-        attackTimer += Time.deltaTime;
-        RotateTowards(target.position);
-
-        if (attackTimer >= assignedSpell.cooldown)
-        {
-            if (assignedSpell.prefab != null)
-            {
-                Vector2 dir = (target.position - firePoint.position).normalized;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-                var proj = Instantiate(assignedSpell.prefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
-                var rb = proj.GetComponent<Rigidbody2D>();
-                if (rb != null)
-                    rb.velocity = dir * assignedSpell.projectileSpeed;
-
-                Debug.Log($"{name} lanza {assignedSpell.displayName} a {target.name}");
-            }
-            attackTimer = 0f;
-        }
-    }
-
-    // ========== SUMMONER ==========
-    private void HandleSummonerStyle()
-    {
-        if (target != null)
-        {
-            float dist = Vector2.Distance(transform.position, target.position);
-
-            // mantener distancia
-            if (dist < desiredDistanceFromTarget)
-            {
-                Vector2 dir = (transform.position - target.position).normalized;
-                transform.position += (Vector3)(dir * speed * Time.deltaTime);
-            }
-
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= assignedSpell.cooldown && activeSummons.Count < assignedSpell.summonCount)
-            {
-                SummonCreature();
-                attackTimer = 0f;
-            }
-        }
-        else if (lastKnownPosition.HasValue)
-        {
-            currentState = StateMachine.Search;
+            currentState = StateMachine.Patrol;
             animator?.SetInteger("State", 0);
-            SearchLastKnown();
-        }
-        else
-        {
             Patrol();
         }
     }
 
-    private void SummonCreature()
+    // ================= SUMMONER =================
+    void HandleSummonerBehavior()
     {
-        if (assignedSpell.summonPrefab == null) return;
+        // Buscar jugadores visibles
+        Transform playerTarget = target;
 
-        var summon = Instantiate(assignedSpell.summonPrefab, transform.position + Vector3.right, Quaternion.identity);
-        activeSummons.Add(summon);
-        Destroy(summon, assignedSpell.summonDuration);
-
-        Debug.Log($"{name} invoca {assignedSpell.summonPrefab.name}");
-    }
-
-    // ========== HEALER ==========
-    private void HandleHealerStyle()
-    {
-        Collider2D[] allies = Physics2D.OverlapCircleAll(transform.position, detectionRadius, allyLayer);
-        IAttackable weakest = null;
-        float lowestHpRatio = 1f;
-
-        foreach (var a in allies)
+        if (playerTarget != null)
         {
-            var att = a.GetComponent<IAttackable>();
-            if (att != null && att.IsAlive && att != this)
-            {
-                float ratio = (att as NPC_ControllerBase)?.GetHealthRatio() ?? 1f;
-                if (ratio < lowestHpRatio)
-                {
-                    lowestHpRatio = ratio;
-                    weakest = att;
-                }
-            }
-        }
+            currentState = StateMachine.Engage;
+            animator?.SetInteger("State", 0);
 
-        if (weakest != null)
-        {
-            allyTarget = weakest;
-            float dist = Vector2.Distance(transform.position, ((MonoBehaviour)weakest).transform.position);
-            if (dist > attackRange)
+            // Mantener distancia
+            float dist = Vector2.Distance(transform.position, playerTarget.position);
+            if (dist < summonDistance)
             {
-                ChaseTarget(((MonoBehaviour)weakest).transform.position);
+                Vector2 dir = (transform.position - playerTarget.position).normalized;
+                transform.position += (Vector3)(dir * speed * Time.deltaTime);
             }
-            else
+
+            // Intentar invocar
+            if (spellCooldownTimer <= 0f)
             {
-                AttackHeal(weakest);
+                CastSummon();
+                spellCooldownTimer = spell.cooldown;
             }
         }
         else
         {
-            // huir si hay jugador
-            if (target != null)
-            {
-                Vector2 dir = (transform.position - target.position).normalized;
-                transform.position += (Vector3)(dir * speed * Time.deltaTime);
-            }
-            else
-            {
-                Patrol();
-            }
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
         }
     }
 
-    private void AttackHeal(IAttackable ally)
+    // ================= SELF / SUPPORT =================
+    void HandleSelfSupportBehavior()
     {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= assignedSpell.cooldown)
+        // Buscar aliados vivos
+        NPC_ControllerBase[] allies = FindObjectsOfType<NPC_ControllerBase>();
+        NPC_ControllerBase targetAlly = null;
+        float lowestRatio = 1f;
+
+        foreach (var ally in allies)
         {
-            ally.Heal(assignedSpell.healAmount);
-            Debug.Log($"{name} cura a {((MonoBehaviour)ally).name} con {assignedSpell.displayName}");
-            attackTimer = 0f;
+            if (ally == this) continue;
+            if (!ally.health.IsAlive) continue;
+            if (ally.faction != this.faction) continue;
+
+            float ratio = ally.health.currentHealth / ally.health.maxHealth;
+            if (ratio < lowestRatio)
+            {
+                lowestRatio = ratio;
+                targetAlly = ally;
+            }
+        }
+
+        if (targetAlly != null)
+        {
+            // Hacer chase al aliado si está lejos
+            float dist = Vector2.Distance(transform.position, targetAlly.transform.position);
+            if (dist > 1f)
+                ChaseTarget(targetAlly.transform.position);
+
+            // Lanzar spell si cooldown listo
+            if (spellCooldownTimer <= 0f)
+            {
+                TryCastSpell(targetAlly.transform.position);
+                spellCooldownTimer = spell.cooldown;
+            }
+        }
+        else if (target != null)
+        {
+            // No hay aliados, hay enemigos -> huir
+            Vector2 dir = (transform.position - target.position).normalized;
+            transform.position += (Vector3)(dir * speed * Time.deltaTime);
+        }
+        else
+        {
+            // Ni aliados ni enemigos -> patrulla
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
         }
     }
 
-    // ========== PATHFINDING ==========
+    // ================= MOVIMIENTO =================
+    void ChaseTarget(Vector3 destination)
+    {
+        // Movimiento directo si hay LOS
+        if (target != null && HasLineOfSight(target))
+        {
+            RotateTowards(destination);
+            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+            return;
+        }
 
-    private void Patrol()
+        // Si no hay LOS, usamos pathfinding
+        if (currentNode != null && nodeManager != null)
+        {
+            Node tNode = GetClosestNode(destination);
+            path = AStarManager.instance.GeneratePath(currentNode, tNode, radiusInTiles);
+        }
+    }
+
+    void Patrol()
     {
         if (path.Count == 0)
         {
             Node randomNode = nodeManager.GetRandomNode();
             if (randomNode != null)
                 path = AStarManager.instance.GeneratePath(currentNode, randomNode, radiusInTiles);
-
-            currentState = StateMachine.Idle;
-            nextStateAfterIdle = StateMachine.Patrol;
-        }
-    }
-
-    private void ChaseTarget(Transform destination)
-    {
-        if (HasLineOfSight(destination))
-        {
-            RotateTowards(destination.position);
-            transform.position = Vector3.MoveTowards(transform.position, destination.position, speed * Time.deltaTime);
-            return;
-        }
-
-        pathUpdateTimer -= Time.deltaTime;
-        if (pathUpdateTimer <= 0f)
-        {
-            Node tnode = GetClosestNode(destination.position);
-            if (tnode != null && currentNode != null)
-            {
-                path = AStarManager.instance.GeneratePath(currentNode, tnode, radiusInTiles);
-            }
-            pathUpdateTimer = pathUpdateCooldown;
         }
     }
 
@@ -267,42 +185,53 @@ public class NPC_SpellCaster : NPC_ControllerBase
     {
         if (!lastKnownPosition.HasValue) return;
 
-        // Actualizamos el nodo actual
         currentNode = GetClosestNode(transform.position);
 
-        // Si no tenemos path, lo calculamos
         if (path.Count == 0)
         {
-            int requiredClearance = Mathf.Max(0, Mathf.CeilToInt(radiusInTiles) - 1);
-            Node goal = nodeManager.GetClosestNodeWithClearance(lastKnownPosition.Value, requiredClearance, maxRadius: 8);
-
-            if (goal != null && currentNode != null)
-            {
-                Debug.Log($"A* start.cl={currentNode.clearance} goal.cl={goal.clearance} req={requiredClearance}");
+            Node goal = nodeManager.GetClosestNode(lastKnownPosition.Value);
+            if (goal != null)
                 path = AStarManager.instance.GeneratePath(currentNode, goal, radiusInTiles);
+        }
+    }
 
-                // Guardamos el nodo de destino real para comparar luego
-                searchGoalNode = goal;
-            }
-            else
-            {
-                Debug.LogWarning($"{name}: no se encontró nodo válido cerca de la última posición conocida. Cancelando búsqueda.");
-                lastKnownPosition = null;
-                path.Clear();
-                currentState = StateMachine.Patrol;
-                return;
-            }
+    // ================= SPELL CAST =================
+    void TryCastSpell(Vector3 targetPos)
+    {
+        if (spell == null || spell.prefab == null) return;
+
+        var spellGO = Instantiate(spell.prefab, transform.position, Quaternion.identity);
+
+        // Si es Projectile o Area, apuntar hacia target
+        if (spell.type == SpellType.Projectile || spell.type == SpellType.Area)
+        {
+            Vector2 dir = (targetPos - transform.position).normalized;
+            spellGO.transform.right = dir;
+
+            if (spell.type == SpellType.Projectile && spellGO.TryGetComponent<Rigidbody2D>(out var rb))
+                rb.velocity = dir * spell.projectileSpeed;
         }
 
-        // Si hemos llegado suficientemente cerca al nodo de destino
-        if (searchGoalNode != null && Vector2.Distance(transform.position, searchGoalNode.transform.position) < 0.2f)
+        // Invocados y buffs se manejan según SpellData (puedes añadir Init si hace falta)
+    }
+
+    void CastSummon()
+    {
+        if (spell.summonPrefab == null) return;
+
+        for (int i = 0; i < spell.summonCount; i++)
         {
-            Debug.Log($"{name} terminó búsqueda y no encontró al jugador. Vuelve a patrullar.");
-            lastKnownPosition = null;
-            path.Clear();
-            currentState = StateMachine.Idle; // pausa breve antes de retomar patrulla
-            nextStateAfterIdle = StateMachine.Patrol;
-            searchGoalNode = null; // limpiamos referencia
+            Vector3 spawnPos = transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            var summon = Instantiate(spell.summonPrefab, spawnPos, Quaternion.identity);
+
+            // Pasar Owner
+            var npc = summon.GetComponent<NPC_ControllerBase>();
+            if (npc != null)
+                npc.Init(transform);
+
+            // Destruir tras duración
+            if (spell.summonDuration > 0)
+                Destroy(summon, spell.summonDuration);
         }
     }
 }

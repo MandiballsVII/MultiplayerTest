@@ -34,7 +34,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     bool isLOSLost = false;
 
     protected Animator animator;
-    protected Health health;
+    public Health health { get; private set; }
 
     public float radiusInTiles = 1f;
 
