@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5142924380840073322
+--- !u!1 &3230791668955136276
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5266355265271709716}
-  - component: {fileID: 2510247731801097595}
-  - component: {fileID: 5161036251611906087}
-  - component: {fileID: 863319459904611801}
-  - component: {fileID: 7094183638111847798}
-  - component: {fileID: 2373486320295043874}
-  m_Layer: 10
-  m_Name: BeholderRay
+  - component: {fileID: 1860936699590565892}
+  - component: {fileID: 882724056010925095}
+  - component: {fileID: 2551319947729361616}
+  - component: {fileID: 1444758083426113896}
+  - component: {fileID: 2281269874344258466}
+  - component: {fileID: 7508203646740258498}
+  m_Layer: 9
+  m_Name: ObscureCleric
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5266355265271709716
+--- !u!4 &1860936699590565892
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
+  m_GameObject: {fileID: 3230791668955136276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2510247731801097595
+--- !u!212 &882724056010925095
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
+  m_GameObject: {fileID: 3230791668955136276}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -77,26 +77,26 @@ SpriteRenderer:
   m_SortingLayerID: 167389457
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1372557431, guid: 830a0fc4878590445b9632e161b29610, type: 3}
+  m_Sprite: {fileID: 737974434, guid: c705bd2d6883a0349bd8a8e815e7b828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 1}
+  m_Size: {x: 1, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &5161036251611906087
+--- !u!50 &2551319947729361616
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
-  m_BodyType: 1
+  m_GameObject: {fileID: 3230791668955136276}
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -114,33 +114,18 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
---- !u!114 &863319459904611801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b019ee4e6e64c34b9b9b454f5fff8e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 4
-  damage: 10
-  speed: 10
---- !u!95 &7094183638111847798
+  m_Constraints: 4
+--- !u!95 &1444758083426113896
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
+  m_GameObject: {fileID: 3230791668955136276}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 94609f69fb0e947428e0675ba7c55777, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5c2fdf9e88ebbdf4eb2f6de2afc0e631, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -151,38 +136,45 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!70 &2373486320295043874
-CapsuleCollider2D:
+--- !u!114 &2281269874344258466
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5142924380840073322}
+  m_GameObject: {fileID: 3230791668955136276}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcb6e17278fe297499bb64b32958b384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentNode: {fileID: 0}
+  speed: 3
+  detectionRadius: 5
+  detectionHysteresis: 0.35
+  occlusionLossDelay: 0.12
+  nodeManager: {fileID: 0}
+  attackRange: 1
+  currentState: 0
+  faction: 1
+  obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 7671
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 7671
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.24, y: 0}
-  m_Size: {x: 0.7, y: 0.3}
-  m_Direction: 1
+    m_Bits: 256
+  radiusInTiles: 1
+  idleDuration: 2
+  firePoint: {fileID: 0}
+  spell: {fileID: 11400000, guid: fae2ea1d0e7ced1468e06a739cada06d, type: 2}
+--- !u!114 &7508203646740258498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230791668955136276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729948208b147634ca6cb3c7e4069add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0

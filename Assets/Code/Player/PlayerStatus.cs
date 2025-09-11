@@ -5,6 +5,7 @@ public class PlayerStatus : MonoBehaviour
     private PlayerManager player; // Tu script de jugador
     private PlayerController playerController;
     private PlayerSpellBook playerSpellBook;
+    private Health health;
     private bool isImmobilized;
 
     private float originalSpeed;
@@ -13,6 +14,7 @@ public class PlayerStatus : MonoBehaviour
     {
         player = GetComponent<PlayerManager>();
         playerController = GetComponent<PlayerController>();
+        health = GetComponent<Health>();
         playerSpellBook = GetComponent<PlayerSpellBook>();
         originalSpeed = player.movementSpeed;
     }
@@ -31,7 +33,7 @@ public class PlayerStatus : MonoBehaviour
 
     public void ApplyDamage(int amount)
     {
-        playerController.TakeDamage(amount);
+        health.TakeDamage(amount);
     }
 
     public void ApplySilence(float duration)

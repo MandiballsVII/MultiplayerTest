@@ -22,9 +22,9 @@ public class SpellData : ScriptableObject
     public float power = 20f;           // daño/curación genérica según tipo
 
     [Header("Curación")]
-    public float healAmount = 20f;
-    public float manaRestoreAmount; // cuanto mana devuelve
-    public float healthCost;       // vida que pierde el lanzador
+    public int healAmount = 20;
+    public int manaRestoreAmount; // cuanto mana devuelve
+    public int healthCost;       // vida que pierde el lanzador
     public bool affectAllPlayers = false;
     public float auraDuration = 1f; // duración del aura
     public GameObject auraPrefab; // el aura verde opcional

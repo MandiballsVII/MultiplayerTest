@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,62 +7,56 @@ public class PlayerController : MonoBehaviour
     public PlayerInput PlayerInput { get; private set; }
     public CharacterData CharacterData;
 
-    public int maxHealth = 100;
     public int maxMana = 100;
-
-    private float currentHealth;
     private float currentMana;
 
-    public event Action<float> OnHealthChanged;
-    public event Action<float> OnManaChanged;
+    private Health health;
+
+    public event Action<float, float> OnManaChanged; // current, max
 
     private void Awake()
     {
         PlayerInput = GetComponent<PlayerInput>();
+        health = GetComponent<Health>();
     }
 
     private void Start()
     {
-        currentHealth = maxHealth;
         currentMana = maxMana;
 
-        // Inicializa HUD con valores absolutos
-        OnHealthChanged?.Invoke(currentHealth);
-        OnManaChanged?.Invoke(currentMana);
+        // sincronizar HUD
+        OnManaChanged?.Invoke(currentMana, maxMana);
+
+        // ejemplo: conectar HUD a health
+        health.OnHealthChanged += (cur, max) =>
+        {
+            // tu HUD lo puede leer
+        };
 
         StartCoroutine(RegenerateMana());
     }
 
-    private IEnumerator RegenerateMana()
+    private System.Collections.IEnumerator RegenerateMana()
     {
         while (true)
         {
-            yield return new WaitForSeconds(1f); // 1 por segundo
+            yield return new WaitForSeconds(1f);
             currentMana = Mathf.Clamp(currentMana + 1, 0, maxMana);
-            OnManaChanged?.Invoke(currentMana);
+            OnManaChanged?.Invoke(currentMana, maxMana);
         }
     }
+
     public void RestoreMana(float amount)
     {
         currentMana = Mathf.Clamp(currentMana + amount, 0, maxMana);
-        OnManaChanged?.Invoke(currentMana);
+        OnManaChanged?.Invoke(currentMana, maxMana);
     }
 
     public void UseMana(float amount)
     {
         currentMana = Mathf.Clamp(currentMana - amount, 0, maxMana);
-        OnManaChanged?.Invoke(currentMana); // valor absoluto
-    }
-    public void TakeDamage(float amount)
-    {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
-        OnHealthChanged?.Invoke(currentHealth); // valor absoluto
+        OnManaChanged?.Invoke(currentMana, maxMana);
     }
 
     public bool HasMana(float amount) => currentMana >= amount;
-    public void Heal(float amount)
-    {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        OnHealthChanged?.Invoke(currentHealth); // valor absoluto
-    }
 }

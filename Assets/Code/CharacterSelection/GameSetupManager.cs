@@ -36,13 +36,15 @@ public class GameSetupManager : MonoBehaviour
                 playerController.CharacterData.characterName
             );
 
-            hud.Configure(playerController.maxHealth, playerController.maxMana);
-            hud.UpdateHealth(playerController.maxHealth);
+            var health = playerController.GetComponent<Health>();
+
+            hud.Configure(health.maxHealth, playerController.maxMana);
+            hud.UpdateHealth(health.currentHealth);
             hud.UpdateMana(playerController.maxMana);
 
             // Vincular eventos para actualizar barras
-            playerController.OnHealthChanged += (value) => hud.UpdateHealth(value);
-            playerController.OnManaChanged += (value) => hud.UpdateMana(value);
+            health.OnHealthChanged += (cur, max) => hud.UpdateHealth(cur);
+            playerController.OnManaChanged += (value, max) => hud.UpdateMana(value);
 
             // Colocar en el spawn correspondiente
             pi.transform.position = spawnPoints[spawnIndex].position;

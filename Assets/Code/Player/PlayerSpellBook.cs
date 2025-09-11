@@ -229,9 +229,10 @@ public class PlayerSpellBook : MonoBehaviour
     {
         if (spell == null) return;
 
+        var health = controller.GetComponent<Health>();
         // Coste en vida
         if (spell.healthCost > 0)
-            controller.TakeDamage(spell.healthCost);
+            health.TakeDamage(spell.healthCost);
 
         // Determinar objetivos
         PlayerController[] targets;
@@ -242,9 +243,10 @@ public class PlayerSpellBook : MonoBehaviour
 
         foreach (var player in targets)
         {
+            var hp = player.GetComponent<Health>();
             // Curación
             if (spell.healAmount > 0)
-                player.Heal(spell.healAmount);
+                hp.Heal(spell.healAmount);
 
             // Restaurar mana
             if (spell.manaRestoreAmount > 0)

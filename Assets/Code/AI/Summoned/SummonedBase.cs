@@ -21,6 +21,18 @@ public abstract class SummonedBase : MonoBehaviour, IAttackable
     public void Init(Transform owner)
     {
         Owner = owner;
+        // Heredar la capa del invocador
+        int ownerLayer = owner.gameObject.layer;
+        SetLayerRecursively(gameObject, ownerLayer);
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 
     // ========== SISTEMA DE VIDA ==========

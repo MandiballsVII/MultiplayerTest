@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class NPC_ControllerBase : EnemyBase
+[RequireComponent(typeof(Health))]
+public abstract class NPC_ControllerBase : MonoBehaviour
 {
     [Header("Movimiento")]
     public Node currentNode;
@@ -10,34 +11,41 @@ public abstract class NPC_ControllerBase : EnemyBase
 
     [Header("IA")]
     public float detectionRadius = 5f;
-    [Tooltip("Histeresis para detección: evita toggles rápidos cuando el objetivo está justo en el borde")]
     public float detectionHysteresis = 0.35f;
-    [Tooltip("Si la visión se corta por una pared, esperar este tiempo (s) antes de considerar perdida la visión")]
     public float occlusionLossDelay = 0.12f;
 
     public NodeManager nodeManager;
-    public float attackRange = 1f; // rango de ataque genérico
+    public float attackRange = 1f;
 
     public enum StateMachine { Patrol, Engage, Evade, Search, Idle }
     public StateMachine currentState;
 
     [Header("Facción")]
-    public Faction faction = Faction.Enemy; // ya común para todos
+    public Faction faction = Faction.Enemy;
 
     [Header("Line of Sight")]
-    public LayerMask obstacleMask; // asignar la capa de 'Walls' en inspector
+    public LayerMask obstacleMask;
 
-    // Vision/internal state
-    [Header("Pathfinding / Estados")]
-    protected Transform target;               // target VISIBLE ahora (null si no está visible)
-    protected Transform lastSeenTarget;       // referencia del transform que se vio por última vez
-    protected Vector3? lastKnownPosition;     // posición donde se le vio por última vez
+    // --- Datos internos ---
+    protected Transform target;
+    protected Transform lastSeenTarget;
+    protected Vector3? lastKnownPosition;
     float timeLOSLostStart = -999f;
     bool isLOSLost = false;
 
     protected Animator animator;
+    protected Health health;
 
     public float radiusInTiles = 1f;
+
+    // Invocador (si aplica)
+    public Transform Owner { get; private set; }
+
+    protected virtual void Awake()
+    {
+        health = GetComponent<Health>();
+        health.OnDied += Die;
+    }
 
     protected virtual void Start()
     {
@@ -48,31 +56,48 @@ public abstract class NPC_ControllerBase : EnemyBase
 
         animator = GetComponent<Animator>();
 
-        // si no se ha configurado obstacleMask en inspector, intentar asignar la layer "Walls"
         if (obstacleMask.value == 0)
         {
             int wLayer = LayerMask.NameToLayer("Walls");
             if (wLayer != -1)
                 obstacleMask = LayerMask.GetMask("Walls");
             else
-                Debug.LogWarning($"{name}: obstacleMask no asignado y no existe la layer 'Walls'. Asigna obstacleMask en el inspector.");
+                Debug.LogWarning($"{name}: obstacleMask no asignado y no existe la layer 'Walls'.");
         }
     }
 
-    // IMPORTANT: actualizamos la información de objetivo antes de UpdateState()
     protected virtual void Update()
     {
         UpdateTargetInfo();
         UpdateState();
-        if(currentState != StateMachine.Idle)
+        if (currentState != StateMachine.Idle)
             MoveAlongPath();
+    }
+
+    public void Init(Transform owner)
+    {
+        Owner = owner;
+        int ownerLayer = owner.gameObject.layer;
+        SetLayerRecursively(gameObject, ownerLayer);
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+            SetLayerRecursively(child.gameObject, newLayer);
     }
 
     protected abstract void UpdateState();
 
-    // -----------------------
-    // VISIÓN con histeresis
-    // -----------------------
+    // ================== VIDA ==================
+    protected virtual void Die()
+    {
+        Debug.Log($"{name} ha muerto.");
+        Destroy(gameObject);
+    }
+
+    // ================== VISIÓN ==================
     protected void UpdateTargetInfo()
     {
         float searchRadius = detectionRadius + detectionHysteresis;
@@ -84,7 +109,6 @@ public abstract class NPC_ControllerBase : EnemyBase
 
             if (hasLOSNow)
             {
-                // Restablecer todo
                 target = candidate;
                 lastSeenTarget = candidate;
                 lastKnownPosition = candidate.position;
@@ -93,17 +117,15 @@ public abstract class NPC_ControllerBase : EnemyBase
             }
             else if (lastSeenTarget == candidate)
             {
-                // Iniciamos temporizador para pérdida por obstrucción
                 if (!isLOSLost)
                 {
                     isLOSLost = true;
                     timeLOSLostStart = Time.time;
-                    lastKnownPosition = candidate.position; // <--- guardamos la última posición vista
+                    lastKnownPosition = candidate.position;
                 }
                 else if (Time.time - timeLOSLostStart >= occlusionLossDelay)
                 {
-                    target = null; // ahora realmente perdemos al target
-                                   // lastKnownPosition ya tiene la última posición conocida
+                    target = null;
                 }
             }
         }
@@ -111,14 +133,11 @@ public abstract class NPC_ControllerBase : EnemyBase
         {
             target = null;
             lastSeenTarget = null;
-            // No reseteamos lastKnownPosition aquí para que SearchLastKnown() pueda usarla
             if (!isLOSLost)
                 lastKnownPosition = null;
         }
     }
 
-
-    // Busca el transform más cercano en la layer objetivo dentro de 'radius'
     Transform FindClosestInLayerWithinRadius(Faction myFaction, float radius)
     {
         int targetLayer = (myFaction == Faction.Enemy)
@@ -143,7 +162,6 @@ public abstract class NPC_ControllerBase : EnemyBase
         return closest;
     }
 
-    // Raycast que devuelve true si NO hay obstáculo entre este NPC y el target.
     protected bool HasLineOfSight(Transform t)
     {
         Vector2 dir = (t.position - transform.position);
@@ -151,18 +169,13 @@ public abstract class NPC_ControllerBase : EnemyBase
         if (dist <= 0.001f) return true;
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, dist, obstacleMask);
-
-        // Debug: dibuja la línea en la escena (verde si no impacta, rojo si impacta)
         Color rayColor = (hit.collider == null) ? Color.green : Color.red;
         Debug.DrawRay(transform.position, dir.normalized * dist, rayColor);
 
-        // hit.collider == null => no obstáculo en obstacleMask entre ambos
         return hit.collider == null;
     }
 
-    // -----------------------
-    // MOVIMIENTO base
-    // -----------------------
+    // ================== MOVIMIENTO ==================
     protected void MoveAlongPath()
     {
         if (path.Count == 0) return;
@@ -189,29 +202,24 @@ public abstract class NPC_ControllerBase : EnemyBase
         transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
     }
 
-    // Opcional: gizmos para ver detection/attack
     protected virtual void OnDrawGizmosSelected()
     {
-        // detectar solo en play? permitimos verlo siempre
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // dibujar lastKnownPosition
         if (lastKnownPosition.HasValue)
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawSphere(lastKnownPosition.Value, 0.08f);
         }
 
-        // dibujar target line (si target visible)
         if (target != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, target.position);
         }
     }
-
 }
