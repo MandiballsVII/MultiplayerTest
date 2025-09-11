@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class NPC_Ranged : NPC_ControllerBase
 {
     // Tiempo entre recalculaciones de path (para no recalcular cada frame)

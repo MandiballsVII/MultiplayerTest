@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+[RequireComponent(typeof(Health))]
 public class NPC_Beholder : NPC_ControllerBase
 {
     // Tiempo entre recalculaciones de path (para no recalcular cada frame)
