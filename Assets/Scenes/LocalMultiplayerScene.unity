@@ -275,6 +275,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 78662544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &488793815
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101127162737554378, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134502972449984034, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_Name
+      value: AnubisWarrior (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134502972449984034, guid: a85ad378665d1df40a29314d743f910d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a85ad378665d1df40a29314d743f910d, type: 3}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -15327,7 +15388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5134502972449984034, guid: a85ad378665d1df40a29314d743f910d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15572,7 +15633,7 @@ PrefabInstance:
     - target: {fileID: 2281269874344258466, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: spell
       value: 
-      objectReference: {fileID: 11400000, guid: 1b99eb8d5dfff664e9313960a9e9a393, type: 2}
+      objectReference: {fileID: 11400000, guid: fae2ea1d0e7ced1468e06a739cada06d, type: 2}
     - target: {fileID: 2281269874344258466, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: firePoint
       value: 
@@ -15588,6 +15649,10 @@ PrefabInstance:
     - target: {fileID: 2281269874344258466, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: detectionRadius
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2551319947729361616, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
+      propertyPath: m_BodyType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3230791668955136276, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: m_Name
@@ -15757,6 +15822,7 @@ SceneRoots:
   - {fileID: 1787144769}
   - {fileID: 1255350052}
   - {fileID: 4196548597898191761}
+  - {fileID: 488793815}
   - {fileID: 5354543874380073762}
   - {fileID: 6316655865360494215}
   - {fileID: 6895500912658797795}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -29,7 +30,191 @@ public class NPC_SpellCaster : NPC_ControllerBase
     public Transform firePoint; // Punto desde donde se dispara el proyectil
     public float projectileSpeed = 15f; // Velocidad del proyectil
 
+    // Para detección de aliados (si aplica)
+    float searchRadius;
+    HashSet<Transform> candidates = new HashSet<Transform>();
+
+    // Guardamos aquí al objetivo fijado cuando empieza la animación
+    private NPC_ControllerBase currentHealTarget;
+    private bool isCastingHeal = false;
+
     protected override void UpdateState()
+    {
+        if (spell == null) return;
+
+        // Reducir cooldown del hechizo
+        //spellCooldownTimer -= Time.deltaTime;
+
+        switch (spell.type)
+        {
+            case SpellType.Projectile:
+                HandleRangedBehavior();
+                break;
+            case SpellType.Summon:
+                HandleSummonerBehavior();
+                break;
+            case SpellType.Self:
+                HandleSelfSupportBehavior();
+                break;
+        }
+    }
+
+    private void HandleSelfSupportBehavior()
+    {
+        if (currentState == StateMachine.Idle)
+        {
+            animator?.SetInteger("State", 2);
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleDuration)
+            {
+                currentState = nextStateAfterIdle;
+                animator?.SetInteger("State", 0);
+                idleTimer = 0f;
+            }
+            return;
+        }
+
+        // Si ya estoy casteando, no cambio de objetivo
+        if (isCastingHeal)
+            return;
+
+        DetectAllies();
+
+        // Si ya tengo objetivo válido que aún necesita curación, sigo con él
+        if (currentHealTarget != null)
+        {
+            if (currentHealTarget.TryGetComponent<Health>(out var h) && h.IsAlive && h.currentHealth < h.maxHealth)
+                return; // sigue siendo válido, no cambiar
+            else
+                currentHealTarget = null; // si murió o ya está curado
+        }
+
+        // Buscar nuevo objetivo solo si no tengo uno
+        List<NPC_ControllerBase> damagedAllies = new List<NPC_ControllerBase>();
+        foreach (var t in candidates)
+        {
+            if (t == null) continue;
+            if (t.TryGetComponent<Health>(out var h))
+            {
+                if (!h.IsAlive) continue;
+                if (h.currentHealth < h.maxHealth)
+                {
+                    var ally = t.GetComponent<NPC_ControllerBase>();
+                    if (ally != null) damagedAllies.Add(ally);
+                }
+            }
+        }
+
+        if (damagedAllies.Count > 0)
+        {
+            // Buscar menor % de vida
+            float minRatio = damagedAllies.Min(a =>
+            {
+                var h = a.GetComponent<Health>();
+                return (float)h.currentHealth / h.maxHealth;
+            });
+
+            // Filtrar empatados
+            var lowestAllies = damagedAllies
+                .Where(a =>
+                {
+                    var h = a.GetComponent<Health>();
+                    return Mathf.Approximately((float)h.currentHealth / h.maxHealth, minRatio);
+                })
+                .ToList();
+
+            // Escoger aleatorio entre los de menor vida
+            currentHealTarget = lowestAllies[Random.Range(0, lowestAllies.Count)];
+
+            // Fijar estado y animación
+            path.Clear();
+            RotateTowards(currentHealTarget.transform.position);
+            currentState = StateMachine.Engage;
+            animator?.SetInteger("State", 1); // animación de curar
+        }
+        else
+        {
+            currentHealTarget = null;
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
+        }
+    }
+
+
+
+    private void CastHeal(NPC_ControllerBase ally)
+    {
+        if (spell == null) return;
+        if (!ally.TryGetComponent<Health>(out var h)) return;
+
+        // Visual
+        if (spell.auraPrefab != null)
+        {
+            var aura = Instantiate(spell.auraPrefab, ally.transform.position, Quaternion.identity, ally.transform);
+            Destroy(aura, spell.auraDuration);
+        }
+
+        // Curación
+        h.Heal(spell.healAmount);
+        Debug.Log($"{name} cura a {ally.name} por {spell.healAmount}");
+    }
+
+    private void DetectAllies()
+    {
+        candidates.Clear();
+
+        // Usamos física en vez de escanear toda la escena
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
+        foreach (var col in hits)
+        {
+            var npc = col.GetComponent<NPC_ControllerBase>();
+            if (npc != null && npc != this && npc.faction == faction)
+            {
+                candidates.Add(npc.transform);
+            }
+        }
+    }
+
+
+    private void HandleSummonerBehavior()
+    {
+        if (currentState == StateMachine.Idle)
+        {
+            animator?.SetInteger("State", 2);
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleDuration)
+            {
+                currentState = nextStateAfterIdle;
+                animator?.SetInteger("State", 0);
+                idleTimer = 0f;
+            }
+            return; // no hacer nada más mientras está en idle
+        }
+        if (target != null)
+        {
+            // Engaging directamente
+            path.Clear();
+            currentState = StateMachine.Engage;
+            animator?.SetInteger("State", 1);
+        }
+        else if (lastKnownPosition.HasValue)
+        {
+            // Buscar última posición conocida
+            currentState = StateMachine.Search;
+            animator?.SetInteger("State", 0);
+            SearchLastKnown();
+        }
+        else
+        {
+            // Patrullaje
+            currentState = StateMachine.Patrol;
+            animator?.SetInteger("State", 0);
+            Patrol();
+        }
+    }
+
+    void HandleRangedBehavior()
     {
         if (currentState == StateMachine.Idle)
         {
@@ -162,26 +347,65 @@ public class NPC_SpellCaster : NPC_ControllerBase
 
     public void Attack()
     {
-        if (target == null) return;
+        if (spell == null) return;
 
-        RotateTowards(target.position);
+        // Reducir cooldown del hechizo
+        //spellCooldownTimer -= Time.deltaTime;
+        if(target != null)
+            RotateTowards(target.position);
 
-        
-        // Dirección hacia el objetivo
-        Vector2 direction = (target.position - firePoint.position).normalized;
+        switch (spell.type)
+        {
+            case SpellType.Projectile:
+                // Dirección hacia el objetivo
+                Vector2 direction = (target.position - firePoint.position).normalized;
 
-        // Calcular ángulo en grados
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                // Calcular ángulo en grados
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // Instanciar proyectil con rotación hacia el objetivo
-        var projectile = Instantiate(spell.prefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
+                // Instanciar proyectil con rotación hacia el objetivo
+                var projectile = Instantiate(spell.prefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
 
-        // Darle velocidad
-        projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+                // Darle velocidad
+                projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
 
-        Debug.Log($"{name} dispara a {target.name}");
+                Debug.Log($"{name} dispara a {target.name}");
+                break;
+            case SpellType.Summon:
+                CastSummon();
+                break;
+            case SpellType.Self:
+                // Aquí usamos el objetivo fijado en el momento de empezar la animación
+                if (currentHealTarget != null)
+                    CastHeal(currentHealTarget);
+                break;
+        }
+         
     }
 
+    Transform FindClosestInLayerWithinRadius(Faction myFaction, float radius)
+    {
+        int targetLayer = (myFaction == Faction.Enemy)
+            ? LayerMask.NameToLayer("Player")
+            : LayerMask.NameToLayer("Enemy");
+
+        if (targetLayer == -1) return null;
+
+        Transform closest = null;
+        float best = Mathf.Infinity;
+
+        foreach (var t in GameObject.FindObjectsOfType<Transform>())
+        {
+            if (t.gameObject.layer != targetLayer) continue;
+            float d = Vector2.Distance(transform.position, t.position);
+            if (d <= radius && d < best)
+            {
+                best = d;
+                closest = t;
+            }
+        }
+        return closest;
+    }
     // ================= SPELL CAST =================
     void TryCastSpell(Vector3 targetPos)
     {
@@ -221,4 +445,20 @@ public class NPC_SpellCaster : NPC_ControllerBase
                 Destroy(summon, spell.summonDuration);
         }
     }
+
+    // Llamado al inicio de la animación
+    public void OnHealCastStart()
+    {
+        isCastingHeal = true;
+    }
+
+    // Llamado justo al final de la animación
+    public void OnHealCastEnd()
+    {
+        isCastingHeal = false;
+
+        // resetear para que en el siguiente ciclo pueda elegir a otro
+        currentHealTarget = null;
+    }
+
 }
