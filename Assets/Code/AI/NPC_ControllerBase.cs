@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -178,6 +179,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
     // ================== MOVIMIENTO ==================
     protected void MoveAlongPath()
     {
+
         if (path.Count == 0) return;
 
         Node targetNode = path[0];
@@ -189,6 +191,13 @@ public abstract class NPC_ControllerBase : MonoBehaviour
             currentNode = targetNode;
             path.RemoveAt(0);
         }
+        float step = speed * Time.deltaTime;
+        float dist = Vector2.Distance(transform.position, targetNode.transform.position);
+        //Debug.Log($"Dist: {dist}, Step: {step}");
+        //transform.position = Vector3.MoveTowards(transform.position, targetNode.transform.position, step);
+        //Debug.Log($"NPC: {transform.position}, NextNode: {targetNode.transform.position}");
+        //foreach (var n in path)
+        //    Debug.Log($"Path Node: {n.transform.position}");
     }
 
     protected Node GetClosestNode(Vector3 world) => nodeManager.GetClosestNode(world);
@@ -222,4 +231,35 @@ public abstract class NPC_ControllerBase : MonoBehaviour
             Gizmos.DrawLine(transform.position, target.position);
         }
     }
+    protected virtual void OnDrawGizmos()
+    {
+        if (path == null || path.Count == 0)
+            return;
+
+        // Dibujar líneas entre nodos
+        Gizmos.color = Color.cyan;
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Gizmos.DrawLine(path[i].transform.position, path[i + 1].transform.position);
+        }
+
+        // Nodos intermedios (azul)
+        Gizmos.color = Color.blue;
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Gizmos.DrawSphere(path[i].transform.position, 0.15f);
+        }
+
+        // Nodo final (rojo)
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(path[path.Count - 1].transform.position, 0.25f);
+
+        // Nodo actual (verde)
+        if (currentNode != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(currentNode.transform.position, 0.2f);
+        }
+    }
+
 }

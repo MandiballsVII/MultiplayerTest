@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -37,9 +38,12 @@ public class NPC_SpellCaster : NPC_ControllerBase
     // Guardamos aquí al objetivo fijado cuando empieza la animación
     private NPC_ControllerBase currentHealTarget;
     private bool isCastingHeal = false;
+    // Añadimos una variable para controlar si ya calculamos el path de huida
+    private bool evadePathSet = false;
 
     protected override void UpdateState()
     {
+        print(evadePathSet);
         if (spell == null) return;
 
         // Reducir cooldown del hechizo
@@ -57,6 +61,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
                 HandleSelfSupportBehavior();
                 break;
         }
+
     }
 
     private void HandleSelfSupportBehavior()
@@ -135,12 +140,61 @@ public class NPC_SpellCaster : NPC_ControllerBase
         else
         {
             currentHealTarget = null;
-            currentState = StateMachine.Patrol;
-            animator?.SetInteger("State", 0);
-            Patrol();
+
+            // Si hay player en rango, huir
+            if (target != null && Vector2.Distance(transform.position, target.position) < detectionRadius)
+            {
+                // Entrar en Evade si no está ya
+                if (currentState != StateMachine.Evade)
+                    currentState = StateMachine.Evade;
+
+                animator?.SetInteger("State", 0);
+
+                // Calcular path solo una vez
+                if (!evadePathSet)
+                {
+                    FleeFromTarget(target.position);
+                    evadePathSet = true;
+                }
+            }
+            else if (currentState == StateMachine.Evade && path.Count == 0)
+            {
+                // Hemos terminado la huida, volver a patrulla
+                currentState = StateMachine.Patrol;
+                animator?.SetInteger("State", 0);
+                Patrol();
+                evadePathSet = false;
+            }
         }
+        
     }
 
+    void FleeFromTarget(Vector3 threatPos)
+    {
+        // Dirección opuesta al jugador
+        Vector3 fleeDir = (transform.position - threatPos).normalized;
+
+        // Nodo destino lejano en esa dirección
+        Vector3 fleePos = transform.position + fleeDir * 10f; // ajusta distancia de huida
+        Node fleeNode = GetClosestNode(fleePos);
+
+        if (fleeNode != null && currentNode != null)
+        {
+            path = AStarManager.instance.GeneratePath(currentNode, fleeNode, radiusInTiles);
+            // No tocamos currentNode ni path otra vez hasta que termine Evade
+        }
+        if(path.Count == 0)
+        {
+            // No se pudo generar path, quedarse quieto
+            currentState = StateMachine.Idle;
+            nextStateAfterIdle = StateMachine.Patrol;
+            evadePathSet = false;
+        }
+        //else
+        //{
+        //    evadePathSet = true; // ya tenemos path de huida
+        //}
+    }
 
 
     private void CastHeal(NPC_ControllerBase ally)
