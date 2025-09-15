@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 250954871288323666}
   - component: {fileID: 3738717090613612138}
   - component: {fileID: 1033306109830460177}
+  - component: {fileID: 8276858022606431542}
   m_Layer: 12
   m_Name: Skeleton
   m_TagString: Untagged
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 167389457
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1267602529, guid: a582bdce2ba243248adf8bc957e9849d, type: 3}
+  m_Sprite: {fileID: -1285908710, guid: 7d62b2b66fc0aa44f826fd29a7f591d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -182,3 +183,24 @@ MonoBehaviour:
     m_Bits: 512
   separationRadius: 1
   separationForce: 2
+--- !u!95 &8276858022606431542
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196672047629228948}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa1e458129d27a740a453b670dff4b81, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
