@@ -19,7 +19,7 @@ MonoBehaviour:
   type: 0
   manaCost: 5
   cooldown: 1
-  prefab: {fileID: 1622451925767254046, guid: 8960dcf40f9a6954181e8cb7402f1252, type: 3}
+  prefab: {fileID: 3690416456879135033, guid: 30009d688f3fbfe4b914cf5d072ac537, type: 3}
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3

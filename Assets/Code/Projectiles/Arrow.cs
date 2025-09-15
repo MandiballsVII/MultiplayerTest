@@ -8,13 +8,13 @@ public class Arrow : MonoBehaviour
     Rigidbody2D rb;
     Collider2D col;
 
-    [Header("Tiempos")]
+    [Header("Times")]
     public float flyLifetime = 5f;     // tiempo máximo en vuelo
     public float stuckLifetime = 3f;   // tiempo que permanece clavada
 
-    [Header("Ajustes visuales")]
+    [Header("Visual settings")]
     public float embedDepth = 0.05f;   // cuánto se mete la punta dentro del objetivo
-    [Tooltip("Si tu sprite apunta hacia arriba pon 90, si apunta a la derecha pon 0")]
+    [Tooltip("If your sprite is pointing up, set it to 90; if it is pointing right, set it to 0.")]
     public float angleOffset = 0f;
 
     bool stuck = false;

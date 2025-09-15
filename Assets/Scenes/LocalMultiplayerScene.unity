@@ -15653,7 +15653,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1860936699590565892, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: 14.5
       objectReference: {fileID: 0}
     - target: {fileID: 1860936699590565892, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15694,7 +15694,7 @@ PrefabInstance:
     - target: {fileID: 2281269874344258466, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: spell
       value: 
-      objectReference: {fileID: 11400000, guid: fae2ea1d0e7ced1468e06a739cada06d, type: 2}
+      objectReference: {fileID: 11400000, guid: 1b99eb8d5dfff664e9313960a9e9a393, type: 2}
     - target: {fileID: 2281269874344258466, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: firePoint
       value: 

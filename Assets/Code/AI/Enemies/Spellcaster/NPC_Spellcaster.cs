@@ -43,7 +43,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
 
     protected override void UpdateState()
     {
-        print(evadePathSet);
+        //print(evadePathSet);
         if (spell == null) return;
 
         // Reducir cooldown del hechizo
@@ -82,7 +82,6 @@ public class NPC_SpellCaster : NPC_ControllerBase
         // Si ya estoy casteando, no cambio de objetivo
         if (isCastingHeal)
             return;
-
         DetectAllies();
 
         // Si ya tengo objetivo válido que aún necesita curación, sigo con él
@@ -156,17 +155,25 @@ public class NPC_SpellCaster : NPC_ControllerBase
                     FleeFromTarget(target.position);
                     evadePathSet = true;
                 }
+                if(evadePathSet && path.Count <= 0)
+                {
+                    // No se pudo generar path, quedarse quieto
+                    currentState = StateMachine.Idle;
+                    nextStateAfterIdle = StateMachine.Patrol;
+                    evadePathSet = false;
+                }
             }
-            else if (currentState == StateMachine.Evade && path.Count == 0)
+            
+            else
             {
-                // Hemos terminado la huida, volver a patrulla
                 currentState = StateMachine.Patrol;
                 animator?.SetInteger("State", 0);
                 Patrol();
                 evadePathSet = false;
+                print(evadePathSet);
             }
         }
-        
+
     }
 
     void FleeFromTarget(Vector3 threatPos)

@@ -16,6 +16,7 @@ public class PlayerSpellBook : MonoBehaviour
     private PlayerController controller;
     private PlayerInput playerInput;
     private PlayerAim playerAim;
+    private GameObject body;
     private readonly List<SpellData> inventory = new(); // Para futuro menú de asignación
 
     private bool isCastingChannel; // indica si hay un hechizo activo canalizado
@@ -33,6 +34,7 @@ public class PlayerSpellBook : MonoBehaviour
         controller = GetComponent<PlayerController>();
         playerInput = GetComponent<PlayerInput>();
         playerAim = GetComponent<PlayerAim>();
+        body = gameObject.transform.Find("Body").gameObject;
         if (castPoint == null) castPoint = playerAim.shootPoint; // fallback
 
         spellUI = FindObjectOfType<PlayerSpellUI>(); // Busca la UI en escena
@@ -148,7 +150,8 @@ public class PlayerSpellBook : MonoBehaviour
     private void CastProjectile(SpellData spell, Vector2 dir)
     {
         if (spell.prefab == null) return;
-        var projectile = Instantiate(spell.prefab, castPoint.position, Quaternion.identity);
+        Quaternion rot = body.transform.rotation; // <-- referencia al hijo del Player
+        var projectile = Instantiate(spell.prefab, castPoint.position, rot);
 
         // **IMPORTANTE: inicializar runtime**
         var projRuntime = projectile.GetComponent<ProjectileRuntime>();
