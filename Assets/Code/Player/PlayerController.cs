@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IFactionMember
 {
     public PlayerInput PlayerInput { get; private set; }
     public CharacterData CharacterData;
@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
     private Health health;
 
     public event Action<float, float> OnManaChanged; // current, max
+
+    [Header("Facción")]
+    [SerializeField] private Faction faction = Faction.Player;
+    public Faction Faction => faction;
 
     private void Awake()
     {

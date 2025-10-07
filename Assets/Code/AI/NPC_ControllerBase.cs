@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-public abstract class NPC_ControllerBase : MonoBehaviour
+public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember
 {
     [Header("Movimiento")]
     public Node currentNode;
@@ -23,6 +23,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour
 
     [Header("Facción")]
     public Faction faction = Faction.Enemy;
+    public Faction Faction => faction; // getter para la interfaz
 
     [Header("Line of Sight")]
     public LayerMask obstacleMask;

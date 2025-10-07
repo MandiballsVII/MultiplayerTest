@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2552560231780528189}
   - component: {fileID: 1238120815683575095}
   - component: {fileID: 2908709910248132014}
+  - component: {fileID: 4508210098867419893}
   m_Layer: 9
   m_Name: Beholder
   m_TagString: Enemy
@@ -122,7 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1baf3a4ab1aef41aa1cc93cf822a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 200
   currentNode: {fileID: 0}
   speed: 3
   detectionRadius: 15
@@ -203,6 +203,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
+--- !u!114 &4508210098867419893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123015357571365071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729948208b147634ca6cb3c7e4069add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &3345964778419949204
 GameObject:
   m_ObjectHideFlags: 0

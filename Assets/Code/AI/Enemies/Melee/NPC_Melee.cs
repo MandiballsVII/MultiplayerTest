@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Timeline;
 
 [RequireComponent(typeof(Health))]
 public class NPC_Melee : NPC_ControllerBase
@@ -11,6 +12,14 @@ public class NPC_Melee : NPC_ControllerBase
     private float idleTimer = 0f;
     public float idleDuration = 2f; // duración del idle en segundos
     private StateMachine nextStateAfterIdle; // para saber a dónde ir tras la pausa
+
+    [Header("Combate")]
+    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private Vector2 attackBoxSize = new Vector2(1f, 1f);
+    [SerializeField] private float attackOffset = 0.8f;
+    [SerializeField] private float attackCooldown = 1f;
+
+    private float nextAttackTime;
 
     protected override void UpdateState()
     {
@@ -125,9 +134,101 @@ public class NPC_Melee : NPC_ControllerBase
 
     void Attack()
     {
-        if (target == null) return;
+        if (Time.time < nextAttackTime) return;
+        nextAttackTime = Time.time + attackCooldown;
 
         RotateTowards(target.position);
-        Debug.Log($"{name} ataca a {target.name}");
+
+        // Dirección de ataque
+        Vector2 dir;
+        if (gameObject.name.Contains("Skeleton"))
+            dir = transform.right;
+        else
+            dir = -transform.up; // o transform.right si tus sprites miran hacia la derecha
+        Vector2 origin = (Vector2)transform.position + dir * attackOffset;
+
+        // Realizar boxcast
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(origin, attackBoxSize, 0f, dir, 0f);
+
+        foreach (var hit in hits)
+        {
+            if (hit.collider == null) continue;
+            if (hit.collider.gameObject == gameObject) continue; // no golpearse a sí mismo
+
+            var otherHealth = hit.collider.GetComponent<Health>();
+            var otherFaction = hit.collider.GetComponent<IFactionMember>();
+
+            if (otherHealth != null && otherFaction != null && otherFaction.Faction != this.faction)
+            {
+                otherHealth.TakeDamage(attackDamage);
+                Debug.Log($"{name} golpea a {hit.collider.name} ({otherFaction.Faction}) por {attackDamage} daño");
+            }
+        }
     }
+
+    // ===================== GIZMOS =====================
+    protected new void OnDrawGizmosSelected()
+    {
+        // Llamar al método base para mantener la visualización general (detección, path, etc.)
+        base.OnDrawGizmosSelected();
+
+        // Parámetros del ataque
+        Vector2 dir;
+        if(gameObject.name.Contains("Skeleton"))
+            dir = transform.right;
+        else
+            dir = -transform.up; // o transform.right si tus sprites miran hacia la derecha
+        Vector2 origin = (Vector2)transform.position + dir * attackOffset;
+
+        // Dibujar la caja del área de golpe
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.TRS(origin, Quaternion.identity, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, attackBoxSize);
+
+        // Línea de referencia
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(transform.position, origin);
+    }
+#if UNITY_EDITOR
+    private new void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        // Solo mostrar durante el juego (para depuración)
+        if (!Application.isPlaying) return;
+
+        // Mismo cálculo del box
+        Vector2 dir;
+        if (gameObject.name.Contains("Skeleton"))
+            dir = transform.right;
+        else
+            dir = -transform.up; // o transform.right si tus sprites miran hacia la derecha
+        Vector2 origin = (Vector2)transform.position + dir * attackOffset;
+
+        // Hacer un BoxCast como en el ataque real
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(origin, attackBoxSize, 0f, dir, 0f);
+
+        bool hitSomething = false;
+        foreach (var hit in hits)
+        {
+            if (hit.collider == null) continue;
+            if (hit.collider.gameObject == gameObject) continue;
+
+            var otherNPC = hit.collider.GetComponent<NPC_ControllerBase>();
+            if (otherNPC != null && otherNPC.faction != this.faction)
+            {
+                hitSomething = true;
+                // Dibuja un punto donde golpeó
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(hit.point, 0.1f);
+            }
+        }
+
+        // Dibuja el box: verde si golpea algo, rojo si no
+        Gizmos.color = hitSomething ? Color.green : Color.red;
+        Gizmos.matrix = Matrix4x4.TRS(origin, Quaternion.identity, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, attackBoxSize);
+    }
+#endif
+
+
 }
