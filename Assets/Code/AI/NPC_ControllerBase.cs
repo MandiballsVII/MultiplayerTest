@@ -75,9 +75,10 @@ public abstract class NPC_ControllerBase : MonoBehaviour
             MoveAlongPath();
     }
 
-    public void Init(Transform owner)
+    public void Init(Transform owner, Faction faction)
     {
         Owner = owner;
+        this.faction = faction;
         int ownerLayer = owner.gameObject.layer;
         SetLayerRecursively(gameObject, ownerLayer);
     }
@@ -208,7 +209,10 @@ public abstract class NPC_ControllerBase : MonoBehaviour
         if (direction.sqrMagnitude < 0.001f) return;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+        if(gameObject.name.Contains("Skeleton"))
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        else
+            transform.rotation = Quaternion.Euler(0, 0, angle + 90);
     }
 
     protected virtual void OnDrawGizmosSelected()

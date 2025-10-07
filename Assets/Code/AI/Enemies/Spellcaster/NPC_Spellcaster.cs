@@ -499,7 +499,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
             // Pasar Owner
             var npc = summon.GetComponent<NPC_ControllerBase>();
             if (npc != null)
-                npc.Init(transform);
+                npc.Init(transform, Faction.Enemy);
 
             // Destruir tras duración
             if (spell.summonDuration > 0)

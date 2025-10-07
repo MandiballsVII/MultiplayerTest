@@ -277,10 +277,10 @@ public class PlayerSpellBook : MonoBehaviour
             var summon = Instantiate(spell.summonPrefab, spawnPos, Quaternion.identity);
 
             // Pasar la referencia del invocador al invocado (SummonedBase)
-            var summoned = summon.GetComponent<SummonedBase>();
+            var summoned = summon.GetComponent<NPC_ControllerBase>();
             if (summoned != null)
             {
-                summoned.Init(this.transform);
+                summoned.Init(this.transform, Faction.Player);
             }
             else
             {
