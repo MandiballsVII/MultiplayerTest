@@ -26,20 +26,23 @@ public class ExplosionRuntime : MonoBehaviour
 
     private void DoDamage()
     {
-        // Detección en área
+        var selfFaction = GetComponent<IFactionMember>()?.Faction ?? Faction.Enemy;
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, spell.explosionRadius);
 
         foreach (var hit in hits)
         {
-            //if (hit.CompareTag("Player")) continue; // Evita dañar al jugador si no quieres FF
+            var targetFactionMember = hit.GetComponent<IFactionMember>();
+            var targetHealth = hit.GetComponent<Health>();
+            if (targetFactionMember == null || targetHealth == null) continue;
 
-            //if (hit.TryGetComponent<EnemyHealth>(out var enemy))
-            //{
-            //    enemy.TakeDamage(spell.explosionDamage);
-            //}
-            print($"Hit {hit.name} for {spell.explosionDamage} damage.");
+            if (targetFactionMember.Faction != selfFaction)
+            {
+                targetHealth.TakeDamage(spell.explosionDamage);
+                Debug.Log($"{name} explosion dañó a {hit.name} por {spell.explosionDamage}");
+            }
         }
     }
+
 
     // Para ver el radio en la escena
     private void OnDrawGizmosSelected()

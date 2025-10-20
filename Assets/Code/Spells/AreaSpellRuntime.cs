@@ -13,19 +13,18 @@ public class AreaSpellRuntime : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        if (spell == null) return;
+
+        var selfFaction = GetComponent<IFactionMember>()?.Faction ?? Faction.Enemy;
+        var targetFactionMember = other.GetComponent<IFactionMember>();
+        var targetHealth = other.GetComponent<Health>();
+
+        if (targetFactionMember == null || targetHealth == null) return;
+
+        if (targetFactionMember.Faction != selfFaction)
         {
-            print("Area spell hit an enemy!");
-            // Aquí aplicas daño periódico
-            //var enemy = other.GetComponent<EnemyHealth>();
-            //if (enemy != null)
-            //{
-            //    enemy.TakeDamage(spell.power * Time.deltaTime); // daño por segundo
-            //}
-        }
-        else
-        {
-            print("Area spell hit something else or nothing at all!");
+            targetHealth.TakeDamage(spell.power * Time.deltaTime);
         }
     }
+
 }

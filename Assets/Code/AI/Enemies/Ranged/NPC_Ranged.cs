@@ -22,6 +22,8 @@ public class NPC_Ranged : NPC_ControllerBase
     public Transform firePoint; // Punto desde donde se dispara el proyectil
     public float projectileSpeed = 15f; // Velocidad del proyectil
 
+    [SerializeField] private int arrowDamage = 10;
+
     protected override void UpdateState()
     {
         if (currentState == StateMachine.Idle)
@@ -171,6 +173,8 @@ public class NPC_Ranged : NPC_ControllerBase
 
             // Instanciar proyectil con rotación hacia el objetivo
             var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
+            var arrow = projectile.GetComponent<Arrow>();
+            arrow.Init(this.transform, faction, arrowDamage);
 
             // Darle velocidad
             projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;

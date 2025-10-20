@@ -4,35 +4,46 @@ public class ProjectileRuntime : MonoBehaviour
 {
     private PlayerSpellBook caster;
     private SpellData spell;
+    private ProjectileFaction projectileFaction;
 
     public void Init(PlayerSpellBook owner, SpellData data)
     {
         caster = owner;
         spell = data;
+        projectileFaction = GetComponent<ProjectileFaction>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Instanciar explosión si existe
+        if (spell == null) { Destroy(gameObject); return; }
+
+        // Intentar obtener la facción del objetivo
+        var targetFactionMember = collision.gameObject.GetComponent<IFactionMember>();
+        var targetHealth = collision.gameObject.GetComponent<Health>();
+
+        if (targetFactionMember != null && targetHealth != null)
+        {
+            // Comparar facciones
+            if (targetFactionMember.Faction != projectileFaction.Faction)
+            {
+                targetHealth.TakeDamage(spell.power);
+                Debug.Log($"{name} golpeó a {collision.gameObject.name} por {spell.power} de daño.");
+            }
+        }
+
+        // Explosión opcional
         if (spell.explosionPrefab != null)
         {
             var explosion = Instantiate(spell.explosionPrefab, transform.position, Quaternion.identity);
             var explosionRuntime = explosion.GetComponent<ExplosionRuntime>();
             if (explosionRuntime != null)
                 explosionRuntime.Init(caster, spell);
-            // Aplica daño en área
-            var hits = Physics2D.OverlapCircleAll(transform.position, spell.explosionRadius);
-            foreach (var hit in hits)
-            {
-                //if (hit.TryGetComponent<EnemyHealth>(out var enemy))
-                //    enemy.TakeDamage(spell.explosionDamage);
-                print($"Hit {hit.name} for {spell.explosionDamage} damage.");
-            }
 
-            Destroy(explosion, 1.5f); // o spell.explosionDuration
+            // Asignar también la facción a la explosión
+            var expFaction = explosion.AddComponent<ProjectileFaction>();
+            expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
         }
 
-        // Feedback: VFX, sonido
         Destroy(gameObject);
     }
 }

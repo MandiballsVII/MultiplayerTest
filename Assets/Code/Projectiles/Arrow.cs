@@ -17,6 +17,11 @@ public class Arrow : MonoBehaviour
     [Tooltip("If your sprite is pointing up, set it to 90; if it is pointing right, set it to 0.")]
     public float angleOffset = 0f;
 
+    [Header("Damage")]
+    public float damage = 10f;
+    public Faction faction; // <- facción del que la lanzó
+    public Transform owner; // <- referencia al atacante (jugador o NPC)
+
     bool stuck = false;
     private Vector2 lastVelocity;
     private Coroutine destroyCoroutine;
@@ -38,6 +43,14 @@ public class Arrow : MonoBehaviour
         // Guardar la última velocidad real del rigidbody (para usar en el impacto)
         lastVelocity = rb.velocity;
     }
+
+    public void Init(Transform shooter, Faction shooterFaction, float projectileDamage)
+    {
+        owner = shooter;
+        faction = shooterFaction;
+        damage = projectileDamage;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -70,6 +83,16 @@ public class Arrow : MonoBehaviour
 
     void StickToTarget(Transform target, Vector2 hitPoint, Vector2 direction)
     {
+        // ---------- Aplicar daño ----------
+        var health = target.GetComponent<Health>();
+        var targetFaction = target.GetComponent<IFactionMember>();
+
+        if (health != null && targetFaction != null && targetFaction.Faction != faction)
+        {
+            health.TakeDamage(damage);
+            Debug.Log($"{name} inflige {damage} de daño a {target.name} (facción: {targetFaction.Faction})");
+        }
+
         stuck = true;
 
         // Detener físicas

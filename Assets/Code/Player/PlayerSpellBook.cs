@@ -166,6 +166,11 @@ public class PlayerSpellBook : MonoBehaviour
         // Componente opcional de daño en el proyectil (ver más abajo)
         var hit = projectile.GetComponent<SpellHit>();
         if (hit != null) hit.Init(this, spell);
+
+        // Asignar referencia al caster y su facción
+        var casterFaction = GetComponent<IFactionMember>().Faction;
+        var projFaction = projectile.AddComponent<ProjectileFaction>();
+        projFaction.Init(casterFaction, transform);
     }
 
     private void CastArea(SpellData spell)
@@ -199,6 +204,11 @@ public class PlayerSpellBook : MonoBehaviour
         var aoeRuntime = aoeGO.GetComponent<AreaSpellRuntime>();
         if (aoeRuntime != null)
             aoeRuntime.Init(this, spell);
+
+        // Asignar facción al área
+        var faction = GetComponent<IFactionMember>().Faction;
+        var areaFaction = aoeGO.AddComponent<ProjectileFaction>();
+        areaFaction.Init(faction, transform);
 
         if (spell.isChanneled)
         {
