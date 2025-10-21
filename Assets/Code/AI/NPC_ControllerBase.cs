@@ -66,6 +66,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember
             else
                 Debug.LogWarning($"{name}: obstacleMask no asignado y no existe la layer 'Walls'.");
         }
+
     }
 
     protected virtual void Update()

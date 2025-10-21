@@ -15212,6 +15212,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 4196672047629228948, guid: c5a5c379c9afa8c4c8ae1decb46562fc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5130039039630832215, guid: c5a5c379c9afa8c4c8ae1decb46562fc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -15495,7 +15499,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6005318854284937202, guid: 06d4117ebf313c744811a0a71ffdfbc5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15679,6 +15683,10 @@ PrefabInstance:
     - target: {fileID: 3230791668955136276, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
       propertyPath: m_Name
       value: ObscureCleric
+      objectReference: {fileID: 0}
+    - target: {fileID: 3230791668955136276, guid: f25a7d1b28d31614591d3f13a9f861a7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

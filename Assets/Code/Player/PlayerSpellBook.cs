@@ -153,6 +153,11 @@ public class PlayerSpellBook : MonoBehaviour
         Quaternion rot = body.transform.rotation; // <-- referencia al hijo del Player
         var projectile = Instantiate(spell.prefab, castPoint.position, rot);
 
+        // Asignar referencia al caster y su facción
+        var casterFaction = GetComponent<IFactionMember>().Faction;
+        var projFaction = projectile.AddComponent<ProjectileFaction>();
+        projFaction.Init(casterFaction, transform);
+
         // **IMPORTANTE: inicializar runtime**
         var projRuntime = projectile.GetComponent<ProjectileRuntime>();
         if (projRuntime != null)
@@ -167,10 +172,6 @@ public class PlayerSpellBook : MonoBehaviour
         var hit = projectile.GetComponent<SpellHit>();
         if (hit != null) hit.Init(this, spell);
 
-        // Asignar referencia al caster y su facción
-        var casterFaction = GetComponent<IFactionMember>().Faction;
-        var projFaction = projectile.AddComponent<ProjectileFaction>();
-        projFaction.Init(casterFaction, transform);
     }
 
     private void CastArea(SpellData spell)
