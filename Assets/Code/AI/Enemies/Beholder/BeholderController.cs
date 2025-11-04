@@ -207,7 +207,7 @@ public class NPC_Beholder : NPC_ControllerBase
             projectile.GetComponent<BeholderRay>().Init(dir, projectileSpeed);
         }
 
-        Debug.Log($"{name} dispara a {count} objetivos (con línea de visión)");
+        ///Debug.Log($"{name} dispara a {count} objetivos (con línea de visión)");
         attackTimer = 0f;
     }
 

@@ -21,8 +21,17 @@ public class Health : MonoBehaviour, IAttackable
     {
         if (!IsAlive) return;
 
+        float prevHealth = currentHealth;
         currentHealth = Mathf.Max(0, currentHealth - amount);
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        // Damage Popup si existe spawner asignado
+        var popup = GetComponent<DamagePopupSpawner>();
+        if (popup != null)
+        {
+            float pct = currentHealth / maxHealth;
+            popup.CreatePopup(amount, pct);
+        }
 
         if (currentHealth <= 0)
         {

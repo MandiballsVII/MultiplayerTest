@@ -22,14 +22,14 @@ public class BeholderRay : MonoBehaviour
         transform.position += transform.right * speed * Time.deltaTime;
         if (Time.time > born + lifeTime)
         {
-            print("BeholderRay expired");
+            //print("BeholderRay expired");
             Destroy(gameObject);
         }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        print("BeholderRay hit " + col.name);
+        //print("BeholderRay hit " + col.name);
         // ajusta la comprobación según tu Player script / tags
         if (col.TryGetComponent<PlayerStatus>(out var status))
         {
