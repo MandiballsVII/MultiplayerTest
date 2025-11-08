@@ -22,7 +22,7 @@ TagManager:
   - Projectiles
   - Terrain
   - Summoned
-  - 
+  - Spells
   - 
   - 
   - 
@@ -53,6 +53,9 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 648066803
+    locked: 0
+  - name: Spells
+    uniqueID: 2761879909
     locked: 0
   - name: Enemy
     uniqueID: 3201853011

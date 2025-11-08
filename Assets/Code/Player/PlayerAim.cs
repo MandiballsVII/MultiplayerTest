@@ -6,14 +6,7 @@ public class PlayerAim : MonoBehaviour
 {
     private Transform aimTransform;
     public Transform shootPoint;
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float bulletForce = 20f;
-
-    [SerializeField] private GameObject muzzleFlash;
-    [SerializeField] private int maxAmmo = 20;
-
-    public int currentAmmo;
-    private bool recharging;
+    
     private PlayerController playerController;
     private PlayerManager playerManager;
 
@@ -22,13 +15,15 @@ public class PlayerAim : MonoBehaviour
     private Vector2 _aimPointer;
     private const float STICK_DEADZONE = 0.15f;
 
+    private float lastStickAngle;
+
     [SerializeField] private Transform body; // Asigna el objeto Body en el inspector
 
     void Awake()
     {
         aimTransform = transform.Find("Body/Hands");
         print($"[PlayerAim] Aim Transform: {aimTransform.name}");
-        currentAmmo = maxAmmo;
+        //currentAmmo = maxAmmo;
         playerController = GetComponent<PlayerController>();
         playerManager = GetComponent<PlayerManager>();
 
@@ -56,18 +51,6 @@ public class PlayerAim : MonoBehaviour
         _aimPointer = ctx.ReadValue<Vector2>(); // (Mouse.position)
     }
 
-    //public void Fire(InputAction.CallbackContext ctx)
-    //{
-    //    if (!ctx.performed) return;
-    //    HandleShooting();
-    //}
-
-    public void Reload(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.performed) return;
-        if (!recharging && currentAmmo < maxAmmo) StartCoroutine(Recharge());
-    }
-
     // === Aiming ===
     void HandleAiming()
     {
@@ -77,14 +60,23 @@ public class PlayerAim : MonoBehaviour
         if (_aimStick.sqrMagnitude >= STICK_DEADZONE * STICK_DEADZONE)
         {
             angle = Mathf.Atan2(_aimStick.y, _aimStick.x) * Mathf.Rad2Deg;
+            lastStickAngle = angle; // guardamos la última dirección válida
         }
         else
         {
-            Camera cam = Camera.main;
-            Vector3 screenPos = new Vector3(_aimPointer.x, _aimPointer.y, Mathf.Abs(cam.transform.position.z));
-            Vector3 worldMouse = cam.ScreenToWorldPoint(screenPos);
-            dir = (worldMouse - transform.position).normalized;
-            angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            if (_aimPointer.sqrMagnitude > 0.1f)
+            {
+                Camera cam = Camera.main;
+                Vector3 screenPos = new Vector3(_aimPointer.x, _aimPointer.y, Mathf.Abs(cam.transform.position.z));
+                Vector3 worldMouse = cam.ScreenToWorldPoint(screenPos);
+                dir = (worldMouse - transform.position).normalized;
+                angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                lastStickAngle = angle; // también guardamos para ratón
+            }
+            else
+            {
+                angle = lastStickAngle; // usamos la última dirección válida
+            }
         }
 
         // Rotar Aim (manos/arma)
@@ -106,54 +98,4 @@ public class PlayerAim : MonoBehaviour
         }
     }
 
-    // === Shooting ===
-    public void HandleShooting()
-    {
-        if (recharging) return;
-        else if (playerManager.IsDashing) return;
-
-        if (currentAmmo <= 0)
-        {
-            recharging = true;
-            StartCoroutine(Recharge());
-            return;
-        }
-
-        StartCoroutine(ShowFlash());
-
-        if (bulletPrefab != null && shootPoint != null)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-            //playerController.UseMana(1); // Example mana cost
-            //playerController.TakeDamage(1); // Example self-damage
-            if (bullet.TryGetComponent<Rigidbody2D>(out var rb))
-            {
-                rb.AddForce(shootPoint.right * bulletForce, ForceMode2D.Impulse);
-            }
-        }
-
-        currentAmmo--;
-        if (currentAmmo <= 0)
-        {
-            recharging = true;
-            StartCoroutine(Recharge());
-        }
-    }
-
-    IEnumerator ShowFlash()
-    {
-        if (muzzleFlash != null)
-        {
-            muzzleFlash.SetActive(true);
-            yield return new WaitForSeconds(.1f);
-            muzzleFlash.SetActive(false);
-        }
-    }
-
-    IEnumerator Recharge()
-    {
-        yield return new WaitForSeconds(1f);
-        currentAmmo = maxAmmo;
-        recharging = false;
-    }
 }

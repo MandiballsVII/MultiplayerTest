@@ -19,11 +19,11 @@ MonoBehaviour:
   type: 0
   manaCost: 1
   cooldown: 1
-  prefab: {fileID: 1622451925767254046, guid: 19f22d5b3ad567c4eae42144ff5e1f48, type: 3}
+  prefab: {fileID: 2282668151011518173, guid: ec76fa6f8c5f8b04c8b1c0dda9957dad, type: 3}
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3
-  power: 20
+  power: 10
   healAmount: 20
   manaRestoreAmount: 0
   healthCost: 0
