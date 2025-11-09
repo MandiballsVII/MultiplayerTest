@@ -26,7 +26,10 @@ public class ExplosionRuntime : MonoBehaviour
 
     private void DoDamage()
     {
-        var selfFaction = GetComponent<IFactionMember>()?.Faction ?? Faction.Enemy;
+        var factionComp = GetComponent<ProjectileFaction>();
+        print($"[ExplosionRuntime] factionComp = {factionComp.Faction}");
+        Faction selfFaction = factionComp != null ? factionComp.Faction : Faction.Enemy;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, spell.explosionRadius);
 
         foreach (var hit in hits)
@@ -35,8 +38,10 @@ public class ExplosionRuntime : MonoBehaviour
             var targetHealth = hit.GetComponent<Health>();
             if (targetFactionMember == null || targetHealth == null) continue;
 
+            Debug.Log($"[ExplosionRuntime] Facción explosion = {selfFaction}");
             if (targetFactionMember.Faction != selfFaction)
             {
+                print($"[ExplosionRuntime] Hit: {hit.name}");
                 targetHealth.TakeDamage(spell.explosionDamage);
                 Debug.Log($"{name} explosion dañó a {hit.name} por {spell.explosionDamage}");
             }

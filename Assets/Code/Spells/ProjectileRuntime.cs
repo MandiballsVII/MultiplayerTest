@@ -40,8 +40,10 @@ public class ProjectileRuntime : MonoBehaviour
                 explosionRuntime.Init(caster, spell);
 
             // Asignar también la facción a la explosión
-            var expFaction = explosion.AddComponent<ProjectileFaction>();
-            expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
+
+            var expFaction = explosion.GetComponent<ProjectileFaction>();
+            if (expFaction != null)
+                expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
         }
 
         Destroy(gameObject);
