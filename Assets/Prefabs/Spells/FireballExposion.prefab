@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1587928769224164998}
   - component: {fileID: 7171004072712971305}
   - component: {fileID: 5704208077245192107}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FireballExposion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,15 +77,15 @@ SpriteRenderer:
   m_SortingLayerID: -1533087387
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1561508609, guid: 9cde25d98ad6fcc43b776ee5838226ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10, y: 10.029297}
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!58 &7335301271316948292

@@ -23,7 +23,7 @@ MonoBehaviour:
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3
-  power: 20
+  power: 10
   healAmount: 20
   manaRestoreAmount: 0
   healthCost: 0
@@ -32,6 +32,7 @@ MonoBehaviour:
   auraPrefab: {fileID: 0}
   areaShape: 0
   coneAngle: 45
+  damageInterval: 0.5
   isChanneled: 0
   explosionPrefab: {fileID: 0}
   explosionRadius: 0

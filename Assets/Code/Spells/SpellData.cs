@@ -33,6 +33,10 @@ public class SpellData : ScriptableObject
     public AreaShape areaShape;
     public float coneAngle = 45f; // solo para conos
 
+    [Header("Daño periódico")]
+    [Tooltip("Cada cuántos segundos aplica daño el área. Ej: 1 = una vez por segundo.")]
+    public float damageInterval = 1f;
+
     [Header("Canalización")]
     [Tooltip("true para conos, rayos o cualquier hechizo de duración prolongada")]
     public bool isChanneled; // true para conos, rayos, etc.

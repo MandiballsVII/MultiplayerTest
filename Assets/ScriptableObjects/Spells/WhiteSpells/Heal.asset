@@ -28,7 +28,7 @@ MonoBehaviour:
   manaRestoreAmount: 0
   healthCost: 0
   affectAllPlayers: 1
-  auraDuration: 1
+  auraDuration: 2
   auraPrefab: {fileID: 6762229052723605685, guid: 52e28f65e98620d49a3b2a5981a8b209, type: 3}
   areaShape: 0
   coneAngle: 45
