@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 3039210076647225678}
   - component: {fileID: 4782082638397537690}
   - component: {fileID: 8961734095867911169}
+  - component: {fileID: 1306550162114236419}
   m_Layer: 9
   m_Name: Medusa
   m_TagString: Untagged
@@ -268,7 +269,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -517794285, guid: 286c9b4909d0a1b42a3d1224a2861e2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -423,6 +424,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 5529838465681262851, guid: bcce2820fc6a27441b4667efbeefc951, type: 3}
   offset: {x: 0, y: 1, z: 0}
+--- !u!114 &1306550162114236419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6005318854284937202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e2b3e8e2229ac4eb84fc5924f05a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  flashDuration: 0.15
 --- !u!1 &7057343794173545967
 GameObject:
   m_ObjectHideFlags: 0

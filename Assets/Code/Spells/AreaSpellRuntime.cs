@@ -68,7 +68,7 @@ public class AreaSpellRuntime : MonoBehaviour
             if (factionMember.Faction == selfFaction)
                 continue;
 
-            health.TakeDamage(spell.power);
+            health.TakeDamage(spell.power, transform.position);
         }
     }
 

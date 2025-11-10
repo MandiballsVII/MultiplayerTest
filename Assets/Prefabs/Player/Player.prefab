@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f4aa3b23fc181ac4b879fc43ca4ba9dd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -180,7 +180,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b2e5559d2cd6091499f71489b2a914e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -286,7 +286,7 @@ TrailRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Time: 0.2
   m_PreviewTimeScale: 1
@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 8767550588605358134}
   - component: {fileID: 220621143662020730}
   - component: {fileID: 8625945796572989109}
+  - component: {fileID: -5857731069137348655}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -473,7 +474,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a1eb2570985a7e44eba4b38651214fc6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -586,11 +587,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 4761223737694663498}
-  bulletPrefab: {fileID: 1622451925767254046, guid: 19f22d5b3ad567c4eae42144ff5e1f48, type: 3}
-  bulletForce: 20
-  muzzleFlash: {fileID: 0}
-  maxAmmo: 20
-  currentAmmo: 20
   body: {fileID: 0}
 --- !u!95 &5961309840791020524
 Animator:
@@ -852,8 +848,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterData: {fileID: 0}
-  maxHealth: 100
   maxMana: 100
+  faction: 0
 --- !u!114 &8767550588605358134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -899,3 +895,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  currentHealth: 0
+--- !u!114 &-5857731069137348655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8508372035626733680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e2b3e8e2229ac4eb84fc5924f05a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  flashDuration: 0.15

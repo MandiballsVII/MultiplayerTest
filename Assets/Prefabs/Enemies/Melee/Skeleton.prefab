@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8257643681645538194}
   - component: {fileID: 1448805436185341036}
   - component: {fileID: 1289385518479765595}
+  - component: {fileID: -1655146321735573779}
   m_Layer: 12
   m_Name: Skeleton
   m_TagString: Untagged
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 735242396, guid: 88cde355f916c4e4ab367c5e85301a32, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -232,6 +233,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 5529838465681262851, guid: bcce2820fc6a27441b4667efbeefc951, type: 3}
   offset: {x: 0, y: 1, z: 0}
+--- !u!114 &-1655146321735573779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196672047629228948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e2b3e8e2229ac4eb84fc5924f05a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  flashDuration: 0.15
 --- !u!1 &7121752785697980152
 GameObject:
   m_ObjectHideFlags: 0

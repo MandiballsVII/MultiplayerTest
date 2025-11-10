@@ -26,7 +26,7 @@ public class ProjectileRuntime : MonoBehaviour
             // Comparar facciones
             if (targetFactionMember.Faction != projectileFaction.Faction)
             {
-                targetHealth.TakeDamage(spell.power);
+                targetHealth.TakeDamage(spell.power, transform.position);
                 Debug.Log($"{name} golpeó a {collision.gameObject.name} por {spell.power} de daño.");
             }
         }

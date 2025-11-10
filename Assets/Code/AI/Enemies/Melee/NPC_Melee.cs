@@ -160,7 +160,7 @@ public class NPC_Melee : NPC_ControllerBase
 
             if (otherHealth != null && otherFaction != null && otherFaction.Faction != this.faction)
             {
-                otherHealth.TakeDamage(attackDamage);
+                otherHealth.TakeDamage(attackDamage, gameObject.transform.position);
                 Debug.Log($"{name} golpea a {hit.collider.name} ({otherFaction.Faction}) por {attackDamage} daño");
             }
         }

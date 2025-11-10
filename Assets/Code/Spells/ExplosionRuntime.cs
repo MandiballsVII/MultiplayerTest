@@ -41,8 +41,7 @@ public class ExplosionRuntime : MonoBehaviour
             Debug.Log($"[ExplosionRuntime] Facción explosion = {selfFaction}");
             if (targetFactionMember.Faction != selfFaction)
             {
-                print($"[ExplosionRuntime] Hit: {hit.name}");
-                targetHealth.TakeDamage(spell.explosionDamage);
+                targetHealth.TakeDamage(spell.explosionDamage, transform.position);
                 Debug.Log($"{name} explosion dañó a {hit.name} por {spell.explosionDamage}");
             }
         }

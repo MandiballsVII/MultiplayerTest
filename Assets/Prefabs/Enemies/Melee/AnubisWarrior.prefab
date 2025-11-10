@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 5717535862476408620}
   - component: {fileID: 1544426873982912247}
   - component: {fileID: 6967463460926464349}
+  - component: {fileID: -1239014360508352382}
   m_Layer: 9
   m_Name: AnubisWarrior
   m_TagString: Untagged
@@ -153,7 +154,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -1490337726, guid: db483899daec8dc49b923167ed709f85, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -307,6 +308,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePopupPrefab: {fileID: 5529838465681262851, guid: bcce2820fc6a27441b4667efbeefc951, type: 3}
   offset: {x: 0, y: 1, z: 0}
+--- !u!114 &-1239014360508352382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5134502972449984034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e2b3e8e2229ac4eb84fc5924f05a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  flashDuration: 0.15
 --- !u!1 &5299059098019518013
 GameObject:
   m_ObjectHideFlags: 0
