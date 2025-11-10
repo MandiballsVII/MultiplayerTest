@@ -32,6 +32,7 @@ public class PlayerManager : MonoBehaviour
 
     [HideInInspector] public bool invulnerable;
     [HideInInspector] public bool isDead;
+    [HideInInspector] public bool isStunned = false;
 
     [SerializeField] GameObject deathMenu;
     [SerializeField] private TrailRenderer dashTrail;
@@ -69,36 +70,51 @@ public class PlayerManager : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 moveDir = moveInput; // Vector2 del Input System (x, y)
-        if (!controlsEnabled || isDead || isDashing)
+
+        // Variables comunes (declaradas una sola vez)
+        var camBounds = MultiTargetCamera.Instance.GetCameraBounds();
+        Vector3 pos = transform.position;
+        float halfWidth = capsuleCollider.bounds.extents.x;
+        float halfHeight = capsuleCollider.bounds.extents.y;
+
+        // === CASO: Aturdido (knockback activo) ===
+        if (isStunned)
         {
-            if (!isDashing) rb.velocity = Vector2.zero;
+            // Mantener dentro de los límites de la cámara
+            pos.x = Mathf.Clamp(pos.x, camBounds.min.x + halfWidth, camBounds.max.x - halfWidth);
+            pos.y = Mathf.Clamp(pos.y, camBounds.min.y + halfHeight, camBounds.max.y - halfHeight);
+            transform.position = pos;
+
+            // Podrías añadir aquí una animación de impacto o parpadeo
             return;
         }
 
+        // === CASO: Control bloqueado, muerto o en dash ===
+        if (!controlsEnabled || isDead || isDashing)
+        {
+            if (!isDashing)
+                rb.velocity = Vector2.zero;
+            return;
+        }
+
+        // === Movimiento normal ===
         rb.velocity = moveInput.normalized * movementSpeed;
 
         bool moving = rb.velocity.sqrMagnitude > 0.0001f;
-        
-        // Ya NO rotamos el transform según el movimiento
-        // Ahora el cuerpo mira donde apuntan las manos (Aim)
+
+        // El cuerpo mira hacia donde apunta el Aim
         if (aimTransform != null && bodyTransform != null)
         {
             float aimAngle = aimTransform.eulerAngles.z;
             bodyTransform.rotation = Quaternion.Euler(0, 0, aimAngle);
         }
 
-        // === Stay into camera space ===
-        var camBounds = MultiTargetCamera.Instance.GetCameraBounds();
-        Vector3 pos = transform.position;
-
-        float halfWidth = capsuleCollider.bounds.extents.x;
-        float halfHeight = capsuleCollider.bounds.extents.y;
-
+        // Mantener dentro de los límites de la cámara
         pos.x = Mathf.Clamp(pos.x, camBounds.min.x + halfWidth, camBounds.max.x - halfWidth);
         pos.y = Mathf.Clamp(pos.y, camBounds.min.y + halfHeight, camBounds.max.y - halfHeight);
-
         transform.position = pos;
 
+        // === Actualizar animaciones ===
         if (moveDir.sqrMagnitude > 0.01f)
         {
             Vector2 aimDir = aimTransform.right;
@@ -118,6 +134,7 @@ public class PlayerManager : MonoBehaviour
             ChangeAnimation(PlayerAnimState.Idle);
         }
     }
+
 
     private void ChangeAnimation(PlayerAnimState newState)
     {

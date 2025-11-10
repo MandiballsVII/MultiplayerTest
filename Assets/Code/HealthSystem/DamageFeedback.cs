@@ -60,17 +60,37 @@ public class DamageFeedback : MonoBehaviour
         if (isKnocked) yield break;
         isKnocked = true;
 
-        // Desactivar control temporalmente
+        // Bloquear control temporalmente: usar isStunned para players
         var player = GetComponent<PlayerManager>();
         var npc = GetComponent<NPC_ControllerBase>();
-        if (player != null) player.controlsEnabled = false;
+        if (player != null) player.isStunned = true;
         if (npc != null) npc.enabled = false;
 
-        rb.velocity = dir * knockbackForce;
-        yield return new WaitForSeconds(knockbackDuration);
-        rb.velocity = Vector2.zero;
+        // Aplicar impulso (usar rb si existe)
+        if (rb != null)
+        {
+            rb.velocity = dir * knockbackForce;
+        }
+        else
+        {
+            // fallback: mover por transform si no hay rigidbody
+            float elapsed = 0f;
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = startPos + (Vector3)(dir * knockbackForce);
+            while (elapsed < knockbackDuration)
+            {
+                elapsed += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPos, targetPos, elapsed / knockbackDuration);
+                yield return null;
+            }
+        }
 
-        if (player != null) player.controlsEnabled = true;
+        yield return new WaitForSeconds(knockbackDuration);
+
+        // Fin del knockback
+        if (rb != null) rb.velocity = Vector2.zero;
+
+        if (player != null) player.isStunned = false;
         if (npc != null) npc.enabled = true;
 
         isKnocked = false;
