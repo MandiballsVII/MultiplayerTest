@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5920389948672328857}
   - component: {fileID: 6400818560263290188}
   - component: {fileID: -6971703690190044692}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: AcidArrow 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,8 +75,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 167389457
-  m_SortingLayer: 5
+  m_SortingLayerID: -1532989529
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1176928348, guid: dcf8f5191ddf87b4fb942603a3188f44, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -188,6 +188,9 @@ MonoBehaviour:
   stuckLifetime: 3
   embedDepth: 0.05
   angleOffset: 0
+  damage: 0
+  faction: 0
+  owner: {fileID: 0}
 --- !u!114 &-6971703690190044692
 MonoBehaviour:
   m_ObjectHideFlags: 0

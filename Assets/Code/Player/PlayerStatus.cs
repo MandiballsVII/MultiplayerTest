@@ -31,9 +31,9 @@ public class PlayerStatus : MonoBehaviour
         StartCoroutine(ImmobilizeEffect(duration));
     }
 
-    public void ApplyDamage(int amount)
+    public void ApplyDamage(int amount, Vector2 hitSource)
     {
-        health.TakeDamage(amount);
+        health.TakeDamage(amount, hitSource);
     }
 
     public void ApplySilence(float duration)

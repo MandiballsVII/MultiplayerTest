@@ -45,7 +45,9 @@ public class ProjectileRuntime : MonoBehaviour
             if (expFaction != null)
                 expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
         }
-
-        Destroy(gameObject);
+        if(gameObject.GetComponent<Arrow>() == null)
+        {
+            Destroy(gameObject);
+        }
     }
 }

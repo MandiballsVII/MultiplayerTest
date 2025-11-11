@@ -89,6 +89,7 @@ public class Arrow : MonoBehaviour
 
         if (health != null && targetFaction != null && targetFaction.Faction != faction)
         {
+            print("[Arrow] Aplicando dañooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.");
             health.TakeDamage(damage, hitPoint);
             Debug.Log($"{name} inflige {damage} de daño a {target.name} (facción: {targetFaction.Faction})");
         }

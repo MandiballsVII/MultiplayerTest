@@ -29,6 +29,7 @@ public class BeholderRay : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        Vector2 hitPoint = gameObject.transform.position;
         //print("BeholderRay hit " + col.name);
         // ajusta la comprobación según tu Player script / tags
         if (col.TryGetComponent<PlayerStatus>(out var status))
@@ -39,7 +40,7 @@ public class BeholderRay : MonoBehaviour
             {
                 case 0: status.ApplySlow(0.5f, 3f); break;
                 case 1: status.ApplyImmobilize(2f); break;
-                case 2: status.ApplyDamage((int)damage); break;
+                case 2: status.ApplyDamage((int)damage, hitPoint); break;
                 case 3: status.ApplySilence(3f); break;
             }
             Destroy(gameObject);

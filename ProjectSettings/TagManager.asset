@@ -51,6 +51,9 @@ TagManager:
   - name: Object
     uniqueID: 212880467
     locked: 0
+  - name: Arrows
+    uniqueID: 2761977767
+    locked: 0
   - name: Walls
     uniqueID: 648066803
     locked: 0
