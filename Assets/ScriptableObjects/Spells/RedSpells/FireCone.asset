@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
-  m_Name: CircleOfFlames
+  m_Name: FireCone
   m_EditorClassIdentifier: 
-  id: 007
-  displayName: CircleOfFlames
-  icon: {fileID: 21300000, guid: 226ed936c511b7a4ba532d1737377318, type: 3}
+  id: 013
+  displayName: FireCone
+  icon: {fileID: 21300000, guid: 105f292146d366f4599266d2210b670a, type: 3}
   school: 0
   type: 1
   manaCost: 10
-  cooldown: 3
-  prefab: {fileID: 596965290358967121, guid: f6fd116d600f0da48834b7b96f6d4099, type: 3}
+  cooldown: 5
+  prefab: {fileID: 6221925167913341847, guid: 346a46b61b93709478f38f960151aed7, type: 3}
   projectileSpeed: 12
   areaRadius: 2.5
   duration: 3
-  power: 10
+  power: 20
   healAmount: 20
   manaRestoreAmount: 0
   healthCost: 0
   affectAllPlayers: 0
   auraDuration: 1
   auraPrefab: {fileID: 0}
-  areaShape: 0
+  areaShape: 1
   coneAngle: 45
-  damageInterval: 0.5
-  isChanneled: 0
+  damageInterval: 1
+  isChanneled: 1
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
   explosionDamage: 0

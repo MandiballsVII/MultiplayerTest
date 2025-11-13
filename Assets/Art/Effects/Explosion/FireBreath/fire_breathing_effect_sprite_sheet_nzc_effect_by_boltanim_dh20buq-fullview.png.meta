@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: 9e8f8ef4aba28a24cbd771918dac63ee
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 657
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e48ea8f49a1a800479fb8e7679b3ec18
+      internalID: -983836317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_2
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 462
+        width: 135
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7c1029c811be0149bae2b8287311a3c
+      internalID: 2064151591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 526
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0617fa72642232840a89e161c35eafa8
+      internalID: 1364630090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 395
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55739897f4b7ec345adfedf2fb9db766
+      internalID: -1526807944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 264
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f32ab6bc87902643ac6ca8d3c06071d
+      internalID: 984875146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_11
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 136
+        width: 135
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15f07b1e1fe60734480e8667f66850a0
+      internalID: -2017361929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 133
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3b0104f5639ce6479e321da7a82d462
+      internalID: -1946534403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 326
+        height: 131
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf088c3685b784f408bb17a34d9926ee
+      internalID: 563371744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_0: -983836317
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_1: 1651565792
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_10: -570469596
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_11: -2017361929
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_12: -1946534403
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_13: -250231477
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_14: -830169650
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_15: 563371744
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_16: -189817892
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_2: 2064151591
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_3: 1364630090
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_4: 98609377
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_5: 1312307616
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_6: -1526807944
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_7: 2074692068
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_8: 1005997510
+      fire_breathing_effect_sprite_sheet_nzc_effect_by_boltanim_dh20buq-fullview_9: 984875146
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

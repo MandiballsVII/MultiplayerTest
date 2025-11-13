@@ -26,6 +26,12 @@ public class Arrow : MonoBehaviour
     private Vector2 lastVelocity;
     private Coroutine destroyCoroutine;
 
+    private GameObject impactedObject;
+
+    [SerializeField] private bool damageOverTime = false;
+
+    private float damageOverTimeInterval = 1f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,6 +48,19 @@ public class Arrow : MonoBehaviour
     {
         // Guardar la última velocidad real del rigidbody (para usar en el impacto)
         lastVelocity = rb.velocity;
+    }
+
+    private void Update()
+    {
+        if(stuck && impactedObject.GetComponent<Health>() && damageOverTime)
+        {
+            damageOverTimeInterval -= Time.deltaTime;
+            if(damageOverTimeInterval <= 0f)
+            {
+                damageOverTimeInterval = 1f;
+                impactedObject.GetComponent<Health>().TakeDamage(5);
+            }
+        }
     }
 
     public void Init(Transform shooter, Faction shooterFaction, float projectileDamage)
@@ -83,6 +102,7 @@ public class Arrow : MonoBehaviour
 
     void StickToTarget(Transform target, Vector2 hitPoint, Vector2 direction)
     {
+        impactedObject = target.gameObject;
         // ---------- Aplicar daño ----------
         var health = target.GetComponent<Health>();
         var targetFaction = target.GetComponent<IFactionMember>();
