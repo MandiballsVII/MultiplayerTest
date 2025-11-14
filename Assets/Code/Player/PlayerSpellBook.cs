@@ -286,7 +286,6 @@ public class PlayerSpellBook : MonoBehaviour
                            new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
 
             var summon = Instantiate(spell.summonPrefab, spawnPos, Quaternion.identity);
-
             // Pasar la referencia del invocador al invocado (SummonedBase)
             var summoned = summon.GetComponent<NPC_ControllerBase>();
             if (summoned != null)

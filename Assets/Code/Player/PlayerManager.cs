@@ -114,6 +114,8 @@ public class PlayerManager : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, camBounds.min.y + halfHeight, camBounds.max.y - halfHeight);
         transform.position = pos;
 
+
+
         // === Actualizar animaciones ===
         if (moveDir.sqrMagnitude > 0.01f)
         {
