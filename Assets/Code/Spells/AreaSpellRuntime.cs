@@ -9,6 +9,8 @@ public class AreaSpellRuntime : MonoBehaviour
 
     private readonly HashSet<Health> targetsInside = new();
 
+    private Animator animator;
+
     public void Init(PlayerSpellBook owner, SpellData spell)
     {
         this.owner = owner;
