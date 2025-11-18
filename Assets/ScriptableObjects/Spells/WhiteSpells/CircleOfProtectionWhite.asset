@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
+  m_Name: CircleOfProtectionWhite
+  m_EditorClassIdentifier: 
+  id: 014
+  displayName: CircleOfProtectionWhite
+  icon: {fileID: 21300000, guid: 0a989a310dd223d4ea489bdf22745bc6, type: 3}
+  school: 4
+  type: 2
+  manaCost: 20
+  cooldown: 10
+  prefab: {fileID: 0}
+  projectileSpeed: 12
+  areaRadius: 2.5
+  duration: 3
+  power: 20
+  healAmount: 0
+  manaRestoreAmount: 0
+  healthCost: 0
+  affectAllPlayers: 0
+  auraDuration: 5
+  auraPrefab: {fileID: 4510995805139187081, guid: 6ffc7af31e1e6614e8e85473e350955a, type: 3}
+  areaShape: 0
+  coneAngle: 45
+  damageInterval: 1
+  isChanneled: 0
+  explosionPrefab: {fileID: 0}
+  explosionRadius: 0
+  explosionDamage: 0
+  summonPrefab: {fileID: 0}
+  summonCount: 1
+  summonDuration: 10
