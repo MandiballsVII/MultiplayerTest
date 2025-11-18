@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(CapsuleCollider2D))]
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour, IMovable
 {
     private Rigidbody2D rb;
     private Animator animator;
@@ -40,6 +40,10 @@ public class PlayerManager : MonoBehaviour
     [Header("References")]
     public Transform bodyTransform; // Nuevo: el sprite del cuerpo
     public Transform aimTransform;  // Nuevo: referencia al Aim (lo setea PlayerAim en Awake)
+
+    public float MoveSpeed { get => movementSpeed; set => movementSpeed = value; }
+    public bool CanMove { get => controlsEnabled; set => controlsEnabled = value; }
+
 
     public enum PlayerAnimState
     {

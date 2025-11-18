@@ -93,6 +93,7 @@ public class NPC_Ranged : NPC_ControllerBase
         if (HasLineOfSight(target))
         {
             RotateTowards(target.position);
+            if (!CanMove) return;
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             return; // no usamos pathfinding mientras la visión sea clara
         }

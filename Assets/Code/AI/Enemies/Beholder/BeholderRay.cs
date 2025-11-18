@@ -32,15 +32,17 @@ public class BeholderRay : MonoBehaviour
         Vector2 hitPoint = gameObject.transform.position;
         //print("BeholderRay hit " + col.name);
         // ajusta la comprobación según tu Player script / tags
-        if (col.TryGetComponent<PlayerStatus>(out var status))
+        if (col.TryGetComponent<StatusEffectHandler>(out var status))
         {
             // efecto aleatorio
             int effect = Random.Range(0, 4);
+            Vector2 hit = transform.position;
+
             switch (effect)
             {
                 case 0: status.ApplySlow(0.5f, 3f); break;
-                case 1: status.ApplyImmobilize(2f); break;
-                case 2: status.ApplyDamage((int)damage, hitPoint); break;
+                case 1: status.ApplyStun(2f); break;
+                case 2: status.ApplyDamage(damage, hit); break;
                 case 3: status.ApplySilence(3f); break;
             }
             Destroy(gameObject);

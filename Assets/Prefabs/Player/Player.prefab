@@ -411,6 +411,7 @@ GameObject:
   - component: {fileID: 220621143662020730}
   - component: {fileID: 8625945796572989109}
   - component: {fileID: -5857731069137348655}
+  - component: {fileID: 5297099127358675996}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -508,6 +509,7 @@ MonoBehaviour:
   dashInvulnerability: 1
   invulnerable: 0
   isDead: 0
+  isStunned: 0
   deathMenu: {fileID: 0}
   dashTrail: {fileID: 2666935728686919869}
   bodyTransform: {fileID: 5547662752955312891}
@@ -877,7 +879,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8508372035626733680}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e11c9f4083a1c1429cefd923ca04468, type: 3}
   m_Name: 
@@ -911,3 +913,19 @@ MonoBehaviour:
   knockbackForce: 5
   knockbackDuration: 0.2
   flashDuration: 0.15
+  flashInterval: 0.1
+--- !u!114 &5297099127358675996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8508372035626733680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d94ed614fa7b3b46aab648b8ab81b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInvulnerable: 0
+  isSilenced: 0
+  isStunned: 0

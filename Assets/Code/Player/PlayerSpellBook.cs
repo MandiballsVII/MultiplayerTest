@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerSpellBook : MonoBehaviour
+public class PlayerSpellBook : MonoBehaviour, ISpellCaster
 {
     [Header("Slots")]
     public SpellData[] slots = new SpellData[4];   // Asigna en runtime/pickup
@@ -28,6 +28,8 @@ public class PlayerSpellBook : MonoBehaviour
     private PlayerSpellUI spellUI; // Referencia al HUD
 
     public bool silenced;
+    public bool CanCast { get => !silenced; set => silenced = !value; }
+
 
     void Awake()
     {

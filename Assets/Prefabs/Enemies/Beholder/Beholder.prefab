@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4508210098867419893}
   - component: {fileID: 7472548747974550701}
   - component: {fileID: -3325537020185302155}
+  - component: {fileID: 4842404831797534068}
   m_Layer: 9
   m_Name: Beholder
   m_TagString: Enemy
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1093114285
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 1478876046, guid: 32e99727202667a4fa77018760aa62a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -250,6 +251,21 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.15
   flashInterval: 0.1
+--- !u!114 &4842404831797534068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123015357571365071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d94ed614fa7b3b46aab648b8ab81b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInvulnerable: 0
+  isSilenced: 0
+  isStunned: 0
 --- !u!1 &2915160937938595941
 GameObject:
   m_ObjectHideFlags: 0

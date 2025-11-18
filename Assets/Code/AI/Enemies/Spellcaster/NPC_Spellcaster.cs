@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-public class NPC_SpellCaster : NPC_ControllerBase
+public class NPC_SpellCaster : NPC_ControllerBase, ISpellCaster
 {
     [Header("SpellCaster")]
     public SpellData spell; // Hechizo asignado a este NPC
@@ -40,6 +40,8 @@ public class NPC_SpellCaster : NPC_ControllerBase
     private bool isCastingHeal = false;
     // Añadimos una variable para controlar si ya calculamos el path de huida
     private bool evadePathSet = false;
+    public bool CanCast { get; set; } = true;
+
 
     protected override void UpdateState()
     {
@@ -343,6 +345,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
         if (HasLineOfSight(target))
         {
             RotateTowards(target.position);
+            if (!CanMove) return;
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             return; // no usamos pathfinding mientras la visión sea clara
         }
@@ -408,6 +411,7 @@ public class NPC_SpellCaster : NPC_ControllerBase
 
     public void Attack()
     {
+        if (!CanCast) return;
         if (spell == null) return;
 
         // Reducir cooldown del hechizo

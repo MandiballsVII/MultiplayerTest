@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 8425755882208970568}
   - component: {fileID: 3148781507755314171}
   - component: {fileID: -8265799139996816600}
+  - component: {fileID: 7274582828194063237}
   m_Layer: 9
   m_Name: ObscureCleric
   m_TagString: Untagged
@@ -282,6 +283,21 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.15
   flashInterval: 0.1
+--- !u!114 &7274582828194063237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230791668955136276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d94ed614fa7b3b46aab648b8ab81b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInvulnerable: 0
+  isSilenced: 0
+  isStunned: 0
 --- !u!1 &3448658940957053914
 GameObject:
   m_ObjectHideFlags: 0

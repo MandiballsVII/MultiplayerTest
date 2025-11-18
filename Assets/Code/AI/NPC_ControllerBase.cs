@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember
+public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember, IMovable
 {
     [Header("Movimiento")]
     public Node currentNode;
@@ -42,6 +42,13 @@ public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember
 
     // Invocador (si aplica)
     public Transform Owner { get; private set; }
+
+    public float MoveSpeed
+    {
+        get => speed;
+        set => speed = value;
+    }
+    public bool CanMove { get; set; } = true;
 
     protected virtual void Awake()
     {
