@@ -106,7 +106,7 @@ public class PlayerSpellBook : MonoBehaviour, ISpellCaster
 
     private void TryCast(int slotIndex)
     {
-        if(silenced) return; // No puedes castear si estás silenciado
+        if(!CanCast) return; // No puedes castear si estás silenciado
         if (isCastingChannel)
             return; // No puedes castear otro hechizo mientras canalizas
         var spell = slots[slotIndex];

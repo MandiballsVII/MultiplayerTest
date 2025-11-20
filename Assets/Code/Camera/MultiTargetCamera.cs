@@ -76,7 +76,7 @@ public class MultiTargetCamera : MonoBehaviour
 
     void Zoom()
     {
-        Debug.Log(cam.orthographicSize);
+        //Debug.Log(cam.orthographicSize);
         if (targets.Count == 1)
         {
             cam.orthographicSize = Mathf.MoveTowards(cam.orthographicSize, baseZoom, zoomSpeed * Time.deltaTime);

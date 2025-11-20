@@ -106,10 +106,13 @@ public class Arrow : MonoBehaviour
         // ---------- Aplicar daño ----------
         var health = target.GetComponent<Health>();
         var targetFaction = target.GetComponent<IFactionMember>();
-
-        if (health != null && targetFaction != null && targetFaction.Faction != faction)
+        var status = target.GetComponent<StatusEffectHandler>();
+        if (status != null)
         {
-            print("[Arrow] Aplicando dañooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.");
+            status.ApplyDamage(damage, transform.position);
+        }
+        else if (health != null && targetFaction != null && targetFaction.Faction != faction)
+        {
             health.TakeDamage(damage, hitPoint);
             Debug.Log($"{name} inflige {damage} de daño a {target.name} (facción: {targetFaction.Faction})");
         }

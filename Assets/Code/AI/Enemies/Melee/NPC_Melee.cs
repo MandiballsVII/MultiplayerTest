@@ -157,9 +157,14 @@ public class NPC_Melee : NPC_ControllerBase
             if (hit.collider.gameObject == gameObject) continue; // no golpearse a sí mismo
 
             var otherHealth = hit.collider.GetComponent<Health>();
+            var status = hit.collider.GetComponent<StatusEffectHandler>();
             var otherFaction = hit.collider.GetComponent<IFactionMember>();
 
-            if (otherHealth != null && otherFaction != null && otherFaction.Faction != this.faction)
+            if (status != null)
+            {
+                status.ApplyDamage(attackDamage, transform.position);
+            }
+            else if (otherHealth != null && otherFaction != null && otherFaction.Faction != this.faction)
             {
                 otherHealth.TakeDamage(attackDamage, gameObject.transform.position);
                 Debug.Log($"{name} golpea a {hit.collider.name} ({otherFaction.Faction}) por {attackDamage} daño");

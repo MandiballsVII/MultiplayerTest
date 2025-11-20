@@ -94,7 +94,7 @@ public class PlayerManager : MonoBehaviour, IMovable
         }
 
         // === CASO: Control bloqueado, muerto o en dash ===
-        if (!controlsEnabled || isDead || isDashing)
+        if (!CanMove || isDead || isDashing)
         {
             if (!isDashing)
                 rb.velocity = Vector2.zero;

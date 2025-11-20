@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class StatusEffectHandler : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class StatusEffectHandler : MonoBehaviour
 
     private float originalSpeed;
 
+    private bool invulActive = false; // control interno para debug
+
     void Awake()
     {
         health = GetComponent<Health>();
@@ -23,6 +26,7 @@ public class StatusEffectHandler : MonoBehaviour
         if (movable != null)
             originalSpeed = movable.MoveSpeed;
     }
+
 
     // ======================
     //  EFECTOS GENERALES
@@ -97,4 +101,61 @@ public class StatusEffectHandler : MonoBehaviour
         yield return new WaitForSeconds(duration);
         isInvulnerable = false;
     }
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (!Application.isPlaying) return;
+
+        // --- SILENCE ---
+        if (isSilenced && spellCaster != null && spellCaster.CanCast)
+        {
+            Debug.Log("DEBUG: Silence activado desde el Inspector");
+            ApplySilence(999f);    // silencio "infinito" hasta desactivar
+        }
+        if (!isSilenced && spellCaster != null && !spellCaster.CanCast)
+        {
+            Debug.Log("DEBUG: Silence DESACTIVADO desde el Inspector");
+            spellCaster.CanCast = true;
+            StopAllCoroutines();
+        }
+
+        // --- STUN ---
+        if (isStunned && movable != null && movable.CanMove)
+        {
+            Debug.Log("DEBUG: Stun activado desde el Inspector");
+            ApplyStun(999f);
+        }
+        if (!isStunned && movable != null && !movable.CanMove)
+        {
+            Debug.Log("DEBUG: Stun DESACTIVADO desde el Inspector");
+            movable.CanMove = true;
+            StopAllCoroutines();
+        }
+
+        // --- INVULNERABILITY ---
+        if (isInvulnerable)
+        {
+            // Si ya está activado, no hagas nada
+            if (!invulActive)
+            {
+                Debug.Log("DEBUG: Activando invulnerabilidad (modo debug)");
+                StartCoroutine(InvulnerabilityCoroutine(999f));
+                invulActive = true;
+            }
+        }
+        else
+        {
+            // Si estaba activa por debug, desactivarla
+            if (invulActive)
+            {
+                Debug.Log("DEBUG: Desactivando invulnerabilidad (modo debug)");
+                StopAllCoroutines();
+                isInvulnerable = false;
+                invulActive = false;
+            }
+        }
+
+    }
+#endif
+
 }

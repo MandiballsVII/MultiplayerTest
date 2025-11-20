@@ -194,6 +194,7 @@ public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember, IMovab
 
         Node targetNode = path[0];
         RotateTowards(targetNode.transform.position);
+        if (!CanMove) return;
         transform.position = Vector3.MoveTowards(transform.position, targetNode.transform.position, speed * Time.deltaTime);
 
         if (Vector2.Distance(transform.position, targetNode.transform.position) < 0.1f)
