@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -58,7 +59,17 @@ public class Arrow : MonoBehaviour
             if(damageOverTimeInterval <= 0f)
             {
                 damageOverTimeInterval = 1f;
-                impactedObject.GetComponent<Health>().TakeDamage(5);
+                var status = impactedObject.GetComponent<StatusEffectHandler>();
+                if (status != null)
+                {
+                    status.ApplyDamage(5, transform.position);
+                }
+                else
+                {
+                    var h = impactedObject.GetComponent<Health>();
+                    if (h != null) h.TakeDamage(5, transform.position);
+                }
+
             }
         }
     }
@@ -68,6 +79,24 @@ public class Arrow : MonoBehaviour
         owner = shooter;
         faction = shooterFaction;
         damage = projectileDamage;
+
+        IgnoreSameFactionCollisions();
+    }
+    void IgnoreSameFactionCollisions()
+    {
+        // Buscar todos los colliders de la misma facción
+        var allies = FindObjectsOfType<MonoBehaviour>().OfType<IFactionMember>();
+        foreach (var ally in allies)
+        {
+            if (ally.Faction == faction)
+            {
+                var allyCollider = ((MonoBehaviour)ally).GetComponent<Collider2D>();
+                if (allyCollider != null)
+                {
+                    Physics2D.IgnoreCollision(col, allyCollider, true);
+                }
+            }
+        }
     }
 
 
@@ -102,43 +131,49 @@ public class Arrow : MonoBehaviour
 
     void StickToTarget(Transform target, Vector2 hitPoint, Vector2 direction)
     {
-        impactedObject = target.gameObject;
-        // ---------- Aplicar daño ----------
-        var health = target.GetComponent<Health>();
         var targetFaction = target.GetComponent<IFactionMember>();
+        var targetHealth = target.GetComponent<Health>();
         var status = target.GetComponent<StatusEffectHandler>();
+
+        // --- 1. No golpear ni al dueño ni a la misma facción ---
+        if (target == owner) return;
+        if (targetFaction != null && targetFaction.Faction == faction) return;
+
+        // --- 2. Aplicar daño respetando StatusEffectHandler ---
         if (status != null)
         {
             status.ApplyDamage(damage, transform.position);
         }
-        else if (health != null && targetFaction != null && targetFaction.Faction != faction)
+        else if (targetHealth != null)
         {
-            health.TakeDamage(damage, hitPoint);
-            Debug.Log($"{name} inflige {damage} de daño a {target.name} (facción: {targetFaction.Faction})");
+            targetHealth.TakeDamage(damage, hitPoint);
         }
 
-        stuck = true;
+        // --- 3. Clavar flecha solo si tiene sentido ---
+        // Si quieres que flechas NO se claven en paredes, añade:
+        // if (targetHealth == null) return;
 
-        // Detener físicas
+        stuck = true;
+        impactedObject = target.gameObject;
+
+        // --- 4. Desactivar físicas ---
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
         rb.isKinematic = true;
         rb.simulated = false;
 
-        // Cancelar destrucción en vuelo y programar destrucción clavada
         if (destroyCoroutine != null) StopCoroutine(destroyCoroutine);
         destroyCoroutine = StartCoroutine(DestroyAfter(stuckLifetime));
 
-        // Calcular rotación según la dirección de impacto
+        // --- 5. Rotación ---
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + angleOffset;
         Quaternion rot = Quaternion.Euler(0f, 0f, angle);
 
-        // Colocar embebida
         Vector3 embedPos = (Vector3)hitPoint + (Vector3)direction * embedDepth;
         transform.position = embedPos;
         transform.rotation = rot;
 
-        // Cambiar sorting layer para que quede bajo objetos
+        // --- 6. Sorting Layer ---
         var sr = GetComponent<SpriteRenderer>();
         if (sr != null)
         {
@@ -146,13 +181,13 @@ public class Arrow : MonoBehaviour
             sr.sortingOrder = 0;
         }
 
-        // Buscar el mejor padre (body si existe, fallback al root)
+        // --- 7. Elegir mejor padre ---
         Transform parent = GetBestParent(target);
         transform.SetParent(parent, true);
 
-        // Desactivar colisión para evitar interferencias
         if (col != null) col.enabled = false;
     }
+
 
 
     Transform GetBestParent(Transform hitTransform)

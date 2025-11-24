@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -10,16 +11,41 @@ public class BeholderRay : MonoBehaviour
     public float speed = 10f;
     float born;
 
-    public void Init(Vector2 dir, float spd)
+    public Faction faction;
+
+    public void Init(Vector2 dir, float spd, Faction casterFaction)
     {
         direction = dir.normalized;
         speed = spd;
         born = Time.time;
+        faction = casterFaction;
+
+        IgnoreSameFactionCollisions();
     }
+    void IgnoreSameFactionCollisions()
+    {
+        var myCol = GetComponent<Collider2D>();
+        var allies = FindObjectsOfType<MonoBehaviour>().OfType<IFactionMember>();
+
+        foreach (var ally in allies)
+        {
+            if (ally.Faction == faction)
+            {
+                Collider2D allyCol = ((MonoBehaviour)ally).GetComponent<Collider2D>();
+                if (allyCol != null)
+                {
+                    Physics2D.IgnoreCollision(myCol, allyCol, true);
+                }
+            }
+        }
+    }
+
+
 
     void Update()
     {
-        transform.position += transform.right * speed * Time.deltaTime;
+        transform.position += (Vector3)direction * speed * Time.deltaTime;
+
         if (Time.time > born + lifeTime)
         {
             //print("BeholderRay expired");
@@ -29,6 +55,10 @@ public class BeholderRay : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        // No impactar aliados
+        var fac = col.GetComponent<IFactionMember>();
+        if (fac != null && fac.Faction == faction)
+            return;
         Vector2 hitPoint = gameObject.transform.position;
         //print("BeholderRay hit " + col.name);
         // ajusta la comprobación según tu Player script / tags
@@ -45,6 +75,13 @@ public class BeholderRay : MonoBehaviour
                 case 2: status.ApplyDamage(damage, hit); break;
                 case 3: status.ApplySilence(3f); break;
             }
+            Destroy(gameObject);
+            return;
+        }
+        else if (col.TryGetComponent<Health>(out var h))
+        {
+            // NO tiene efectos de estado -> aplicar daño directo
+            h.TakeDamage(damage, transform.position);
             Destroy(gameObject);
             return;
         }

@@ -24,6 +24,8 @@ public class NPC_Beholder : NPC_ControllerBase
     public Transform firePoint; // Punto desde donde se dispara el proyectil
     public float projectileSpeed = 15f; // Velocidad del proyectil
 
+    public Faction Faction => Faction.Enemy;
+
     protected override void UpdateState()
     {
         radiusInTiles = 2f; // Beholder es más grande
@@ -205,7 +207,8 @@ public class NPC_Beholder : NPC_ControllerBase
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
             var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
-            projectile.GetComponent<BeholderRay>().Init(dir, projectileSpeed);
+            projectile.GetComponent<BeholderRay>().Init(dir, projectileSpeed, Faction.Enemy);
+
         }
 
         ///Debug.Log($"{name} dispara a {count} objetivos (con línea de visión)");

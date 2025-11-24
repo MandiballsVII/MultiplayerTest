@@ -27,25 +27,41 @@ public class ExplosionRuntime : MonoBehaviour
     private void DoDamage()
     {
         var factionComp = GetComponent<ProjectileFaction>();
-        print($"[ExplosionRuntime] factionComp = {factionComp.Faction}");
         Faction selfFaction = factionComp != null ? factionComp.Faction : Faction.Enemy;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, spell.explosionRadius);
 
         foreach (var hit in hits)
         {
-            var targetFactionMember = hit.GetComponent<IFactionMember>();
-            var targetHealth = hit.GetComponent<Health>();
-            if (targetFactionMember == null || targetHealth == null) continue;
+            if (hit.gameObject == gameObject)
+                continue; // no autogolpearse
 
-            Debug.Log($"[ExplosionRuntime] Facción explosion = {selfFaction}");
-            if (targetFactionMember.Faction != selfFaction)
+            var targetFaction = hit.GetComponent<IFactionMember>();
+            if (targetFaction == null)
+                continue;
+
+            // evitar daño a la misma facción
+            if (targetFaction.Faction == selfFaction)
+                continue;
+
+            var status = hit.GetComponent<StatusEffectHandler>();
+            var health = hit.GetComponent<Health>();
+
+            // prioridad: StatusEffectHandler
+            if (status != null)
             {
-                targetHealth.TakeDamage(spell.explosionDamage, transform.position);
-                Debug.Log($"{name} explosion dañó a {hit.name} por {spell.explosionDamage}");
+                status.ApplyDamage(spell.explosionDamage, transform.position);
+                continue;
+            }
+
+            // fallback de daño si no existe status handler
+            if (health != null)
+            {
+                health.TakeDamage(spell.explosionDamage, transform.position);
             }
         }
     }
+
 
 
     // Para ver el radio en la escena
