@@ -85,17 +85,11 @@ public class Arrow : MonoBehaviour
     void IgnoreSameFactionCollisions()
     {
         // Buscar todos los colliders de la misma facción
-        var allies = FindObjectsOfType<MonoBehaviour>().OfType<IFactionMember>();
-        foreach (var ally in allies)
+        var allies = FactionManager.Instance.GetColliders(faction);
+        foreach (var allyCol in allies)
         {
-            if (ally.Faction == faction)
-            {
-                var allyCollider = ((MonoBehaviour)ally).GetComponent<Collider2D>();
-                if (allyCollider != null)
-                {
-                    Physics2D.IgnoreCollision(col, allyCollider, true);
-                }
-            }
+            if (allyCol != null && col != null)
+                Physics2D.IgnoreCollision(col, allyCol, true);
         }
     }
 

@@ -25,18 +25,12 @@ public class BeholderRay : MonoBehaviour
     void IgnoreSameFactionCollisions()
     {
         var myCol = GetComponent<Collider2D>();
-        var allies = FindObjectsOfType<MonoBehaviour>().OfType<IFactionMember>();
-
-        foreach (var ally in allies)
+        var allies = FactionManager.Instance.GetColliders(faction);
+        foreach (var allyCol in allies)
         {
-            if (ally.Faction == faction)
-            {
-                Collider2D allyCol = ((MonoBehaviour)ally).GetComponent<Collider2D>();
-                if (allyCol != null)
-                {
-                    Physics2D.IgnoreCollision(myCol, allyCol, true);
-                }
-            }
+            print("BeholderRay ignoring collision with ally " + allyCol.name);
+            if (allyCol != null && myCol != null)
+                Physics2D.IgnoreCollision(myCol, allyCol, true);
         }
     }
 

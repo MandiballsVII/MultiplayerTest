@@ -206,6 +206,8 @@ public class NPC_Beholder : NPC_ControllerBase
             Vector2 dir = (visibleTargets[i].position - firePoint.position).normalized;
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
+            projectileSpeed = Random.Range(15f, 25f);
+
             var projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward));
             projectile.GetComponent<BeholderRay>().Init(dir, projectileSpeed, Faction.Enemy);
 
