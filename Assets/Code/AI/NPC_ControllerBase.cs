@@ -99,6 +99,21 @@ public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember, IMovab
             SetLayerRecursively(child.gameObject, newLayer);
     }
 
+    public bool IsEnemyCollider(Collider2D col)
+    {
+        if (col == null) return false;
+
+        var fac = col.GetComponent<IFactionMember>();
+        if (fac == null) return false;
+
+        return fac.Faction != this.faction;
+    }
+    public bool IsAllyCollider(Collider2D col)
+    {
+        var fac = col.GetComponent<IFactionMember>();
+        return fac != null && fac.Faction == this.faction;
+    }
+
     protected abstract void UpdateState();
 
     // ================== VIDA ==================

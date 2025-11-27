@@ -13,22 +13,22 @@ public class ProjectileRuntime : MonoBehaviour
         projectileFaction = GetComponent<ProjectileFaction>();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D col)
     {
         if (spell == null) { Destroy(gameObject); return; }
 
-        // Intentar obtener la facción del objetivo
-        var targetFactionMember = collision.gameObject.GetComponent<IFactionMember>();
-        var targetHealth = collision.gameObject.GetComponent<Health>();
+        var targetFactionMember = col.GetComponent<IFactionMember>();
+        var targetHealth = col.GetComponent<Health>();
 
+        // Ignorar aliados completos
+        if (targetFactionMember != null && targetFactionMember.Faction == projectileFaction.Faction)
+            return;
+
+        // Si es un enemigo, aplicar daño
         if (targetFactionMember != null && targetHealth != null)
         {
-            // Comparar facciones
-            if (targetFactionMember.Faction != projectileFaction.Faction)
-            {
-                targetHealth.TakeDamage(spell.power, transform.position);
-                Debug.Log($"{name} golpeó a {collision.gameObject.name} por {spell.power} de daño.");
-            }
+            targetHealth.TakeDamage(spell.power, transform.position);
+            Debug.Log($"{name} golpeó a {col.name} por {spell.power} de daño.");
         }
 
         // Explosión opcional
@@ -39,15 +39,14 @@ public class ProjectileRuntime : MonoBehaviour
             if (explosionRuntime != null)
                 explosionRuntime.Init(caster, spell);
 
-            // Asignar también la facción a la explosión
-
             var expFaction = explosion.GetComponent<ProjectileFaction>();
             if (expFaction != null)
                 expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
         }
-        if(gameObject.GetComponent<Arrow>() == null)
-        {
+
+        // Que se destruya si no es un Arrow (misma lógica que tú)
+        if (GetComponent<Arrow>() == null)
             Destroy(gameObject);
-        }
     }
+
 }

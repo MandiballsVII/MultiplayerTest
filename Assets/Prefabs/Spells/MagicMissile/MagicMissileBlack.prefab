@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8775840515409728684}
   - component: {fileID: 8754538831643575722}
   - component: {fileID: 4141827602731583221}
+  - component: {fileID: 2775458126739243584}
   m_Layer: 13
   m_Name: MagicMissileBlack
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1533087387
-  m_SortingLayer: 4
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 1142779432, guid: 7828991109adf1043b38ecb7a56d72ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -144,7 +145,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.1, y: 0}
@@ -183,3 +184,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2775458126739243584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8346907520809119125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650e56775a3540c41b9a96efc183e726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

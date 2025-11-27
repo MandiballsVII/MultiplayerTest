@@ -9,5 +9,12 @@ public class ProjectileFaction : MonoBehaviour, IFactionMember
     {
         Faction = faction;
         Owner = owner;
+
+        var myCol = GetComponent<Collider2D>();
+        var allies = FactionManager.Instance.GetColliders(faction);
+
+        foreach (var ally in allies)
+            Physics2D.IgnoreCollision(myCol, ally, true);
     }
+
 }
