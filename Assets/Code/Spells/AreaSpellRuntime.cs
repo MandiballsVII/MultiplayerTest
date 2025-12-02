@@ -71,9 +71,9 @@ public class AreaSpellRuntime : MonoBehaviour
                 continue;
 
             health.TakeDamage(spell.power, transform.position);
+            SpellEffectApplier.ApplyStatusEffects(spell, health.GetComponent<Collider2D>(), owner);
         }
     }
-
 
     // Para debug visual en editor
     private void OnDrawGizmosSelected()

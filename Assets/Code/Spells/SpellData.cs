@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Spells/SpellData")]
@@ -51,5 +52,9 @@ public class SpellData : ScriptableObject
     public GameObject summonPrefab;
     public int summonCount = 1; // Por si quieres invocar más de uno
     public float summonDuration = 10f; // Tiempo que vive el esqueleto
+
+    [Header("Status Effects")]
+    [Tooltip("Efectos que se aplican al impactar o al tick del área.")]
+    public List<StatusEffectDefinition> statusEffects = new List<StatusEffectDefinition>();
 
 }

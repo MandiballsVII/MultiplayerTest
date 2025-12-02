@@ -4,14 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BeholderRay : MonoBehaviour
 {
-    public float lifeTime = 4f;
-    public float damage = 10f;
-
     Vector2 direction;
     public float speed = 10f;
     float born;
 
     public Faction faction;
+
+    public SpellData spellData;
 
     public void Init(Vector2 dir, float spd, Faction casterFaction)
     {
@@ -40,7 +39,7 @@ public class BeholderRay : MonoBehaviour
     {
         transform.position += (Vector3)direction * speed * Time.deltaTime;
 
-        if (Time.time > born + lifeTime)
+        if (Time.time > born + spellData.duration)
         {
             //print("BeholderRay expired");
             Destroy(gameObject);
@@ -58,24 +57,15 @@ public class BeholderRay : MonoBehaviour
         // ajusta la comprobación según tu Player script / tags
         if (col.TryGetComponent<StatusEffectHandler>(out var status))
         {
-            // efecto aleatorio
-            int effect = Random.Range(0, 4);
-            Vector2 hit = transform.position;
-
-            switch (effect)
-            {
-                case 0: status.ApplySlow(0.5f, 3f); break;
-                case 1: status.ApplyStun(2f); break;
-                case 2: status.ApplyDamage(damage, hit); break;
-                case 3: status.ApplySilence(3f); break;
-            }
+            status.ApplyDamage(spellData.power, transform.position);
+            SpellEffectApplier.ApplyRandomEffect(spellData, col, transform.position);
             Destroy(gameObject);
             return;
         }
         else if (col.TryGetComponent<Health>(out var h))
         {
             // NO tiene efectos de estado -> aplicar daño directo
-            h.TakeDamage(damage, transform.position);
+            h.TakeDamage(spellData.power, transform.position);
             Destroy(gameObject);
             return;
         }
@@ -86,4 +76,5 @@ public class BeholderRay : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 }

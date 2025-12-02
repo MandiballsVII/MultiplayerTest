@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 826ad5216ca289d47a0f790e22753744, type: 3}
-  m_Name: AcidCone
+  m_Name: IceDart
   m_EditorClassIdentifier: 
-  id: 006
-  displayName: AcidCone
-  icon: {fileID: 21300000, guid: 2a326a15d6eb7ba4c9f724869080f7ce, type: 3}
-  school: 2
-  type: 1
-  manaCost: 10
-  cooldown: 3
-  prefab: {fileID: 5476550727666368842, guid: 5fa6fe33ee9f43c4cb362e3cfeb0ee5b, type: 3}
-  projectileSpeed: 12
+  id: 015
+  displayName: IceDart
+  icon: {fileID: 21300000, guid: 4a84842b273ea324685f74b575b04769, type: 3}
+  school: 1
+  type: 0
+  manaCost: 1
+  cooldown: 0.2
+  prefab: {fileID: 5587156416404300173, guid: 70879b446408f3d42a018aed88ec1997, type: 3}
+  projectileSpeed: 25
   areaRadius: 2.5
   duration: 3
-  power: 20
+  power: 1
   healAmount: 20
   manaRestoreAmount: 0
   healthCost: 0
   affectAllPlayers: 0
   auraDuration: 1
   auraPrefab: {fileID: 0}
-  areaShape: 1
+  areaShape: 0
   coneAngle: 45
   damageInterval: 1
-  isChanneled: 1
+  isChanneled: 0
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
   explosionDamage: 0
@@ -41,6 +41,6 @@ MonoBehaviour:
   summonCount: 1
   summonDuration: 10
   statusEffects:
-  - type: 4
-    magnitude: 3
-    duration: 3
+  - type: 1
+    magnitude: 0.5
+    duration: 2

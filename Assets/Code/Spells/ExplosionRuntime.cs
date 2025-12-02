@@ -51,6 +51,7 @@ public class ExplosionRuntime : MonoBehaviour
             if (status != null)
             {
                 status.ApplyDamage(spell.explosionDamage, transform.position);
+                SpellEffectApplier.ApplyStatusEffects(spell, hit, caster);
                 continue;
             }
 
@@ -58,6 +59,7 @@ public class ExplosionRuntime : MonoBehaviour
             if (health != null)
             {
                 health.TakeDamage(spell.explosionDamage, transform.position);
+                SpellEffectApplier.ApplyStatusEffects(spell, hit, caster);
             }
         }
     }

@@ -272,6 +272,7 @@ public class PlayerSpellBook : MonoBehaviour, ISpellCaster
             if (spell.auraPrefab != null)
             {
                 var vfx = Instantiate(spell.auraPrefab, player.transform.position, Quaternion.identity, player.transform);
+                SpellEffectApplier.ApplyStatusEffects(spell, player.GetComponent<Collider2D>(), this);
                 Destroy(vfx, spell.auraDuration > 0 ? spell.auraDuration : 0.5f);
             }
         }

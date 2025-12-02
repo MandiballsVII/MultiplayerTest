@@ -131,6 +131,7 @@ MonoBehaviour:
   damage: 10
   speed: 50
   faction: 0
+  spellData: {fileID: 11400000, guid: 11ba9bcc9187c7242990ff80f2738bfc, type: 2}
 --- !u!95 &7094183638111847798
 Animator:
   serializedVersion: 5

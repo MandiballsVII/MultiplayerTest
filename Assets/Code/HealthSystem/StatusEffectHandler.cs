@@ -56,6 +56,11 @@ public class StatusEffectHandler : MonoBehaviour
     {
         StartCoroutine(InvulnerabilityCoroutine(duration));
     }
+    public void ApplyPoison(float dps, float duration)
+    {
+        StartCoroutine(PoisonCoroutine(dps, duration));
+    }
+
 
     // ======================
     //  COROUTINAS
@@ -101,6 +106,22 @@ public class StatusEffectHandler : MonoBehaviour
         yield return new WaitForSeconds(duration);
         isInvulnerable = false;
     }
+    private IEnumerator PoisonCoroutine(float dps, float duration)
+    {
+        float timer = duration;
+        float tickInterval = 1f;   // puedes hacerlo configurable
+
+        while (timer > 0f)
+        {
+            timer -= tickInterval;
+
+            if (!isInvulnerable && health != null)
+                health.TakeDamage(dps, transform.position);
+
+            yield return new WaitForSeconds(tickInterval);
+        }
+    }
+
 #if UNITY_EDITOR
     void OnValidate()
     {

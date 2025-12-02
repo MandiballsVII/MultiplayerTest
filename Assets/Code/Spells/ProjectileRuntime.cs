@@ -21,14 +21,24 @@ public class ProjectileRuntime : MonoBehaviour
         var targetHealth = col.GetComponent<Health>();
 
         // Ignorar aliados completos
-        if (targetFactionMember != null && targetFactionMember.Faction == projectileFaction.Faction)
+        if (targetFactionMember != null && projectileFaction != null && targetFactionMember.Faction == projectileFaction.Faction)
             return;
 
-        // Si es un enemigo, aplicar daño
-        if (targetFactionMember != null && targetHealth != null)
+        // Aplicar efectos de estado si hay StatusEffectHandler o aplicar daño directo
+        var status = col.GetComponent<StatusEffectHandler>();
+
+        if (status != null)
+        {
+            SpellEffectApplier.ApplyStatusEffects(spell, col, caster);
+            // Si el spell tiene daño directo además de efectos, puedes aplicarlo:
+            if (spell.power > 0 && (targetFactionMember == null || targetFactionMember.Faction != projectileFaction.Faction))
+                status.ApplyDamage(spell.power, transform.position);
+        }
+        else if (targetHealth != null && (targetFactionMember == null || targetFactionMember.Faction != projectileFaction.Faction))
         {
             targetHealth.TakeDamage(spell.power, transform.position);
-            Debug.Log($"{name} golpeó a {col.name} por {spell.power} de daño.");
+            // además aplicar efectos a colliders sin StatusEffectHandler -> se ignoran
+            SpellEffectApplier.ApplyStatusEffects(spell, col, caster);
         }
 
         // Explosión opcional
@@ -40,13 +50,11 @@ public class ProjectileRuntime : MonoBehaviour
                 explosionRuntime.Init(caster, spell);
 
             var expFaction = explosion.GetComponent<ProjectileFaction>();
-            if (expFaction != null)
+            if (expFaction != null && projectileFaction != null)
                 expFaction.Init(projectileFaction.Faction, projectileFaction.Owner);
         }
 
-        // Que se destruya si no es un Arrow (misma lógica que tú)
-        if (GetComponent<Arrow>() == null)
+        if (GetComponent<Arrow>() == null) // conservar comportamiento Arrow
             Destroy(gameObject);
     }
-
 }

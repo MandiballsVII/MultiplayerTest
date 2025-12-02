@@ -32,6 +32,7 @@ MonoBehaviour:
   auraPrefab: {fileID: 0}
   areaShape: 0
   coneAngle: 45
+  damageInterval: 1
   isChanneled: 0
   explosionPrefab: {fileID: 0}
   explosionRadius: 0
@@ -39,3 +40,7 @@ MonoBehaviour:
   summonPrefab: {fileID: 0}
   summonCount: 1
   summonDuration: 10
+  statusEffects:
+  - type: 4
+    magnitude: 5
+    duration: 4
