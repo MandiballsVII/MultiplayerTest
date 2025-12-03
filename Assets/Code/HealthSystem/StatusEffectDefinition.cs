@@ -7,6 +7,8 @@ public enum StatusType
     Stun,
     Silence,
     Poison,
+    Accelerate,
+    DamageReduction,
     Invulnerability
 }
 
@@ -15,7 +17,7 @@ public class StatusEffectDefinition
 {
     public StatusType type;
 
-    [Tooltip("Slow: 0.5 reduce la velocidad al 50%. Ignorado en efectos que no usan magnitud.")]
+    [Tooltip("Slow: 0.5 reduce la velocidad al 50%. Accelerate: 1.5 aumenta la velocidad al 150%. Ignorado en efectos que no usan magnitud.")]
     public float magnitude = 1f;
 
     [Tooltip("Duración del efecto en segundos.")]

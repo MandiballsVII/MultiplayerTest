@@ -10,6 +10,7 @@ public class StatusEffectHandler : MonoBehaviour
     private ISpellCaster spellCaster;  // Para silenciar, etc.
 
     public bool isInvulnerable = false;
+    public float damageReductionMultiplier = 1f; // 1 = sin reduccion, 0.5 = 50% menos daño
     public bool isSilenced = false;
     public bool isStunned = false;
 
@@ -34,7 +35,7 @@ public class StatusEffectHandler : MonoBehaviour
     public void ApplyDamage(float amount, Vector2? hitSource)
     {
         if (isInvulnerable) return;
-        health.TakeDamage(amount, hitSource);
+        health.TakeDamage(amount * damageReductionMultiplier, hitSource);
     }
 
     public void ApplySlow(float multiplier, float duration)
@@ -56,9 +57,18 @@ public class StatusEffectHandler : MonoBehaviour
     {
         StartCoroutine(InvulnerabilityCoroutine(duration));
     }
+
+    public void ApplyDamageReduction(float multiplier, float duration)
+    {
+        StartCoroutine(DamageReductionCoroutine(multiplier, duration));
+    }
     public void ApplyPoison(float dps, float duration)
     {
         StartCoroutine(PoisonCoroutine(dps, duration));
+    }
+    public void ApplyAccelerate(float multiplier, float duration)
+    {
+        StartCoroutine(AccelerateCoroutine(multiplier, duration));
     }
 
 
@@ -66,6 +76,14 @@ public class StatusEffectHandler : MonoBehaviour
     //  COROUTINAS
     // ======================
     private IEnumerator SlowCoroutine(float multiplier, float duration)
+    {
+        if (movable == null) yield break;
+
+        movable.MoveSpeed = originalSpeed * multiplier;
+        yield return new WaitForSeconds(duration);
+        movable.MoveSpeed = originalSpeed;
+    }
+    private IEnumerator AccelerateCoroutine(float multiplier, float duration)
     {
         if (movable == null) yield break;
 
@@ -105,6 +123,13 @@ public class StatusEffectHandler : MonoBehaviour
         isInvulnerable = true;
         yield return new WaitForSeconds(duration);
         isInvulnerable = false;
+    }
+
+    private IEnumerator DamageReductionCoroutine(float multiplier, float duration)
+    {
+        damageReductionMultiplier = multiplier;
+        yield return new WaitForSeconds(duration);
+        damageReductionMultiplier = 1f;
     }
     private IEnumerator PoisonCoroutine(float dps, float duration)
     {

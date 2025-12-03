@@ -60,39 +60,41 @@ public class DamageFeedback : MonoBehaviour
         if (isKnocked) yield break;
         isKnocked = true;
 
-        // Bloquear control temporalmente: usar isStunned para players
-        var player = GetComponent<PlayerManager>();
         var npc = GetComponent<NPC_ControllerBase>();
-        if (player != null) player.isStunned = true;
+        var player = GetComponent<PlayerManager>();
+
+        // Desactivar control de movimiento
         if (npc != null) npc.enabled = false;
+        if (player != null) player.isStunned = true;
 
-        // Aplicar impulso (usar rb si existe)
-        if (rb != null)
+        // Guardar modo original del Rigidbody
+        RigidbodyType2D originalBodyType = rb.bodyType;
+
+        // Pasamos a dinámico para aplicar físicas reales
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.velocity = Vector2.zero;
+
+        // Aplicar fuerza real
+        rb.AddForce(dir.normalized * knockbackForce, ForceMode2D.Impulse);
+
+        float elapsed = 0f;
+        while (elapsed < knockbackDuration)
         {
-            rb.velocity = dir * knockbackForce;
-        }
-        else
-        {
-            // fallback: mover por transform si no hay rigidbody
-            float elapsed = 0f;
-            Vector3 startPos = transform.position;
-            Vector3 targetPos = startPos + (Vector3)(dir * knockbackForce);
-            while (elapsed < knockbackDuration)
-            {
-                elapsed += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPos, targetPos, elapsed / knockbackDuration);
-                yield return null;
-            }
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        yield return new WaitForSeconds(knockbackDuration);
+        // Detener movimiento
+        rb.velocity = Vector2.zero;
 
-        // Fin del knockback
-        if (rb != null) rb.velocity = Vector2.zero;
+        // Volver al modo original (kinematic para NPC, dynamic para jugadores)
+        rb.bodyType = originalBodyType;
 
-        if (player != null) player.isStunned = false;
+        // Restaurar control
         if (npc != null) npc.enabled = true;
+        if (player != null) player.isStunned = false;
 
         isKnocked = false;
     }
+
 }

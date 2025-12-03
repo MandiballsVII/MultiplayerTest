@@ -21,6 +21,10 @@ public static class SpellEffectApplier
                     status?.ApplySlow(eff.magnitude, eff.duration);
                     break;
 
+                case StatusType.Accelerate:
+                    status?.ApplyAccelerate(eff.magnitude, eff.duration);
+                    break;
+
                 case StatusType.Stun:
                     status?.ApplyStun(eff.duration);
                     break;
@@ -31,6 +35,10 @@ public static class SpellEffectApplier
 
                 case StatusType.Invulnerability:
                     status?.ApplyInvulnerability(eff.duration);
+                    break;
+
+                case StatusType.DamageReduction:
+                    status?.ApplyDamageReduction(eff.magnitude, eff.duration);
                     break;
 
                 case StatusType.Poison:
@@ -68,10 +76,6 @@ public static class SpellEffectApplier
 
             case StatusType.Silence:
                 status?.ApplySilence(eff.duration);
-                break;
-
-            case StatusType.Invulnerability:
-                status?.ApplyInvulnerability(eff.duration);
                 break;
 
             case StatusType.Poison:
