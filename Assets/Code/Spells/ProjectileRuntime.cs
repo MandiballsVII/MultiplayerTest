@@ -5,6 +5,7 @@ public class ProjectileRuntime : MonoBehaviour
     private PlayerSpellBook caster;
     private SpellData spell;
     private ProjectileFaction projectileFaction;
+    private bool hasHit = false;
 
     public void Init(PlayerSpellBook owner, SpellData data)
     {
@@ -15,6 +16,11 @@ public class ProjectileRuntime : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        if (hasHit) return;     // Evita segundas colisiones
+        hasHit = true;
+
+        Debug.Log("IMPACTO DIRECTO -> " + col.name);
+
         if (spell == null) { Destroy(gameObject); return; }
 
         var targetFactionMember = col.GetComponent<IFactionMember>();

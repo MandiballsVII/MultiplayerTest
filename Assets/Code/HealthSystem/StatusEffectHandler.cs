@@ -18,6 +18,8 @@ public class StatusEffectHandler : MonoBehaviour
 
     private bool invulActive = false; // control interno para debug
 
+    private Coroutine poisonRoutine = null;
+
     void Awake()
     {
         health = GetComponent<Health>();
@@ -64,7 +66,10 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void ApplyPoison(float dps, float duration)
     {
-        StartCoroutine(PoisonCoroutine(dps, duration));
+        if (poisonRoutine != null)
+            StopCoroutine(poisonRoutine);
+
+        poisonRoutine = StartCoroutine(PoisonCoroutine(dps, duration));
     }
     public void ApplyAccelerate(float multiplier, float duration)
     {
@@ -145,6 +150,7 @@ public class StatusEffectHandler : MonoBehaviour
 
             yield return new WaitForSeconds(tickInterval);
         }
+        poisonRoutine = null;
     }
 
 #if UNITY_EDITOR

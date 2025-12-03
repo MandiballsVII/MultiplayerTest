@@ -33,6 +33,8 @@ public class ExplosionRuntime : MonoBehaviour
 
         foreach (var hit in hits)
         {
+            Debug.Log("EXPLOSION -> " + hit.name);
+
             if (hit.gameObject == gameObject)
                 continue; // no autogolpearse
 
