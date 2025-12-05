@@ -49,6 +49,7 @@ public class NPC_Beholder : NPC_ControllerBase
             if (dist <= attackRange)
             {
                 currentState = StateMachine.Engage;
+                if (!CanAttack) return;
                 animator?.SetInteger("State", 1);
                 Attack();
             }

@@ -108,12 +108,23 @@ public class StatusEffectHandler : MonoBehaviour
 
         if (movable != null) movable.CanMove = false;
 
+        // si puede atacar, lo bloqueamos
+        var attacker = GetComponent<NPC_ControllerBase>();
+        var spellCaster = GetComponent<ISpellCaster>();
+        if (attacker != null) attacker.CanAttack = false;
+        if (spellCaster != null) spellCaster.CanCast = false;
+
         yield return new WaitForSeconds(duration);
 
         if (movable != null) movable.CanMove = true;
 
+        // Restablecer ataques si aplica
+        if (attacker != null) attacker.CanAttack = true;
+        if (spellCaster != null) spellCaster.CanCast = true;
+
         isStunned = false;
     }
+
 
     private IEnumerator SilenceCoroutine(float duration)
     {

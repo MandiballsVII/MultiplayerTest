@@ -49,6 +49,8 @@ public abstract class NPC_ControllerBase : MonoBehaviour, IFactionMember, IMovab
         set => speed = value;
     }
     public bool CanMove { get; set; } = true;
+    public bool CanAttack { get; set; } = true;
+
 
     protected virtual void Awake()
     {

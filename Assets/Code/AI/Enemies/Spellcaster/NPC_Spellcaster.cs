@@ -411,6 +411,7 @@ public class NPC_SpellCaster : NPC_ControllerBase, ISpellCaster
 
     public void Attack()
     {
+        if (!CanAttack) return;
         if (!CanCast) return;
         if (spell == null) return;
 
@@ -493,6 +494,8 @@ public class NPC_SpellCaster : NPC_ControllerBase, ISpellCaster
 
     void CastSummon()
     {
+        if (!CanAttack) return;
+        if (!CanCast) return;
         if (spell.summonPrefab == null) return;
 
         for (int i = 0; i < spell.summonCount; i++)
