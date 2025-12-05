@@ -63,7 +63,7 @@ public static class SpellEffectApplier
         {
             case StatusType.None:
                 if (health != null)
-                    health.TakeDamage(spell.power, hitPos);
+                    health.TakeDamage(spell.power, hitPos, spell);
                 break;
 
             case StatusType.Slow:

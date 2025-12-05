@@ -19,8 +19,6 @@ public class ProjectileRuntime : MonoBehaviour
         if (hasHit) return;     // Evita segundas colisiones
         hasHit = true;
 
-        Debug.Log("IMPACTO DIRECTO -> " + col.name);
-
         if (spell == null) { Destroy(gameObject); return; }
 
         var targetFactionMember = col.GetComponent<IFactionMember>();
@@ -42,7 +40,7 @@ public class ProjectileRuntime : MonoBehaviour
         }
         else if (targetHealth != null && (targetFactionMember == null || targetFactionMember.Faction != projectileFaction.Faction))
         {
-            targetHealth.TakeDamage(spell.power, transform.position);
+            targetHealth.TakeDamage(spell.power, transform.position, spell);
             // además aplicar efectos a colliders sin StatusEffectHandler -> se ignoran
             SpellEffectApplier.ApplyStatusEffects(spell, col, caster);
         }

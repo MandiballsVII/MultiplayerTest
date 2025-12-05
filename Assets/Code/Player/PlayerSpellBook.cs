@@ -208,6 +208,13 @@ public class PlayerSpellBook : MonoBehaviour, ISpellCaster
         if (aoeRuntime != null)
             aoeRuntime.Init(this, spell);
 
+        // *** Inicializar lógica especial del whirlwind ***
+        var whirl = aoeGO.GetComponent<WhirlwindRuntime>();
+        if (whirl != null)
+        {
+            whirl.Init(this, spell);
+        }
+
         // Asignar facción al área
         var faction = GetComponent<IFactionMember>().Faction;
         var areaFaction = aoeGO.AddComponent<ProjectileFaction>();

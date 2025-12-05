@@ -39,6 +39,11 @@ public class StatusEffectHandler : MonoBehaviour
         if (isInvulnerable) return;
         health.TakeDamage(amount * damageReductionMultiplier, hitSource);
     }
+    public void ApplyDamage(float amount, Vector2? hitSource, SpellData spell)
+    {
+        if (isInvulnerable) return;
+        health.TakeDamage(amount * damageReductionMultiplier, hitSource, spell);
+    }
 
     public void ApplySlow(float multiplier, float duration)
     {

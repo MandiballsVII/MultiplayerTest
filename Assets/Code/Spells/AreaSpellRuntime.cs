@@ -4,7 +4,7 @@ using UnityEngine;
 public class AreaSpellRuntime : MonoBehaviour
 {
     private PlayerSpellBook owner;
-    private SpellData spell;
+    public SpellData spell;
     private float timer;
 
     private readonly HashSet<Health> targetsInside = new();
@@ -70,7 +70,7 @@ public class AreaSpellRuntime : MonoBehaviour
             if (factionMember.Faction == selfFaction)
                 continue;
 
-            health.TakeDamage(spell.power, transform.position);
+            health.TakeDamage(spell.power, transform.position, spell);
             SpellEffectApplier.ApplyStatusEffects(spell, health.GetComponent<Collider2D>(), owner);
         }
     }

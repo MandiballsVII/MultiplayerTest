@@ -27,12 +27,16 @@ public class DamageFeedback : MonoBehaviour
     void OnEnable() => health.OnDamaged += ApplyFeedback;
     void OnDisable() => health.OnDamaged -= ApplyFeedback;
 
-    private void ApplyFeedback(Vector2 hitDir, float dmg)
+    private void ApplyFeedback(Vector2 hitDir, float dmg, SpellData sourceSpell)
     {
         if (!health.IsAlive) return;
 
         if (sr != null)
             StartCoroutine(FlashCoroutine());
+
+        // Si el ataque deshabilita knockback, no lo aplicamos
+        if (sourceSpell != null && sourceSpell.disableKnockback)
+            return;
 
         if (rb != null && hitDir != Vector2.zero)
             StartCoroutine(KnockbackCoroutine(hitDir));

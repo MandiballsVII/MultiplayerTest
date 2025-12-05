@@ -60,7 +60,7 @@ public class ExplosionRuntime : MonoBehaviour
             // fallback de daño si no existe status handler
             if (health != null)
             {
-                health.TakeDamage(spell.explosionDamage, transform.position);
+                health.TakeDamage(spell.explosionDamage, transform.position, spell);
                 SpellEffectApplier.ApplyStatusEffects(spell, hit, caster);
             }
         }

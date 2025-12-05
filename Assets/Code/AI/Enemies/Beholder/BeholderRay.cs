@@ -65,7 +65,7 @@ public class BeholderRay : MonoBehaviour
         else if (col.TryGetComponent<Health>(out var h))
         {
             // NO tiene efectos de estado -> aplicar daño directo
-            h.TakeDamage(spellData.power, transform.position);
+            h.TakeDamage(spellData.power, transform.position, spellData);
             Destroy(gameObject);
             return;
         }

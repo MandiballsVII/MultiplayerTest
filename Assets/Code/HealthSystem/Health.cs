@@ -12,7 +12,7 @@ public class Health : MonoBehaviour, IAttackable
 
     public event Action<float, float> OnHealthChanged; // (current, max)
     public event Action OnDied;
-    public event Action<Vector2, float> OnDamaged; // (direction, amount)
+    public event Action<Vector2, float, SpellData> OnDamaged; // (direction, amount)
 
     private Camera mainCamera;
 
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour, IAttackable
         TakeDamage(amount, null);
     }
 
-    public void TakeDamage(float amount, Vector2? hitSource = null)
+    public void TakeDamage(float amount, Vector2? hitSource = null, SpellData sourceSpell = null)
     {
         if (!IsAlive) return;
 
@@ -40,7 +40,7 @@ public class Health : MonoBehaviour, IAttackable
             hitDir = ((Vector2)transform.position - hitSource.Value).normalized;
 
         // Notificar daño
-        OnDamaged?.Invoke(hitDir, amount);
+        OnDamaged?.Invoke(hitDir, amount, sourceSpell);
 
         // Camera Shake solo si es Player
         if (CompareTag("Player") && mainCamera != null)

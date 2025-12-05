@@ -21,6 +21,7 @@ public class SpellData : ScriptableObject
     public float areaRadius = 2.5f;     // para Area
     public float duration = 3f;         // p.ej. AoE vivo / buff duración
     public float power = 20f;           // daño/curación genérica según tipo
+    public bool disableKnockback = false;
 
     [Header("Curación")]
     public int healAmount = 20;
